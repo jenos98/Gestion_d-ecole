@@ -1,0 +1,235 @@
+/* ============================================================
+   theme-dark.css — Palette et surcharges du thème sombre
+   Conforme aux contrastes WCAG et aux variables looked-up de l'application
+   ============================================================ */
+
+.root {
+    /* ── Couleurs principales adaptées au mode sombre ── */
+    -color-primary:       #3b82f6;
+    -color-primary-hover: #60a5fa;
+    -color-primary-light: #1e3a8a;
+
+    -color-success:       #22c55e;
+    -color-success-light: #14532d;
+
+    -color-danger:        #ef4444;
+    -color-danger-hover:  #f87171;
+    -color-danger-light:  #7f1d1d;
+
+    -color-warning:       #f59e0b;
+    -color-warning-light: #78350f;
+
+    -color-info:          #06b6d4;
+    -color-info-light:    #164e63;
+
+    /* ── Neutres sombres (Slate) ── */
+    -color-bg:            #0f172a;   /* Slate 900 */
+    -color-surface:       #1e293b;   /* Slate 800 */
+    -color-border:        #334155;   /* Slate 700 */
+    -color-text:          #f8fafc;   /* Slate 50 */
+    -color-text-secondary:#cbd5e1;   /* Slate 300 */
+    -color-muted:         #94a3b8;   /* Slate 400 */
+    -color-placeholder:   #64748b;   /* Slate 500 */
+
+    /* ── Sidebar / Header ── */
+    -color-sidebar-bg:    #0b1120;   /* Slate 950 */
+    -color-sidebar-text:  #cbd5e1;
+    -color-sidebar-hover: rgba(255, 255, 255, 0.08);
+    -color-header-bg:     #0b1120;
+
+    /* ── Ombres sombres ── */
+    -shadow-sm: dropshadow(gaussian, rgba(0, 0, 0, 0.35), 6, 0, 0, 1);
+    -shadow-md: dropshadow(gaussian, rgba(0, 0, 0, 0.45), 10, 0, 0, 2);
+    -shadow-lg: dropshadow(gaussian, rgba(0, 0, 0, 0.60), 16, 0, 0, 4);
+
+    -fx-background-color: -color-bg;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   SURCHARGES COMPOSANTS JAVA-FX EN MODE SOMBRE
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Tableaux ── */
+.table-view {
+    -fx-background-color: -color-surface;
+    -fx-border-color: -color-border;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #1e293b;
+}
+
+.table-view .column-header {
+    -fx-background-color: #1e293b;
+    -fx-border-color: -color-border;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: -color-muted;
+}
+
+.table-row-cell {
+    -fx-background-color: -color-surface;
+    -fx-border-color: -color-border;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #162032;
+}
+
+.table-row-cell:hover {
+    -fx-background-color: -color-primary-light;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: -color-primary-light;
+    -fx-text-fill: -color-text;
+}
+
+.table-cell {
+    -fx-text-fill: -color-text;
+}
+
+/* ── Formulaires & Entrées ── */
+.input-field {
+    -fx-background-color: -color-surface;
+    -fx-text-fill: -color-text;
+    -fx-border-color: -color-border;
+}
+
+.input-field:focused {
+    -fx-border-color: -color-primary;
+    -fx-effect: dropshadow(gaussian, rgba(59, 130, 246, 0.25), 6, 0, 0, 0);
+}
+
+.input-field:disabled {
+    -fx-background-color: #0f172a;
+    -fx-opacity: 0.6;
+}
+
+.combo-box, .date-picker {
+    -fx-background-color: -color-surface;
+    -fx-border-color: -color-border;
+}
+
+.combo-box .cell, .date-picker .cell {
+    -fx-text-fill: -color-text;
+}
+
+.combo-box-popup .list-view {
+    -fx-background-color: -color-surface;
+    -fx-border-color: -color-border;
+}
+
+.combo-box-popup .list-cell {
+    -fx-background-color: -color-surface;
+    -fx-text-fill: -color-text;
+}
+
+.combo-box-popup .list-cell:hover {
+    -fx-background-color: #334155;
+}
+
+/* ── Boutons secondaires & d'action ── */
+.btn-secondary {
+    -fx-background-color: -color-surface;
+    -fx-border-color: -color-border;
+    -fx-text-fill: -color-text-secondary;
+}
+
+.btn-secondary:hover {
+    -fx-background-color: #334155;
+    -fx-text-fill: white;
+}
+
+.btn-action {
+    -fx-background-color: -color-surface;
+    -fx-border-color: -color-border;
+    -fx-text-fill: -color-text-secondary;
+}
+
+.btn-action:hover {
+    -fx-background-color: -color-primary-light;
+    -fx-border-color: -color-primary;
+    -fx-text-fill: white;
+}
+
+/* ── Dialogues ── */
+.dialog-container {
+    -fx-background-color: -color-surface;
+    -fx-border-color: -color-border;
+    -fx-border-width: 1;
+    -fx-border-radius: 12;
+}
+
+.dialog-password-field {
+    -fx-background-color: #0f172a;
+    -fx-border-color: -color-border;
+    -fx-text-fill: -color-text;
+}
+
+.close-cash-step {
+    -fx-background-color: #162032;
+    -fx-border-color: -color-border;
+}
+
+/* ── Onglets (TabPane) ── */
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-background-color: #0b1120;
+}
+
+.tab-pane .tab {
+    -fx-background-color: -color-surface;
+    -fx-border-color: -color-border;
+}
+
+.tab-pane .tab:selected {
+    -fx-background-color: #334155;
+}
+
+.tab-pane .tab .tab-label {
+    -fx-text-fill: -color-text-secondary;
+}
+
+.tab-pane .tab:selected .tab-label {
+    -fx-text-fill: white;
+}
+
+/* ── Cartes et contenants ── */
+.money-card, .stat-card, .cash-status-card, .quick-actions-card {
+    -fx-background-color: -color-surface;
+    -fx-border-color: -color-border;
+    -fx-border-width: 1;
+    -fx-border-radius: 10;
+}
+
+.charts-container {
+    -fx-background-color: -color-surface;
+    -fx-border-color: -color-border;
+    -fx-border-width: 1;
+}
+
+.chart-card {
+    -fx-background-color: -color-bg;
+    -fx-border-color: -color-border;
+}
+
+.charts-overlay {
+    -fx-background-color: -color-surface;
+}
+
+/* ── Header ── */
+.header-bar {
+    -fx-background-color: -color-header-bg;
+    -fx-border-color: transparent transparent #1e293b transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+.btn-icon-header {
+    -fx-text-fill: #cbd5e1;
+}
+
+.btn-icon-header:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.12);
+    -fx-text-fill: white;
+}

@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.chart.*?>
+
+<ScrollPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:id="rootScroll"
+            styleClass="dashboard-scroll"
+            fitToWidth="true"
+            fx:controller="com.jenos.gestionecole.controller.DashboardController">
+
+    <VBox fx:id="dashboardRoot" styleClass="dashboard-root" spacing="20">
+
+        <!-- ─── EN-TÊTE DE PAGE & FILTRES ────────────────────────────── -->
+        <HBox fx:id="pageHeader" styleClass="dashboard-page-header" alignment="CENTER_LEFT" spacing="16">
+            <VBox spacing="4" HBox.hgrow="ALWAYS">
+                <Label fx:id="lblPageTitle" styleClass="dashboard-page-title" text="Tableau de bord"/>
+                <Label fx:id="lblWelcome"   styleClass="dashboard-welcome"    text="Bienvenue"/>
+            </VBox>
+
+            <!-- Barre de filtres de consultation -->
+            <HBox spacing="10" alignment="CENTER_RIGHT" styleClass="dashboard-filters-bar">
+                <Label styleClass="filter-label" text="Période :"/>
+                <ComboBox fx:id="comboPeriod" prefWidth="150" promptText="Période"/>
+                <Label styleClass="filter-label" text="Devise :"/>
+                <ComboBox fx:id="comboCurrency" prefWidth="90"/>
+                <Button fx:id="btnRefreshDashboard" onAction="#handleManualRefresh"
+                        styleClass="btn-action" text="Actualiser"/>
+                <Label fx:id="lblDate" styleClass="dashboard-date" text=""/>
+            </HBox>
+        </HBox>
+
+        <!-- ─── ALERTE RAPPORT MANQUANT (cachée par défaut) ─────────── -->
+        <VBox fx:id="alertReportPending" styleClass="alert-warning" managed="false" visible="false" spacing="10">
+            <Label styleClass="alert-title" text="Rapport journalier non généré"/>
+            <Label styleClass="alert-message"
+                   text="Le rapport journalier de la caisse n'a pas encore été généré. Il doit être généré et imprimé avant la fermeture de la caisse."
+                   wrapText="true"/>
+            <Button fx:id="btnGenerateReportAlert" onAction="#generateDailyReport"
+                    styleClass="btn-warning-action" text="Générer maintenant"/>
+        </VBox>
+
+        <!-- ─── CARTES FINANCIÈRES (5 indicateurs majeurs) ──────────── -->
+        <VBox fx:id="financialSection" spacing="12">
+            <Label styleClass="section-title" text="Indicateurs financiers"/>
+            <GridPane fx:id="financialCards" styleClass="cards-grid" hgap="14" vgap="14">
+                <columnConstraints>
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="20"/>
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="20"/>
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="20"/>
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="20"/>
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="20"/>
+                </columnConstraints>
+
+                <!-- Carte Solde net -->
+                <VBox fx:id="cardCashBalance" styleClass="money-card, card-primary"
+                      GridPane.columnIndex="0" spacing="6">
+                    <Label styleClass="card-title" text="Solde net (Période)"/>
+                    <Label fx:id="lblCashBalanceUSD" styleClass="card-amount" text="••••••"/>
+                    <Label fx:id="lblCashBalanceCDF" styleClass="card-amount-secondary" text="••••••"/>
+                </VBox>
+
+                <!-- Carte Recettes -->
+                <VBox fx:id="cardRevenue" styleClass="money-card, card-success"
+                      GridPane.columnIndex="1" spacing="6">
+                    <Label styleClass="card-title" text="Recettes encaissées"/>
+                    <Label fx:id="lblRevenueUSD" styleClass="card-amount, text-success" text="••••••"/>
+                    <Label fx:id="lblRevenueCDF" styleClass="card-amount-secondary, text-success" text="••••••"/>
+                </VBox>
+
+                <!-- Carte Dépenses -->
+                <VBox fx:id="cardExpenses" styleClass="money-card, card-danger"
+                      GridPane.columnIndex="2" spacing="6">
+                    <Label styleClass="card-title" text="Dépenses enregistrées"/>
+                    <Label fx:id="lblExpensesUSD" styleClass="card-amount, text-danger" text="••••••"/>
+                    <Label fx:id="lblExpensesCDF" styleClass="card-amount-secondary, text-danger" text="••••••"/>
+                </VBox>
+
+                <!-- Carte Frais impayés -->
+                <VBox fx:id="cardUnpaidFees" styleClass="money-card, card-warning"
+                      GridPane.columnIndex="3" spacing="6">
+                    <Label styleClass="card-title" text="Frais impayés (Solde dû)"/>
+                    <Label fx:id="lblUnpaidFeesUSD" styleClass="card-amount, text-warning" text="••••••"/>
+                    <Label fx:id="lblUnpaidFeesCDF" styleClass="card-amount-secondary, text-warning" text="••••••"/>
+                </VBox>
+
+                <!-- Carte Budget disponible -->
+                <VBox fx:id="cardBudget" styleClass="money-card, card-neutral"
+                      GridPane.columnIndex="4" spacing="6">
+                    <Label styleClass="card-title" text="Budget restant"/>
+                    <Label fx:id="lblBudgetUSD" styleClass="card-amount" text="••••••"/>
+                    <Label fx:id="lblBudgetCDF" styleClass="card-amount-secondary" text="••••••"/>
+                </VBox>
+            </GridPane>
+        </VBox>
+
+        <!-- ─── CARTES ADMINISTRATIVES & SCOLAIRES ──────────────────── -->
+        <VBox spacing="12">
+            <Label styleClass="section-title" text="Statistiques scolaires"/>
+            <GridPane fx:id="administrativeCards" styleClass="cards-grid" hgap="14" vgap="14">
+                <columnConstraints>
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="25"/>
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="25"/>
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="25"/>
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="25"/>
+                </columnConstraints>
+
+                <VBox fx:id="cardStudents" styleClass="stat-card" GridPane.columnIndex="0" spacing="6">
+                    <Label styleClass="card-title" text="Élèves inscrits actifs"/>
+                    <Label fx:id="lblTotalStudents" styleClass="card-value" text="—"/>
+                </VBox>
+
+                <VBox fx:id="cardStaff" styleClass="stat-card" GridPane.columnIndex="1" spacing="6">
+                    <Label styleClass="card-title" text="Personnel en service"/>
+                    <Label fx:id="lblTotalStaff" styleClass="card-value" text="—"/>
+                </VBox>
+
+                <VBox fx:id="cardClasses" styleClass="stat-card" GridPane.columnIndex="2" spacing="6">
+                    <Label styleClass="card-title" text="Classes pédagogiques"/>
+                    <Label fx:id="lblTotalClasses" styleClass="card-value" text="—"/>
+                </VBox>
+
+                <VBox fx:id="cardOperations" styleClass="stat-card" GridPane.columnIndex="3" spacing="6">
+                    <Label styleClass="card-title" text="Opérations du journal"/>
+                    <Label fx:id="lblTotalOperations" styleClass="card-value" text="—"/>
+                </VBox>
+            </GridPane>
+        </VBox>
+
+        <!-- ─── ZONE GRAPHIQUES DYNAMIQUES ───────────────────────────── -->
+        <VBox fx:id="chartsSection" spacing="12">
+            <HBox alignment="CENTER_LEFT">
+                <Label styleClass="section-title" text="Graphiques d'activité"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="lblChartCurrencyIndicator" styleClass="chart-currency-badge" text="Devise affichée : USD"/>
+            </HBox>
+
+            <StackPane fx:id="chartsContainer" styleClass="charts-container" minHeight="360">
+
+                <!-- 1. Contenu principal (2 graphiques côte-à-côte) -->
+                <GridPane fx:id="chartsContent" hgap="16" vgap="16">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="ALWAYS" percentWidth="60"/>
+                        <ColumnConstraints hgrow="ALWAYS" percentWidth="40"/>
+                    </columnConstraints>
+
+                    <!-- Graphique Financier (Recettes en vert, Dépenses en rouge) -->
+                    <VBox styleClass="chart-card" GridPane.columnIndex="0" spacing="8">
+                        <Label fx:id="lblFinancialChartTitle" styleClass="chart-card-title"
+                               text="Recettes (Vert) vs Dépenses (Rouge)"/>
+                        <BarChart fx:id="financialChart" animated="false" legendVisible="true" VBox.vgrow="ALWAYS" prefHeight="300">
+                            <xAxis><CategoryAxis fx:id="financialXAxis" label="Tranche temporelle"/></xAxis>
+                            <yAxis><NumberAxis fx:id="financialYAxis" label="Montant"/></yAxis>
+                        </BarChart>
+                    </VBox>
+
+                    <!-- Graphique Scolaire (Répartition des effectifs) -->
+                    <VBox styleClass="chart-card" GridPane.columnIndex="1" spacing="8">
+                        <Label fx:id="lblAcademicChartTitle" styleClass="chart-card-title"
+                               text="Effectifs des élèves par section"/>
+                        <BarChart fx:id="academicChart" animated="false" legendVisible="false" VBox.vgrow="ALWAYS" prefHeight="300">
+                            <xAxis><CategoryAxis fx:id="academicXAxis" label="Section"/></xAxis>
+                            <yAxis><NumberAxis fx:id="academicYAxis" label="Nombre d'élèves"/></yAxis>
+                        </BarChart>
+                    </VBox>
+                </GridPane>
+
+                <!-- 2. État de chargement (ProgressIndicator) -->
+                <VBox fx:id="chartsLoading" alignment="CENTER" spacing="12"
+                      styleClass="charts-overlay" visible="false" managed="false">
+                    <ProgressIndicator maxWidth="45" maxHeight="45"/>
+                    <Label styleClass="loading-text" text="Chargement des données réelles en cours..."/>
+                </VBox>
+
+                <!-- 3. État vide (Aucune donnée) -->
+                <VBox fx:id="chartsEmpty" alignment="CENTER" spacing="12"
+                      styleClass="charts-overlay" visible="false" managed="false">
+                    <Label styleClass="empty-icon" text="📊"/>
+                    <Label styleClass="empty-title" text="Aucune donnée pour la période sélectionnée"/>
+                    <Label styleClass="empty-subtitle"
+                           text="Aucune recette, dépense ou effectif n'a été enregistré pour ce périmètre."/>
+                </VBox>
+
+                <!-- 4. État d'erreur -->
+                <VBox fx:id="chartsError" alignment="CENTER" spacing="12"
+                      styleClass="charts-overlay" visible="false" managed="false">
+                    <Label styleClass="error-icon" text="⚠️"/>
+                    <Label styleClass="error-title" text="Erreur lors du calcul des graphiques"/>
+                    <Label fx:id="lblChartsErrorDetail" styleClass="error-subtitle"
+                           text="Une erreur inattendue est survenue."/>
+                    <Button onAction="#handleManualRefresh" styleClass="btn-action" text="Réessayer"/>
+                </VBox>
+
+            </StackPane>
+        </VBox>
+
+        <!-- ─── ÉTAT DE LA CAISSE + ACTIONS RAPIDES ─────────────────── -->
+        <HBox spacing="16" alignment="TOP_LEFT">
+
+            <!-- État caisse -->
+            <VBox fx:id="cashStatusCard" styleClass="cash-status-card" spacing="10"
+                  HBox.hgrow="SOMETIMES" minWidth="260">
+                <Label styleClass="section-title" text="État de la caisse"/>
+                <Label fx:id="lblCashStatus"    styleClass="cash-status-label" text="—"/>
+                <Label fx:id="lblCashCashier"   styleClass="cash-status-detail" text=""/>
+                <Label fx:id="lblCashOpenTime"  styleClass="cash-status-detail" text=""/>
+            </VBox>
+
+            <!-- Actions rapides -->
+            <VBox fx:id="quickActions" styleClass="quick-actions-card" spacing="10"
+                  HBox.hgrow="ALWAYS">
+                <Label styleClass="section-title" text="Actions rapides"/>
+                <HBox spacing="10">
+                    <Button fx:id="btnNewPayment"  onAction="#goToPayments"
+                            styleClass="btn-action" text="Nouveau paiement"/>
+                    <Button fx:id="btnNewExpense"  onAction="#goToExpenses"
+                            styleClass="btn-action" text="Nouvelle dépense"/>
+                    <Button fx:id="btnDailyReport" onAction="#generateDailyReport"
+                            styleClass="btn-action" text="Rapport journalier"/>
+                    <Button fx:id="btnCloseCash"   onAction="#openCloseCashDialog"
+                            styleClass="btn-action, btn-action-danger" text="Fermer la caisse"/>
+                    <Button fx:id="btnViewCashes"  onAction="#viewAllCashes"
+                            styleClass="btn-action" text="Voir les caisses"
+                            visible="false" managed="false"/>
+                </HBox>
+            </VBox>
+        </HBox>
+
+    </VBox>
+</ScrollPane>

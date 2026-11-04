@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            styleClass="view-container"
+            fx:controller="com.jenos.gestionecole.controller.UserFormController">
+
+    <!-- ─── TOP : Barre d'action supérieure ─── -->
+    <top>
+        <VBox styleClass="view-top-bar" spacing="6">
+            <padding><Insets top="14" right="20" bottom="14" left="20"/></padding>
+            <HBox alignment="CENTER_LEFT" spacing="12">
+                <Button fx:id="btnBack" onAction="#handleCancel" text="← Retour à la liste" styleClass="btn-secondary"/>
+                <Separator orientation="VERTICAL"/>
+                <Label fx:id="lblFormTitle" text="Création d'un Compte Utilisateur" styleClass="view-title"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- ─── CENTER : Formulaire Déroulant ─── -->
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="app-scroll">
+            <VBox spacing="16" styleClass="form-page-container" alignment="TOP_CENTER">
+                <padding><Insets top="20" right="30" bottom="30" left="30"/></padding>
+
+                <VBox maxWidth="750" spacing="18" styleClass="form-section-card">
+
+                    <!-- Message d'erreur ou d'alerte -->
+                    <Label fx:id="lblError" text="" wrapText="true" visible="false" managed="false"
+                           style="-fx-background-color: #f8d7da; -fx-text-fill: #842029; -fx-padding: 10; -fx-background-radius: 4;"/>
+
+                    <!-- Section 1 : État civil & Coordonnées -->
+                    <Label text="1. Identité &amp; Contact" styleClass="section-card-title"/>
+                    <GridPane hgap="16" vgap="12">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="33.33"/>
+                            <ColumnConstraints percentWidth="33.33"/>
+                            <ColumnConstraints percentWidth="33.34"/>
+                        </columnConstraints>
+
+                        <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                            <Label text="Nom de famille *" styleClass="field-label"/>
+                            <TextField fx:id="txtNom" promptText="ex: MUTOMBO" styleClass="input-field"/>
+                        </VBox>
+
+                        <VBox spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                            <Label text="Postnom" styleClass="field-label"/>
+                            <TextField fx:id="txtPostnom" promptText="ex: KASENDE" styleClass="input-field"/>
+                        </VBox>
+
+                        <VBox spacing="4" GridPane.columnIndex="2" GridPane.rowIndex="0">
+                            <Label text="Prénom *" styleClass="field-label"/>
+                            <TextField fx:id="txtPrenom" promptText="ex: Jenos" styleClass="input-field"/>
+                        </VBox>
+
+                        <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                            <Label text="Email professionnel *" styleClass="field-label"/>
+                            <TextField fx:id="txtEmail" promptText="ex: jenos@ecole.cd" styleClass="input-field"/>
+                        </VBox>
+
+                        <VBox spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                            <Label text="Numéro de Téléphone" styleClass="field-label"/>
+                            <TextField fx:id="txtPhone" promptText="+243 8..." styleClass="input-field"/>
+                        </VBox>
+
+                        <VBox spacing="4" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                            <Label text="Nom d'utilisateur (Login) *" styleClass="field-label"/>
+                            <TextField fx:id="txtUsername" promptText="ex: jenos_m" styleClass="input-field"/>
+                        </VBox>
+                    </GridPane>
+
+                    <Separator/>
+
+                    <!-- Section 2 : Rôle, Caisse & Statut -->
+                    <Label text="2. Rôle, Caisse Associée &amp; Statut" styleClass="section-card-title"/>
+                    <GridPane hgap="16" vgap="12">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="33.33"/>
+                            <ColumnConstraints percentWidth="33.33"/>
+                            <ColumnConstraints percentWidth="33.34"/>
+                        </columnConstraints>
+
+                        <VBox spacing="4" GridPane.columnIndex="0">
+                            <Label text="Rôle dans l'application *" styleClass="field-label"/>
+                            <ComboBox fx:id="cmbRole" maxWidth="Infinity" styleClass="filter-combo"/>
+                        </VBox>
+
+                        <VBox fx:id="boxCashRegister" spacing="4" GridPane.columnIndex="1">
+                            <Label text="Caisse Associée (Règle Caisse Unique) *" styleClass="field-label"/>
+                            <ComboBox fx:id="cmbCashRegister" maxWidth="Infinity" styleClass="filter-combo"/>
+                        </VBox>
+
+                        <VBox spacing="4" GridPane.columnIndex="2">
+                            <Label text="Statut du compte *" styleClass="field-label"/>
+                            <ComboBox fx:id="cmbStatus" maxWidth="Infinity" styleClass="filter-combo"/>
+                        </VBox>
+                    </GridPane>
+
+                    <Separator/>
+
+                    <!-- Section 3 : Mot de passe (Masqué, jamais en clair) -->
+                    <Label text="3. Sécurité d'Accès &amp; Mot de Passe" styleClass="section-card-title"/>
+                    <VBox fx:id="boxPasswordFields" spacing="12">
+                        <GridPane hgap="16" vgap="12">
+                            <columnConstraints>
+                                <ColumnConstraints percentWidth="50"/>
+                                <ColumnConstraints percentWidth="50"/>
+                            </columnConstraints>
+
+                            <VBox spacing="4" GridPane.columnIndex="0">
+                                <Label fx:id="lblPassword" text="Mot de passe initial *" styleClass="field-label"/>
+                                <PasswordField fx:id="txtPassword" promptText="••••••••" styleClass="input-field"/>
+                            </VBox>
+
+                            <VBox spacing="4" GridPane.columnIndex="1">
+                                <Label fx:id="lblConfirmPassword" text="Confirmer le mot de passe *" styleClass="field-label"/>
+                                <PasswordField fx:id="txtConfirmPassword" promptText="••••••••" styleClass="input-field"/>
+                            </VBox>
+                        </GridPane>
+                        <Label text="Le mot de passe doit comporter au moins 6 caractères et ne sera jamais affiché en clair." styleClass="text-muted"/>
+                    </VBox>
+
+                    <!-- Barre de boutons -->
+                    <HBox spacing="14" alignment="CENTER_RIGHT" style="-fx-padding: 10 0 0 0;">
+                        <Button fx:id="btnCancel" onAction="#handleCancel" text="Annuler" styleClass="btn-secondary"/>
+                        <Button fx:id="btnSave" onAction="#handleSave" text="💾 Enregistrer l'Utilisateur" styleClass="btn-primary" prefHeight="38"/>
+                    </HBox>
+
+                </VBox>
+
+            </VBox>
+        </ScrollPane>
+    </center>
+
+</BorderPane>

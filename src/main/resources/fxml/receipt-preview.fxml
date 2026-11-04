@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            styleClass="view-container"
+            fx:controller="com.jenos.gestionecole.controller.ReceiptPreviewController">
+
+    <!-- ─── TOP : Barre d'actions d'aperçu ─── -->
+    <top>
+        <HBox spacing="14" alignment="CENTER_LEFT" styleClass="view-top-bar">
+            <Label text="Aperçu du Reçu de Caisse" styleClass="view-title"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button fx:id="btnClose" onAction="#handleClose" text="Fermer" styleClass="btn-secondary"/>
+            <Button fx:id="btnPrint" onAction="#handlePrint" text="Imprimer la Quittance" styleClass="btn-primary"/>
+        </HBox>
+    </top>
+
+    <!-- ─── CENTER : Feuille de Reçu Officielle ─── -->
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="app-scroll">
+            <StackPane styleClass="form-page-container" alignment="TOP_CENTER">
+
+                <!-- Feuille Reçu format bordereau caisse -->
+                <VBox fx:id="receiptSheet" prefWidth="640" maxWidth="680" styleClass="form-section-card" spacing="16">
+
+                    <!-- En-tête officiel établissement -->
+                    <VBox spacing="4" alignment="CENTER">
+                        <Label text="COMPLEXE SCOLAIRE JENOS" styleClass="h1"/>
+                        <Label text="République Démocratique du Congo - Ministère de l'Éducation Nationale" styleClass="text-muted"/>
+                        <Label text="DIRECTION FINANCIÈRE &amp; CAISSE CENTRALE" styleClass="field-label"/>
+                        <Separator/>
+                    </VBox>
+
+                    <!-- Numéro & Statut (Original ou Duplicata) -->
+                    <HBox alignment="CENTER_LEFT" spacing="12">
+                        <VBox spacing="2">
+                            <Label text="QUITTANCE OFFICIELLE DE CAISSE" styleClass="h2"/>
+                            <HBox spacing="8" alignment="CENTER_LEFT">
+                                <Label text="N° :" styleClass="field-label"/>
+                                <Label fx:id="lblReceiptNumber" text="REC-2025-0000" styleClass="h2"/>
+                            </HBox>
+                        </VBox>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <VBox alignment="CENTER_RIGHT" spacing="4">
+                            <Label fx:id="lblBadgeOriginal" text="ORIGINAL" styleClass="badge, badge-success"/>
+                            <Label fx:id="lblIssueDate" text="Date: 25/09/2026 10:15" styleClass="text-muted"/>
+                        </VBox>
+                    </HBox>
+
+                    <!-- Informations du payeur / élève -->
+                    <VBox styleClass="form-section-card" spacing="8">
+                        <Label text="Bénéficiaire / Payeur" styleClass="section-card-title"/>
+                        <GridPane hgap="16" vgap="8">
+                            <columnConstraints>
+                                <ColumnConstraints percentWidth="30"/>
+                                <ColumnConstraints percentWidth="70"/>
+                            </columnConstraints>
+
+                            <Label text="Nom &amp; Postnom :" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                            <Label fx:id="lblBeneficiaryName" text="Nom de l'élève" styleClass="h2" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                            <Label text="Matricule :" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                            <Label fx:id="lblBeneficiaryMatricule" text="2025-SEC-0000" styleClass="field-label" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                            <Label text="Classe / Filière :" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                            <Label fx:id="lblBeneficiaryDetail" text="6e Math-Physique A" styleClass="field-label" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                        </GridPane>
+                    </VBox>
+
+                    <!-- Détail du versement -->
+                    <VBox styleClass="form-section-card" spacing="8">
+                        <Label text="Détail du Règlement" styleClass="section-card-title"/>
+                        <GridPane hgap="16" vgap="8">
+                            <columnConstraints>
+                                <ColumnConstraints percentWidth="40"/>
+                                <ColumnConstraints percentWidth="60"/>
+                            </columnConstraints>
+
+                            <Label text="Motif / Frais payé :" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                            <Label fx:id="lblFeeName" text="Minerval 1er Trimestre" styleClass="h2" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                            <Label text="Mode de paiement :" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                            <Label fx:id="lblPaymentMethod" text="ESPECES" styleClass="field-label" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                            <Label text="Réf. Transaction :" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                            <Label fx:id="lblTransactionRef" text="—" styleClass="text-muted" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                        </GridPane>
+
+                        <Separator/>
+
+                        <!-- Montant Réglé Mis en Évidence -->
+                        <HBox alignment="CENTER_LEFT" spacing="12">
+                            <Label text="MONTANT PAYÉ :" styleClass="h2"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label fx:id="lblAmountPaid" text="0.00 USD" styleClass="h1"/>
+                        </HBox>
+                    </VBox>
+
+                    <!-- Situation du frais & Solde Restant dans la même devise -->
+                    <HBox spacing="16" styleClass="form-section-card">
+                        <VBox spacing="4" HBox.hgrow="ALWAYS">
+                            <Label text="Montant exigible pour ce frais :" styleClass="field-label"/>
+                            <Label fx:id="lblFeeTotalDue" text="0.00 USD" styleClass="field-label"/>
+                        </VBox>
+                        <Separator orientation="VERTICAL"/>
+                        <VBox spacing="4" HBox.hgrow="ALWAYS">
+                            <Label text="Solde restant dû après règlement :" styleClass="field-label"/>
+                            <Label fx:id="lblBalanceRemaining" text="0.00 USD" styleClass="h2"/>
+                        </VBox>
+                    </HBox>
+
+                    <!-- Mentions légales et signatures -->
+                    <VBox spacing="12">
+                        <HBox spacing="20">
+                            <VBox spacing="4" HBox.hgrow="ALWAYS">
+                                <Label text="Guichet &amp; Opérateur :" styleClass="field-label"/>
+                                <Label fx:id="lblCashier" text="Caissière : Jenos (Caisse Principale 01)" styleClass="text-muted"/>
+                            </VBox>
+                            <VBox spacing="4" alignment="TOP_RIGHT">
+                                <Label text="Sceau &amp; Signature Caisse :" styleClass="field-label"/>
+                                <Label text="[ Cachet Payé ]" styleClass="text-muted"/>
+                            </VBox>
+                        </HBox>
+
+                        <Separator/>
+                        <Label text="Mention importante : La présente quittance fait foi de paiement libératoire. Aucun remboursement n'est accordé."
+                               styleClass="text-muted"/>
+                    </VBox>
+
+                </VBox>
+
+            </StackPane>
+        </ScrollPane>
+    </center>
+
+</BorderPane>

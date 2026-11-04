@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            styleClass="view-container"
+            fx:controller="com.jenos.gestionecole.controller.UsersController">
+
+    <!-- ─── TOP : En-tête et Barre de Filtres ─── -->
+    <top>
+        <VBox styleClass="view-top-bar" spacing="12">
+            <padding><Insets top="14" right="20" bottom="14" left="20"/></padding>
+
+            <!-- Titre et Action Principale -->
+            <HBox alignment="CENTER_LEFT" spacing="16">
+                <VBox spacing="2" HBox.hgrow="ALWAYS">
+                    <Label text="Gestion des Utilisateurs &amp; Comptes Système" styleClass="view-title"/>
+                    <Label text="Administration des comptes, rôles, caisses de rattachement et sécurité des accès." styleClass="text-muted"/>
+                </VBox>
+                <Label fx:id="lblUserCount" text="0 utilisateur(s)" styleClass="badge, badge-info"/>
+                <Button fx:id="btnAddUser" onAction="#handleNewUser" text="+ Nouvel Utilisateur" styleClass="btn-primary"/>
+            </HBox>
+
+            <!-- Barre de Recherche et Filtres -->
+            <HBox spacing="12" alignment="CENTER_LEFT" styleClass="form-section-card">
+                <TextField fx:id="txtSearch" promptText="🔍 Rechercher par nom, identifiant, email..." prefWidth="280" styleClass="input-field"/>
+
+                <ComboBox fx:id="cmbRole" promptText="Tous les rôles" prefWidth="170" styleClass="filter-combo"/>
+                <ComboBox fx:id="cmbStatus" promptText="Tous les statuts" prefWidth="150" styleClass="filter-combo"/>
+                <ComboBox fx:id="cmbCashRegister" promptText="Toutes les caisses" prefWidth="190" styleClass="filter-combo"/>
+
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="btnResetFilters" onAction="#handleResetFilters" text="Réinitialiser" styleClass="btn-secondary"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- ─── CENTER : Tableau des Utilisateurs ─── -->
+    <center>
+        <VBox styleClass="form-page-container" spacing="10">
+            <padding><Insets top="10" right="20" bottom="10" left="20"/></padding>
+            <TableView fx:id="tableUsers" VBox.vgrow="ALWAYS" styleClass="table-view">
+                <columns>
+                    <TableColumn fx:id="tcName" text="Nom &amp; Prénom" prefWidth="200"/>
+                    <TableColumn fx:id="tcUsername" text="Identifiant" prefWidth="140"/>
+                    <TableColumn fx:id="tcRole" text="Rôle" prefWidth="150"/>
+                    <TableColumn fx:id="tcCashRegister" text="Caisse Associée" prefWidth="170"/>
+                    <TableColumn fx:id="tcStatus" text="Statut" prefWidth="110"/>
+                    <TableColumn fx:id="tcLastLogin" text="Dernière Connexion" prefWidth="160"/>
+                    <TableColumn fx:id="tcActions" text="Actions" prefWidth="220" sortable="false"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+
+    <!-- ─── BOTTOM : Pied de page informatif ─── -->
+    <bottom>
+        <HBox alignment="CENTER_LEFT" spacing="12" styleClass="view-top-bar">
+            <padding><Insets top="8" right="20" bottom="8" left="20"/></padding>
+            <Label text="🔒 Règle de conformité : Pas de suppression physique d'un utilisateur ayant opéré (désactivation conservatoire)." styleClass="text-muted"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="lblStatusInfo" text="" styleClass="text-muted"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

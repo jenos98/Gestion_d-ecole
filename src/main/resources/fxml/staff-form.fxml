@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            styleClass="view-container"
+            fx:controller="com.jenos.gestionecole.controller.StaffFormController">
+
+    <!-- ─── TOP : En-tête ─── -->
+    <top>
+        <VBox styleClass="view-top-bar" spacing="6">
+            <HBox alignment="CENTER_LEFT" spacing="12">
+                <Button fx:id="btnBack" onAction="#handleBack" text="← Retour au Personnel" styleClass="btn-secondary"/>
+                <Label fx:id="lblTitle" text="Fiche d'un Membre du Personnel" styleClass="view-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="lblMatriculeBadge" text="Nouveau" styleClass="badge, badge-neutral"/>
+            </HBox>
+            <Label fx:id="lblMessage" visible="false" managed="false"/>
+        </VBox>
+    </top>
+
+    <!-- ─── CENTER : Formulaire complet ─── -->
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="app-scroll">
+            <VBox spacing="18" styleClass="form-page-container">
+
+                <!-- 1. IDENTITÉ & ÉTAT CIVIL -->
+                <VBox styleClass="form-section-card" spacing="14">
+                    <Label text="1. Identité Civile &amp; Qualification" styleClass="section-card-title"/>
+                    <GridPane hgap="16" vgap="14">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="33.33"/>
+                            <ColumnConstraints percentWidth="33.33"/>
+                            <ColumnConstraints percentWidth="33.34"/>
+                        </columnConstraints>
+
+                        <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                            <Label text="Nom de famille *" styleClass="field-label"/>
+                            <TextField fx:id="txtNom" promptText="ex: Mukendi" styleClass="input-field"/>
+                        </VBox>
+
+                        <VBox spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                            <Label text="Postnom *" styleClass="field-label"/>
+                            <TextField fx:id="txtPostnom" promptText="ex: Tshilumba" styleClass="input-field"/>
+                        </VBox>
+
+                        <VBox spacing="4" GridPane.columnIndex="2" GridPane.rowIndex="0">
+                            <Label text="Prénom" styleClass="field-label"/>
+                            <TextField fx:id="txtPrenom" promptText="ex: Alain" styleClass="input-field"/>
+                        </VBox>
+
+                        <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                            <Label text="Genre *" styleClass="field-label"/>
+                            <ComboBox fx:id="cmbGenre" maxWidth="Infinity" styleClass="filter-combo"/>
+                        </VBox>
+
+                        <VBox spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                            <Label text="Titre ou Qualification / Diplôme" styleClass="field-label"/>
+                            <TextField fx:id="txtQualification" promptText="Licencié, Gradué, Diplômé d'État..." styleClass="input-field"/>
+                        </VBox>
+
+                        <VBox spacing="4" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                            <Label text="Date d'engagement" styleClass="field-label"/>
+                            <DatePicker fx:id="dpDateEmbauche" maxWidth="Infinity" styleClass="date-picker"/>
+                        </VBox>
+                    </GridPane>
+                </VBox>
+
+                <!-- 2. AFFECTATION & CONTACT -->
+                <VBox styleClass="form-section-card" spacing="14">
+                    <Label text="2. Affectation Professionnelle &amp; Coordonnées" styleClass="section-card-title"/>
+                    <GridPane hgap="16" vgap="14">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="50"/>
+                            <ColumnConstraints percentWidth="50"/>
+                        </columnConstraints>
+
+                        <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                            <Label text="Catégorie *" styleClass="field-label"/>
+                            <ComboBox fx:id="cmbCategorie" promptText="Choisir la catégorie" maxWidth="Infinity" styleClass="filter-combo"/>
+                        </VBox>
+
+                        <VBox spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                            <Label text="Fonction officielle *" styleClass="field-label"/>
+                            <TextField fx:id="txtFonction" promptText="Professeur, Comptable, Secrétaire..." styleClass="input-field"/>
+                        </VBox>
+
+                        <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                            <Label text="Poste / Affectation spécifique" styleClass="field-label"/>
+                            <TextField fx:id="txtPoste" promptText="Titulaire 6e Sc, Caisse Principale..." styleClass="input-field"/>
+                        </VBox>
+
+                        <VBox spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                            <Label text="Numéro de téléphone" styleClass="field-label"/>
+                            <TextField fx:id="txtTelephone" promptText="+243 ..." styleClass="input-field"/>
+                        </VBox>
+
+                        <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                            <Label text="Adresse email" styleClass="field-label"/>
+                            <TextField fx:id="txtEmail" promptText="nom@ecolejenos.cd" styleClass="input-field"/>
+                        </VBox>
+
+                        <VBox spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                            <Label text="Adresse de résidence" styleClass="field-label"/>
+                            <TextField fx:id="txtAdresse" promptText="Commune, quartier, avenue..." styleClass="input-field"/>
+                        </VBox>
+                    </GridPane>
+                </VBox>
+
+                <!-- 3. RÉMUNÉRATION CONTRACTUELLE (Protégé par RoleGuard) -->
+                <VBox fx:id="cardSalary" styleClass="form-section-card" spacing="14">
+                    <Label text="3. Rémunération Contractuelle &amp; Statut RH" styleClass="section-card-title"/>
+                    <GridPane hgap="16" vgap="14">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="33.33"/>
+                            <ColumnConstraints percentWidth="33.33"/>
+                            <ColumnConstraints percentWidth="33.34"/>
+                        </columnConstraints>
+
+                        <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                            <Label text="Salaire de Base Mensuel *" styleClass="field-label"/>
+                            <TextField fx:id="txtSalaireBase" promptText="0.00" styleClass="input-field"/>
+                        </VBox>
+
+                        <VBox spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                            <Label text="Devise Contractuelle *" styleClass="field-label"/>
+                            <ComboBox fx:id="cmbDevise" maxWidth="Infinity" styleClass="filter-combo"/>
+                        </VBox>
+
+                        <VBox spacing="4" GridPane.columnIndex="2" GridPane.rowIndex="0">
+                            <Label text="Statut Administratif *" styleClass="field-label"/>
+                            <ComboBox fx:id="cmbStatut" maxWidth="Infinity" styleClass="filter-combo"/>
+                        </VBox>
+                    </GridPane>
+                </VBox>
+
+                <!-- Boutons d'action -->
+                <HBox spacing="12" alignment="CENTER_RIGHT" styleClass="form-action-bar">
+                    <Button fx:id="btnCancel" onAction="#handleCancel" text="Annuler" styleClass="btn-secondary"/>
+                    <Button fx:id="btnSave" onAction="#handleSave" text="Enregistrer la Fiche" styleClass="btn-primary"/>
+                </HBox>
+
+            </VBox>
+        </ScrollPane>
+    </center>
+
+</BorderPane>

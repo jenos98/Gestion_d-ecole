@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<ScrollPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            styleClass="app-scroll"
+            fitToWidth="true"
+            fx:controller="com.jenos.gestionecole.controller.dialog.OperationDetailsController">
+
+    <VBox spacing="16" styleClass="form-page-container">
+        <padding><Insets top="14" right="16" bottom="16" left="16"/></padding>
+
+        <!-- ─── En-tête ─── -->
+        <HBox alignment="CENTER_LEFT" spacing="12">
+            <VBox spacing="3" HBox.hgrow="ALWAYS">
+                <HBox spacing="10" alignment="BASELINE_LEFT">
+                    <Label text="Opération" styleClass="view-title"/>
+                    <Label fx:id="lblRef" text="REC-2026-0001" styleClass="view-title" style="-fx-text-fill: #0d6efd;"/>
+                    <Label fx:id="lblStatus" text="VALIDÉE"
+                           style="-fx-background-color: #d1e7dd; -fx-text-fill: #0f5132; -fx-padding: 3 8 3 8; -fx-background-radius: 4; -fx-font-weight: bold;"/>
+                </HBox>
+                <Label fx:id="lblDateTime" text="Date et heure : 26/09/2026 10:30" styleClass="text-muted"/>
+            </VBox>
+        </HBox>
+
+        <!-- ─── Détails financiers et opérationnels ─── -->
+        <VBox styleClass="form-section-card" spacing="12">
+            <Label text="Caractéristiques de la Transaction" styleClass="section-card-title"/>
+
+            <GridPane hgap="16" vgap="10">
+                <columnConstraints>
+                    <ColumnConstraints percentWidth="50"/>
+                    <ColumnConstraints percentWidth="50"/>
+                </columnConstraints>
+
+                <!-- Type & Montant -->
+                <VBox spacing="2" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                    <Label text="Type d'Opération :" styleClass="field-label"/>
+                    <Label fx:id="lblType" text="PAIEMENT_ELEVE" styleClass="h2"/>
+                </VBox>
+
+                <VBox spacing="2" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                    <Label text="Montant &amp; Devise :" styleClass="field-label"/>
+                    <Label fx:id="lblAmount" text="150.00 USD" style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #198754;"/>
+                </VBox>
+
+                <!-- Description & Référence -->
+                <VBox spacing="2" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                    <Label text="Description / Libellé :" styleClass="field-label"/>
+                    <Label fx:id="lblDescription" text="Minerval 1er Trimestre" wrapText="true" styleClass="text-muted"/>
+                </VBox>
+
+                <VBox spacing="2" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                    <Label text="Référence / N° Bordereau :" styleClass="field-label"/>
+                    <Label fx:id="lblTransactionRef" text="REC-001" styleClass="text-muted"/>
+                </VBox>
+
+                <!-- Mode & Caisse / Caissière -->
+                <VBox spacing="2" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                    <Label text="Mode de Règlement :" styleClass="field-label"/>
+                    <Label fx:id="lblPaymentMethod" text="ESPECES" styleClass="text-muted"/>
+                </VBox>
+
+                <VBox spacing="2" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                    <Label text="Caisse &amp; Caissière :" styleClass="field-label"/>
+                    <HBox spacing="8">
+                        <Label fx:id="lblCashRegister" text="Caisse 01" styleClass="text-muted"/>
+                        <Label text="|" styleClass="text-muted"/>
+                        <Label fx:id="lblCashier" text="Jenos" styleClass="text-muted"/>
+                    </HBox>
+                </VBox>
+            </GridPane>
+        </VBox>
+
+        <!-- ─── Périmètre Scolaire (si applicable) ─── -->
+        <VBox fx:id="boxSchoolInfo" styleClass="form-section-card" spacing="10">
+            <Label text="Périmètre Scolaire de l'Élève" styleClass="section-card-title"/>
+            <GridPane hgap="16" vgap="8">
+                <columnConstraints>
+                    <ColumnConstraints percentWidth="50"/>
+                    <ColumnConstraints percentWidth="50"/>
+                </columnConstraints>
+
+                <VBox spacing="2" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                    <Label text="Élève bénéficiaire :" styleClass="field-label"/>
+                    <Label fx:id="lblBeneficiary" text="—" styleClass="h2"/>
+                </VBox>
+
+                <VBox spacing="2" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                    <Label text="Matricule :" styleClass="field-label"/>
+                    <Label fx:id="lblMatricule" text="—" styleClass="text-muted"/>
+                </VBox>
+
+                <VBox spacing="2" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                    <Label text="Section &amp; Promotion :" styleClass="field-label"/>
+                    <Label fx:id="lblSectionPromo" text="—" styleClass="text-muted"/>
+                </VBox>
+
+                <VBox spacing="2" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                    <Label text="Option &amp; Classe :" styleClass="field-label"/>
+                    <Label fx:id="lblOptionClasse" text="—" styleClass="text-muted"/>
+                </VBox>
+            </GridPane>
+        </VBox>
+
+        <!-- ─── Données d'Audit (Annulation / Correction) ─── -->
+        <VBox fx:id="boxAuditInfo" styleClass="form-section-card" spacing="6"
+              style="-fx-background-color: #fff3cd; -fx-border-color: #ffe69c;" visible="false" managed="false">
+            <Label text="Traçabilité d'Audit (Annulation / Rectification)" styleClass="section-card-title"
+                   style="-fx-text-fill: #664d03;"/>
+            <Label fx:id="lblCancelReason" text="Motif : —" wrapText="true" style="-fx-font-weight: bold;"/>
+            <Label fx:id="lblCancelledBy" text="Auteur de la décision : —"/>
+            <Label fx:id="lblCorrectionNotes" text="Notes : —" wrapText="true"/>
+        </VBox>
+
+        <!-- ─── Zone Formulaire d'action (Rétractable) ─── -->
+        <VBox fx:id="boxActionForm" styleClass="form-section-card" spacing="10" visible="false" managed="false">
+            <Label fx:id="lblActionFormTitle" text="Action d'Audit" styleClass="section-card-title"/>
+            <TextField fx:id="txtNewAmount" promptText="Nouveau montant rectifié..." styleClass="input-field"/>
+            <TextField fx:id="txtActionReason" promptText="Motif obligatoire de la modification..." styleClass="input-field"/>
+            <HBox spacing="10" alignment="CENTER_RIGHT">
+                <Button fx:id="btnCancelForm" onAction="#handleCancelForm" text="Annuler l'action" styleClass="btn-secondary"/>
+                <Button fx:id="btnConfirmAction" onAction="#handleConfirmAction" text="Valider la modification"
+                        styleClass="btn-primary, btn-danger"/>
+            </HBox>
+        </VBox>
+
+        <!-- ─── Boutons de commande ─── -->
+        <HBox spacing="12" alignment="CENTER_RIGHT">
+            <Button fx:id="btnCancelOperation" onAction="#handleShowCancelForm"
+                    text="Annuler l'Opération" styleClass="btn-danger"/>
+            <Button fx:id="btnCorrectOperation" onAction="#handleShowCorrectForm"
+                    text="Corriger le Montant" styleClass="btn-secondary"/>
+            <Button fx:id="btnClose" onAction="#handleClose"
+                    text="Fermer" styleClass="btn-primary"/>
+        </HBox>
+    </VBox>
+</ScrollPane>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<ScrollPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            styleClass="dashboard-scroll"
+            fitToWidth="true"
+            fx:controller="com.jenos.gestionecole.controller.ProfileController">
+
+    <VBox spacing="20" styleClass="view-container">
+
+        <!-- ─── TOP : Titre ─── -->
+        <VBox spacing="4" styleClass="view-top-bar">
+            <Label text="Mon Profil &amp; Sécurité du Compte" styleClass="view-title"/>
+            <Label text="Consultez vos privilèges, mettez à jour vos coordonnées et gérez votre mot de passe." styleClass="text-muted"/>
+            <Label fx:id="lblFeedback" visible="false" managed="false"/>
+        </VBox>
+
+        <!-- ─── CENTER : Grille 2 Cartes ─── -->
+        <GridPane hgap="20" vgap="20">
+            <columnConstraints>
+                <ColumnConstraints percentWidth="50"/>
+                <ColumnConstraints percentWidth="50"/>
+            </columnConstraints>
+
+            <!-- 1. Informations Personnelles & Système -->
+            <VBox GridPane.columnIndex="0" styleClass="form-section-card" spacing="14">
+                <Label text="Informations du Compte" styleClass="section-card-title"/>
+
+                <GridPane hgap="12" vgap="12">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="50"/>
+                        <ColumnConstraints percentWidth="50"/>
+                    </columnConstraints>
+
+                    <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                        <Label text="Nom" styleClass="field-label"/>
+                        <TextField fx:id="txtNom" styleClass="input-field"/>
+                    </VBox>
+                    <VBox spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                        <Label text="Postnom &amp; Prénom" styleClass="field-label"/>
+                        <TextField fx:id="txtPrenom" styleClass="input-field"/>
+                    </VBox>
+
+                    <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                        <Label text="Identifiant système (Username)" styleClass="field-label"/>
+                        <TextField fx:id="txtUsername" editable="false" styleClass="input-field" style="-fx-opacity: 0.8;"/>
+                    </VBox>
+                    <VBox spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <Label text="Rôle attribué" styleClass="field-label"/>
+                        <TextField fx:id="txtRole" editable="false" styleClass="input-field" style="-fx-opacity: 0.8;"/>
+                    </VBox>
+
+                    <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                        <Label text="Téléphone personnel *" styleClass="field-label"/>
+                        <TextField fx:id="txtPhone" styleClass="input-field"/>
+                    </VBox>
+                    <VBox spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                        <Label text="Adresse Email *" styleClass="field-label"/>
+                        <TextField fx:id="txtEmail" styleClass="input-field"/>
+                    </VBox>
+
+                    <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="3" GridPane.columnSpan="2">
+                        <Label text="Caisse associée" styleClass="field-label"/>
+                        <TextField fx:id="txtCashRegister" editable="false" styleClass="input-field" style="-fx-opacity: 0.8;"/>
+                    </VBox>
+                </GridPane>
+
+                <HBox alignment="CENTER_RIGHT" spacing="10">
+                    <Button fx:id="btnSaveDetails" onAction="#handleSaveDetails" text="Enregistrer mes coordonnées" styleClass="btn-primary"/>
+                </HBox>
+            </VBox>
+
+            <!-- 2. Changement Sécurisé du Mot de Passe -->
+            <VBox GridPane.columnIndex="1" styleClass="form-section-card" spacing="14">
+                <Label text="Sécurité &amp; Modification du Mot de Passe" styleClass="section-card-title"/>
+                <Label text="Le nouveau mot de passe doit comporter au moins 6 caractères et différer de l'actuel." styleClass="text-muted"/>
+
+                <VBox spacing="12">
+                    <VBox spacing="4">
+                        <Label text="Ancien mot de passe actuel *" styleClass="field-label"/>
+                        <PasswordField fx:id="txtOldPassword" styleClass="input-field" promptText="Saisissez votre mot de passe actuel"/>
+                    </VBox>
+
+                    <VBox spacing="4">
+                        <Label text="Nouveau mot de passe *" styleClass="field-label"/>
+                        <PasswordField fx:id="txtNewPassword" styleClass="input-field" promptText="Au moins 6 caractères"/>
+                    </VBox>
+
+                    <VBox spacing="4">
+                        <Label text="Confirmation du nouveau mot de passe *" styleClass="field-label"/>
+                        <PasswordField fx:id="txtConfirmPassword" styleClass="input-field" promptText="Retapez le mot de passe à l'identique"/>
+                    </VBox>
+                </VBox>
+
+                <Label fx:id="lblPasswordError" styleClass="label-error" visible="false" wrapText="true"/>
+
+                <HBox alignment="CENTER_RIGHT" spacing="10">
+                    <Button fx:id="btnChangePassword" onAction="#handleChangePassword" text="Modifier mon mot de passe" styleClass="btn-primary"/>
+                </HBox>
+
+                <Separator styleClass="dialog-separator"/>
+
+                <!-- Déconnexion rapide -->
+                <VBox spacing="6">
+                    <Label text="Fermeture de la session" styleClass="field-label"/>
+                    <Button fx:id="btnLogout" onAction="#handleLogout" text="Se déconnecter maintenant" styleClass="btn-secondary, btn-action-danger" maxWidth="Infinity"/>
+                </VBox>
+            </VBox>
+        </GridPane>
+
+    </VBox>
+</ScrollPane>

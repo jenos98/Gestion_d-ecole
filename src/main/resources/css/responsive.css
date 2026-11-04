@@ -1,0 +1,88 @@
+/* ============================================================
+   responsive.css — Adaptations 1366×768 et facteurs 125%/150%
+   ============================================================ */
+
+/*
+   STRATÉGIE :
+   - Aucune taille fixe excessive dans les FXML.
+   - Les conteneurs utilisent HBox.hgrow=ALWAYS, VBox.vgrow=ALWAYS.
+   - À 1366×768, les cartes passent sur 2 colonnes via ScrollPane vertical.
+   - À 1920×1080, les cartes restent sur 4 colonnes.
+   - Le contenu central défile verticalement plutôt qu'être tronqué.
+   - Les tests à 125% et 150% (Windows DPI) doivent utiliser des tailles
+     relatives, jamais des valeurs px fixes sur les zones adaptatives.
+*/
+
+/* ── Zone de contenu principal ── */
+.content-container {
+    -fx-min-width: 0;
+    -fx-pref-width: 0; /* laisse le BorderPane gérer */
+}
+
+/* ── ScrollPane universel (dashboard, students, etc.) ── */
+.app-scroll {
+    -fx-hbar-policy: NEVER;
+    -fx-vbar-policy: AS_NEEDED;
+    -fx-fit-to-width: true;
+    -fx-background-color: -color-bg;
+    -fx-border-width: 0;
+}
+
+.app-scroll .viewport {
+    -fx-background-color: -color-bg;
+}
+
+/* ── Adaptation 1366×768 : cartes sur 2 colonnes ── */
+/*
+   Note : JavaFX ne supporte pas les media queries CSS.
+   L'adaptation de colonnes se fait dans le contrôleur via :
+   gridPane.getColumnConstraints().clear();
+   // puis redéfinir 2 colonnes à 50% si largeur < 1500px
+*/
+
+/* ── Sidebar : ne jamais dépasser 240px en largeur ── */
+.sidebar {
+    -fx-max-width: 240;
+}
+
+/* ── Header : hauteur fixe mais padding adaptatif ── */
+.header-bar {
+    -fx-max-height: 64;
+}
+
+/* ── Cartes : ne jamais avoir de taille fixe rigide ── */
+.money-card,
+.stat-card,
+.cash-status-card,
+.quick-actions-card {
+    -fx-min-width: 160;
+    -fx-pref-width: 0;  /* flex */
+    -fx-max-width: Infinity;
+}
+
+/* ── Boutons adaptables ── */
+.btn-action {
+    -fx-min-width: 130;
+    -fx-pref-width: -1;
+}
+
+/* ── Formulaires : largeur max raisonnable ── */
+.form-container {
+    -fx-max-width: 900;
+    -fx-pref-width: 100%;
+}
+
+/* ── TableView : toujours en mode adaptatif ── */
+.table-view {
+    -fx-pref-height: 0;      /* laisse VBox.vgrow=ALWAYS gérer */
+    -fx-min-height: 200;
+}
+
+/* ── Textes : taille relative pour DPI élevé ── */
+/*
+   Éviter px rigides pour les éléments qui doivent s'adapter au DPI.
+   JavaFX utilise les points CSS, qui tiennent compte du facteur
+   d'échelle system (125%, 150%) sur Windows.
+   Donc 13px en CSS JavaFX = 13pt × facteur d'échelle.
+   C'est correct par défaut — ne pas surcharger avec des valeurs fixes.
+*/

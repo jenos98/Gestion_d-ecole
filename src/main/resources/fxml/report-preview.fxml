@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            styleClass="view-container"
+            fx:controller="com.jenos.gestionecole.controller.PrintPreviewController">
+
+    <!-- ─── TOP : Barre d'outils d'aperçu ─── -->
+    <top>
+        <VBox styleClass="view-top-bar" spacing="6">
+            <padding><Insets top="8" right="16" bottom="8" left="16"/></padding>
+            <HBox spacing="12" alignment="CENTER_LEFT">
+                <Button fx:id="btnClose" onAction="#handleClose" text="← Fermer" styleClass="btn-secondary"/>
+                <Separator orientation="VERTICAL"/>
+
+                <!-- Contrôles de zoom -->
+                <HBox spacing="6" alignment="CENTER">
+                    <Button fx:id="btnZoomOut" onAction="#handleZoomOut" text="－" styleClass="btn-secondary"/>
+                    <Label fx:id="lblZoom" text="100 %" styleClass="field-label" prefWidth="55" alignment="CENTER"/>
+                    <Button fx:id="btnZoomIn" onAction="#handleZoomIn" text="＋" styleClass="btn-secondary"/>
+                </HBox>
+
+                <Separator orientation="VERTICAL"/>
+
+                <!-- Navigation de pages -->
+                <HBox spacing="8" alignment="CENTER">
+                    <Button fx:id="btnPrevPage" onAction="#handlePrevPage" text="◀" styleClass="btn-secondary"/>
+                    <Label fx:id="lblPageIndicator" text="Page 1 / 1" style="-fx-font-weight: bold;"/>
+                    <Button fx:id="btnNextPage" onAction="#handleNextPage" text="▶" styleClass="btn-secondary"/>
+                </HBox>
+
+                <Separator orientation="VERTICAL"/>
+
+                <!-- Orientation -->
+                <Button fx:id="btnPortrait" onAction="#handlePortrait" text="Portrait" styleClass="btn-secondary"/>
+                <Button fx:id="btnLandscape" onAction="#handleLandscape" text="Paysage" styleClass="btn-secondary"/>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <!-- Exportations & Impression -->
+                <Button fx:id="btnExportExcel" onAction="#handleExportExcel" text="📊 Exporter Excel" styleClass="btn-secondary"/>
+                <Button fx:id="btnExportPdf" onAction="#handleExportPdf" text="📄 Exporter PDF" styleClass="btn-secondary"/>
+                <Button fx:id="btnPrint" onAction="#handlePrint" text="🖨 Lancer l'Impression" styleClass="btn-primary"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- ─── CENTER : Feuille de Document A4 ─── -->
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="app-scroll" style="-fx-background-color: #525659;">
+            <StackPane styleClass="form-page-container" alignment="TOP_CENTER" style="-fx-background-color: #525659; -fx-padding: 24;">
+                
+                <!-- Feuille blanche simulant la page A4 officielle -->
+                <VBox fx:id="documentSheet" prefWidth="760" minHeight="980" maxWidth="840"
+                      style="-fx-background-color: white; -fx-padding: 36; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 3);"
+                      spacing="16">
+
+                    <!-- Entête officiel de l'école -->
+                    <HBox alignment="CENTER_LEFT" spacing="16">
+                        <VBox spacing="3" HBox.hgrow="ALWAYS">
+                            <Label fx:id="lblSchoolTitle" text="COMPLEXE SCOLAIRE JENOS" style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #0d6efd;"/>
+                            <Label text="République Démocratique du Congo • Ministère de l'Éducation Nationale" style="-fx-font-size: 11; -fx-text-fill: #6c757d;"/>
+                            <Label text="Direction Générale &amp; Services Financiers" style="-fx-font-size: 10; -fx-text-fill: #6c757d;"/>
+                        </VBox>
+                        <VBox alignment="TOP_RIGHT" spacing="2">
+                            <Label fx:id="lblDocMeta" text="Édité le 26/09/2026 à 10:45" style="-fx-text-fill: #6c757d; -fx-font-size: 11;"/>
+                            <Label text="Système Jenos-Gestion v2.0" style="-fx-text-fill: #adb5bd; -fx-font-size: 10;"/>
+                        </VBox>
+                    </HBox>
+
+                    <Separator/>
+
+                    <!-- Titre du document et filtres actifs -->
+                    <VBox spacing="4" alignment="CENTER">
+                        <Label fx:id="lblDocTitle" text="RAPPORT OFFICIEL" style="-fx-font-size: 16; -fx-font-weight: bold; -fx-underline: true;"/>
+                        <Label fx:id="lblFilterSummary" text="Filtres : Section Secondaire | Option Scientifique | Classe 6e A"
+                               style="-fx-text-fill: #495057; -fx-font-size: 11; -fx-font-style: italic;"/>
+                    </VBox>
+
+                    <!-- Tableau de données dynamique (en-têtes et lignes) -->
+                    <GridPane fx:id="gridReportTable" hgap="1" vgap="1" VBox.vgrow="ALWAYS" style="-fx-background-color: #dee2e6;">
+                        <!-- Rempli dynamiquement -->
+                    </GridPane>
+
+                    <!-- Totaux USD / CDF Strictement Séparés -->
+                    <VBox spacing="6" style="-fx-border-color: #dee2e6; -fx-padding: 10; -fx-background-color: #f8f9fa;">
+                        <Label text="Récapitulation &amp; Totaux par Devise (Séparation Stricte USD / CDF) :" style="-fx-font-weight: bold; -fx-font-size: 11;"/>
+                        <HBox spacing="20">
+                            <Label fx:id="lblTotalUSD" text="Total USD: 0.00 USD" style="-fx-font-weight: bold; -fx-text-fill: #198754; -fx-font-size: 13;"/>
+                            <Label fx:id="lblTotalCDF" text="Total CDF: 0 CDF" style="-fx-font-weight: bold; -fx-text-fill: #0d6efd; -fx-font-size: 13;"/>
+                        </HBox>
+                    </VBox>
+
+                    <!-- Bloc signature officielle -->
+                    <Region VBox.vgrow="ALWAYS"/>
+                    <HBox alignment="BOTTOM_CENTER" spacing="50" style="-fx-padding: 20 0 0 0;">
+                        <VBox alignment="CENTER" spacing="30" HBox.hgrow="ALWAYS">
+                            <Label text="Le Responsable de l'Édition" style="-fx-font-weight: bold; -fx-font-size: 11;"/>
+                            <Label text="(Signature &amp; Date)" style="-fx-font-size: 10; -fx-text-fill: #6c757d;"/>
+                        </VBox>
+
+                        <VBox alignment="CENTER" spacing="30" HBox.hgrow="ALWAYS">
+                            <Label text="Visa de la Direction / Caisse" style="-fx-font-weight: bold; -fx-font-size: 11;"/>
+                            <Label text="(Sceau officiel)" style="-fx-font-size: 10; -fx-text-fill: #6c757d;"/>
+                        </VBox>
+                    </HBox>
+
+                </VBox>
+            </StackPane>
+        </ScrollPane>
+    </center>
+
+</BorderPane>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            styleClass="view-container"
+            fx:controller="com.jenos.gestionecole.controller.OptionsController">
+
+    <!-- ─── TOP : En-tête ─── -->
+    <top>
+        <VBox styleClass="view-top-bar" spacing="6">
+            <Label text="Gestion des Options d'Étude &amp; Filières" styleClass="view-title"/>
+            <Label text="Configuration hiérarchique : Section › Promotion › Option › Classe." styleClass="text-muted"/>
+        </VBox>
+    </top>
+
+    <!-- ─── CENTER : Formulaire et Tableau côte à côte ─── -->
+    <center>
+        <HBox spacing="20" styleClass="form-page-container">
+
+            <!-- 1. Formulaire d'ajout / modification (gauche) -->
+            <VBox fx:id="formSection" prefWidth="380" minWidth="320" styleClass="form-section-card" spacing="14">
+                <Label fx:id="lblFormTitle" text="Nouvelle Option d'Étude" styleClass="section-card-title"/>
+                <Label fx:id="lblMessage" visible="false" managed="false"/>
+
+                <VBox spacing="6">
+                    <Label text="Nom de l'option *" styleClass="field-label"/>
+                    <TextField fx:id="txtOptionName" promptText="ex: Scientifique, Commerciale..." styleClass="input-field"/>
+                </VBox>
+
+                <VBox spacing="6">
+                    <Label text="Section de rattachement *" styleClass="field-label"/>
+                    <ComboBox fx:id="cmbSection" promptText="Choisir la section..." maxWidth="Infinity" styleClass="filter-combo"/>
+                </VBox>
+
+                <VBox spacing="6">
+                    <Label text="Promotion *" styleClass="field-label"/>
+                    <ComboBox fx:id="cmbPromotion" promptText="Choisir la promotion..." maxWidth="Infinity" styleClass="filter-combo"/>
+                </VBox>
+
+                <CheckBox fx:id="chkActive" text="Option active pour les inscriptions" selected="true" styleClass="field-label"/>
+
+                <HBox spacing="10" alignment="CENTER_RIGHT" styleClass="form-action-bar">
+                    <Button fx:id="btnResetForm" onAction="#handleReset" text="Effacer" styleClass="btn-secondary"/>
+                    <Button fx:id="btnSave" onAction="#handleSave" text="Enregistrer l'Option" styleClass="btn-primary"/>
+                </HBox>
+            </VBox>
+
+            <!-- 2. Tableau des options existantes (droite) -->
+            <VBox HBox.hgrow="ALWAYS" styleClass="form-section-card" spacing="12">
+                <Label text="Options Actuellement Configurées" styleClass="section-card-title"/>
+                <TableView fx:id="tableOptions" VBox.vgrow="ALWAYS" styleClass="table-view">
+                    <columns>
+                        <TableColumn fx:id="tcOptionName" text="Option" prefWidth="180"/>
+                        <TableColumn fx:id="tcSection" text="Section" prefWidth="130"/>
+                        <TableColumn fx:id="tcPromotion" text="Promotion" prefWidth="100"/>
+                        <TableColumn fx:id="tcStatus" text="Statut" prefWidth="90"/>
+                        <TableColumn fx:id="tcActions" text="Actions" prefWidth="160" sortable="false"/>
+                    </columns>
+                </TableView>
+            </VBox>
+
+        </HBox>
+    </center>
+</BorderPane>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            styleClass="view-container"
+            fx:controller="com.jenos.gestionecole.controller.PaymentMethodsController">
+
+    <!-- ─── TOP : En-tête ─── -->
+    <top>
+        <VBox styleClass="view-top-bar" spacing="6">
+            <padding><Insets top="14" right="20" bottom="14" left="20"/></padding>
+            <Label text="Configuration des Modes de Paiement" styleClass="view-title"/>
+            <Label text="Paramétrage des canaux d'encaissement acceptés au guichet et exigences de traçabilité (référence obligatoire)." styleClass="text-muted"/>
+        </VBox>
+    </top>
+
+    <!-- ─── CENTER : Formulaire et Tableau ─── -->
+    <center>
+        <HBox spacing="18" styleClass="form-page-container">
+            <padding><Insets top="16" right="20" bottom="20" left="20"/></padding>
+
+            <!-- 1. Formulaire d'ajout (gauche) -->
+            <VBox fx:id="formSection" prefWidth="380" minWidth="320" styleClass="form-section-card" spacing="14">
+                <Label fx:id="lblFormTitle" text="Nouveau Mode de Paiement" styleClass="section-card-title"/>
+                <Label fx:id="lblMessage" visible="false" managed="false"/>
+
+                <VBox spacing="4">
+                    <Label text="Code du mode *" styleClass="field-label"/>
+                    <TextField fx:id="txtCode" promptText="ex: MOBILE_MONEY, ESPECES, CHEQUE" styleClass="input-field"/>
+                </VBox>
+
+                <VBox spacing="4">
+                    <Label text="Libellé affiché *" styleClass="field-label"/>
+                    <TextField fx:id="txtName" promptText="ex: Mobile Money (M-Pesa, Orange, Airtel)" styleClass="input-field"/>
+                </VBox>
+
+                <CheckBox fx:id="chkRequiresReference" text="Nécessite une référence de transaction obligatoire" selected="false" styleClass="field-label"/>
+                <Label text="Si activé, la caissière ne pourra pas valider l'encaissement sans renseigner le numéro de bordereau ou l'ID SMS." styleClass="text-muted"/>
+
+                <HBox spacing="10" alignment="CENTER_RIGHT" style="-fx-padding: 10 0 0 0;">
+                    <Button fx:id="btnReset" onAction="#handleReset" text="Effacer" styleClass="btn-secondary"/>
+                    <Button fx:id="btnSave" onAction="#handleSave" text="Enregistrer le Mode" styleClass="btn-primary"/>
+                </HBox>
+            </VBox>
+
+            <!-- 2. Tableau des modes de paiement (droite) -->
+            <VBox HBox.hgrow="ALWAYS" styleClass="form-section-card" spacing="12">
+                <Label text="Modes de Paiement Actifs &amp; Disponibles" styleClass="section-card-title"/>
+                <TableView fx:id="tableMethods" VBox.vgrow="ALWAYS" styleClass="table-view">
+                    <columns>
+                        <TableColumn fx:id="tcCode" text="Code" prefWidth="130"/>
+                        <TableColumn fx:id="tcName" text="Mode de Paiement" prefWidth="250"/>
+                        <TableColumn fx:id="tcRequiresRef" text="Réf. Obligatoire" prefWidth="140"/>
+                        <TableColumn fx:id="tcStatus" text="Statut" prefWidth="110"/>
+                        <TableColumn fx:id="tcActions" text="Actions" prefWidth="130" sortable="false"/>
+                    </columns>
+                </TableView>
+            </VBox>
+
+        </HBox>
+    </center>
+
+</BorderPane>

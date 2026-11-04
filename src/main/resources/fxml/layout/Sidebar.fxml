@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:id="sidebar"
+      styleClass="sidebar"
+      fx:controller="com.jenos.gestionecole.controller.SidebarController">
+
+    <ScrollPane styleClass="sidebar-scroll" fitToWidth="true" VBox.vgrow="ALWAYS">
+        <VBox styleClass="sidebar-menu" spacing="2">
+
+            <!-- TABLEAU DE BORD -->
+            <Button fx:id="btnDashboard" onAction="#goToDashboard"
+                    styleClass="menu-item, active"
+                    text="Tableau de bord"/>
+
+            <Separator styleClass="menu-separator"/>
+
+            <!-- SCOLARITÉ -->
+            <Label text="SCOLARITÉ" styleClass="menu-section-label"/>
+            <Button fx:id="btnStudents"    onAction="#goToStudents"
+                    styleClass="menu-item" text="Élèves"/>
+            <Button fx:id="btnEnrollment"  onAction="#goToEnrollment"
+                    styleClass="menu-item" text="Inscription"/>
+            <Button fx:id="btnStaff"       onAction="#goToStaff"
+                    styleClass="menu-item" text="Personnel"/>
+
+            <Separator styleClass="menu-separator"/>
+
+            <!-- FINANCES -->
+            <Label text="FINANCES" styleClass="menu-section-label"/>
+            <Button fx:id="btnFees"     onAction="#goToFees"
+                    styleClass="menu-item" text="Frais Scolaires"/>
+            <Button fx:id="btnPayments" onAction="#goToPayments"
+                    styleClass="menu-item" text="Paiements"/>
+            <Button fx:id="btnExpenses" onAction="#goToExpenses"
+                    styleClass="menu-item" text="Dépenses"/>
+            <Button fx:id="btnCash"     onAction="#goToCash"
+                    styleClass="menu-item" text="Caisse"/>
+
+            <Separator styleClass="menu-separator"/>
+
+            <!-- SUIVI -->
+            <Label text="SUIVI" styleClass="menu-section-label"/>
+            <Button fx:id="btnHistory" onAction="#goToHistory"
+                    styleClass="menu-item" text="Historique"/>
+            <Button fx:id="btnReports" onAction="#goToReports"
+                    styleClass="menu-item" text="Rapports"/>
+
+            <!-- Espaceur pour pousser vers le bas -->
+            <Region VBox.vgrow="ALWAYS"/>
+
+            <Separator styleClass="menu-separator"/>
+
+            <!-- ADMINISTRATION -->
+            <Label text="ADMINISTRATION" styleClass="menu-section-label"/>
+            <Button fx:id="btnSettings" onAction="#goToSettings"
+                    styleClass="menu-item" text="Paramètres"/>
+            <Button fx:id="btnAuditLog" onAction="#goToAuditLog"
+                    styleClass="menu-item" text="Journal d'audit"/>
+
+            <Separator styleClass="menu-separator"/>
+
+            <!-- AIDE -->
+            <Label text="AIDE" styleClass="menu-section-label"/>
+            <Button fx:id="btnGuide" onAction="#goToGuide"
+                    styleClass="menu-item" text="Centre d'aide"/>
+
+        </VBox>
+    </ScrollPane>
+</VBox>

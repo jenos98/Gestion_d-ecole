@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            styleClass="view-container"
+            fx:controller="com.jenos.gestionecole.controller.StudentHistoryController">
+
+    <!-- ─── TOP : En-tête de l'élève ─── -->
+    <top>
+        <VBox styleClass="view-top-bar" spacing="10">
+            <HBox alignment="CENTER_LEFT" spacing="12">
+                <VBox spacing="4" HBox.hgrow="ALWAYS">
+                    <Label fx:id="lblStudentName" text="Historique des Opérations de l'Élève" styleClass="view-title"/>
+                    <Label fx:id="lblStudentInfo" text="Matricule, Promotion, Option et Classe" styleClass="text-muted"/>
+                </VBox>
+                <Button onAction="#handleBack" text="← Retour aux Étudiants" styleClass="btn-secondary"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- ─── CENTER : TableView Historique non destructif ─── -->
+    <center>
+        <VBox spacing="12" styleClass="form-page-container">
+            <TableView fx:id="tableHistory" VBox.vgrow="ALWAYS" styleClass="table-view">
+                <columns>
+                    <TableColumn fx:id="colDate" text="Date &amp; Heure" prefWidth="140"/>
+                    <TableColumn fx:id="colRef" text="N° Référence" prefWidth="120"/>
+                    <TableColumn fx:id="colLabel" text="Libellé / Frais Scolaire" prefWidth="260"/>
+                    <TableColumn fx:id="colAmount" text="Montant Réglé" prefWidth="130"/>
+                    <TableColumn fx:id="colMethod" text="Mode de Paiement" prefWidth="130"/>
+                    <TableColumn fx:id="colStatus" text="Statut" prefWidth="100"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+
+</BorderPane>

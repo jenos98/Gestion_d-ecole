@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            styleClass="view-container"
+            fx:controller="com.jenos.gestionecole.controller.PaymentsController">
+
+    <top>
+        <VBox styleClass="view-top-bar" spacing="6">
+            <padding><Insets top="10" right="16" bottom="6" left="16"/></padding>
+            <Label text="Paiements &amp; Encaissements" styleClass="view-title"/>
+            <Label text="Enregistrement des frais de scolarité élèves et des règlements du personnel." styleClass="text-muted"/>
+        </VBox>
+    </top>
+
+    <center>
+        <TabPane fx:id="tabPanePayments" tabClosingPolicy="UNAVAILABLE" styleClass="main-tab-pane">
+
+            <!-- ═══════════════════════════════════════════════════════════════ -->
+            <!-- ONGLET 1 : Nouveau Paiement (Élève ou Personnel)              -->
+            <!-- ═══════════════════════════════════════════════════════════════ -->
+            <Tab text="Nouveau paiement" closable="false">
+                <ScrollPane fitToWidth="true" styleClass="app-scroll">
+                    <VBox spacing="16" styleClass="form-page-container">
+                        <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
+
+                        <!-- Titre + N° Reçu -->
+                        <HBox alignment="CENTER_LEFT" spacing="12">
+                            <Label text="Nouveau Paiement" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label fx:id="lblReceiptNumber" text="N° Reçu : AUTO"
+                                   style="-fx-text-fill: #0d6efd; -fx-font-weight: bold;"/>
+                        </HBox>
+
+                        <!-- Toggle type : Élève / Personnel -->
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <ToggleButton fx:id="btnTypeEleve" text="Élève" selected="true"/>
+                            <ToggleButton fx:id="btnTypePersonnel" text="Personnel"/>
+                        </HBox>
+
+                        <!-- Bloc Sélection Élève -->
+                        <VBox fx:id="boxEleveSelection" styleClass="form-section-card" spacing="12">
+                            <Label text="Sélection de l'élève" styleClass="section-card-title"/>
+                            <HBox spacing="8" alignment="CENTER_LEFT">
+                                <TextField fx:id="txtStudentSearch"
+                                           promptText="Nom, prénom ou matricule de l'élève..."
+                                           styleClass="input-field" HBox.hgrow="ALWAYS"/>
+                                <Button fx:id="btnSearchStudent" onAction="#handleSearchStudent"
+                                        text="Chercher" styleClass="btn-primary"/>
+                            </HBox>
+
+                            <TableView fx:id="tblStudentResults" prefHeight="130" styleClass="table-view">
+                                <columns>
+                                    <TableColumn fx:id="colMatricule" text="Matricule" prefWidth="120"/>
+                                    <TableColumn fx:id="colNom" text="Nom complet" prefWidth="240"/>
+                                    <TableColumn fx:id="colClasse" text="Classe" prefWidth="140"/>
+                                    <TableColumn fx:id="colOption" text="Option" prefWidth="160"/>
+                                </columns>
+                            </TableView>
+
+                            <!-- Situation financière de l'élève sélectionné -->
+                            <GridPane hgap="20" vgap="10">
+                                <columnConstraints>
+                                    <ColumnConstraints percentWidth="25"/>
+                                    <ColumnConstraints percentWidth="25"/>
+                                    <ColumnConstraints percentWidth="25"/>
+                                    <ColumnConstraints percentWidth="25"/>
+                                </columnConstraints>
+
+                                <VBox spacing="4" GridPane.columnIndex="0">
+                                    <Label text="Élève :" styleClass="field-label"/>
+                                    <Label fx:id="lblStudentName" text="—" styleClass="h2"/>
+                                    <Label fx:id="lblStudentMatricule" text="—" styleClass="text-muted"/>
+                                </VBox>
+
+                                <VBox spacing="4" GridPane.columnIndex="1">
+                                    <Label text="Classe &amp; Option :" styleClass="field-label"/>
+                                    <Label fx:id="lblStudentClass" text="—" styleClass="h2"/>
+                                    <Label fx:id="lblStudentOption" text="—" styleClass="text-muted"/>
+                                </VBox>
+
+                                <VBox spacing="4" GridPane.columnIndex="2">
+                                    <Label text="Total Dû / Déjà Payé :" styleClass="field-label"/>
+                                    <HBox spacing="6" alignment="BASELINE_LEFT">
+                                        <Label text="Dû:" styleClass="text-muted"/>
+                                        <Label fx:id="lblTotalDue" text="••••••" styleClass="h2"/>
+                                    </HBox>
+                                    <HBox spacing="6" alignment="BASELINE_LEFT">
+                                        <Label text="Payé:" styleClass="text-muted"/>
+                                        <Label fx:id="lblTotalPaid" text="••••••" styleClass="h2"/>
+                                    </HBox>
+                                </VBox>
+
+                                <VBox spacing="4" GridPane.columnIndex="3">
+                                    <Label text="Solde Restant :" styleClass="field-label"/>
+                                    <Label fx:id="lblBalance" text="••••••" styleClass="h1"/>
+                                </VBox>
+                            </GridPane>
+                        </VBox>
+
+                        <!-- Bloc Sélection Personnel (masqué par défaut) -->
+                        <VBox fx:id="boxPersonnelSelection" styleClass="form-section-card" spacing="12"
+                              visible="false" managed="false">
+                            <Label text="Sélection du membre du personnel" styleClass="section-card-title"/>
+                            <ComboBox fx:id="cmbPersonnel" promptText="Sélectionner le membre du personnel..."
+                                      maxWidth="Infinity" styleClass="filter-combo"/>
+                            <HBox spacing="8" alignment="CENTER_LEFT">
+                                <Label text="Type de paiement :" styleClass="field-label"/>
+                                <ComboBox fx:id="cmbStaffPaymentType" maxWidth="Infinity" styleClass="filter-combo"/>
+                            </HBox>
+                        </VBox>
+
+                        <!-- Formulaire commun -->
+                        <VBox styleClass="form-section-card" spacing="14">
+                            <Label text="Détails du paiement" styleClass="section-card-title"/>
+                            <Label fx:id="lblPaymentError" styleClass="label-error, alert-error-box"
+                                   visible="false" managed="false"/>
+                            <Label fx:id="lblPaymentSuccess" styleClass="notification-success"
+                                   visible="false" managed="false"/>
+
+                            <GridPane hgap="16" vgap="14">
+                                <columnConstraints>
+                                    <ColumnConstraints percentWidth="33.33"/>
+                                    <ColumnConstraints percentWidth="33.33"/>
+                                    <ColumnConstraints percentWidth="33.34"/>
+                                </columnConstraints>
+
+                                <VBox spacing="6" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                    <Label text="Frais à payer *" styleClass="field-label"/>
+                                    <ComboBox fx:id="cmbFee" promptText="Choisir le frais"
+                                              maxWidth="Infinity" styleClass="filter-combo"/>
+                                </VBox>
+
+                                <VBox spacing="6" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                    <Label text="Montant *" styleClass="field-label"/>
+                                    <TextField fx:id="txtAmount" promptText="0.00" styleClass="input-field"/>
+                                </VBox>
+
+                                <VBox spacing="6" GridPane.columnIndex="2" GridPane.rowIndex="0">
+                                    <Label text="Devise *" styleClass="field-label"/>
+                                    <ComboBox fx:id="cmbCurrency" maxWidth="Infinity" styleClass="filter-combo"/>
+                                </VBox>
+
+                                <VBox spacing="6" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                                    <Label text="Mode de paiement *" styleClass="field-label"/>
+                                    <ComboBox fx:id="cmbPaymentMethod" maxWidth="Infinity" styleClass="filter-combo"/>
+                                </VBox>
+
+                                <VBox fx:id="boxReference" spacing="6"
+                                      GridPane.columnIndex="1" GridPane.rowIndex="1"
+                                      visible="false" managed="false">
+                                    <Label text="Référence de transaction *" styleClass="field-label"/>
+                                    <TextField fx:id="txtReference" promptText="Ex: T-1234567890"
+                                               styleClass="input-field"/>
+                                </VBox>
+
+                                <VBox spacing="6" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                    <Label text="Montant attendu" styleClass="field-label"/>
+                                    <Label fx:id="lblExpectedAmount" text="—"
+                                           style="-fx-text-fill: #6c757d;"/>
+                                </VBox>
+                            </GridPane>
+                        </VBox>
+
+                        <!-- Résumé avant validation -->
+                        <VBox fx:id="boxPaymentSummary" styleClass="form-section-card" spacing="10"
+                              visible="false" managed="false">
+                            <Label text="Résumé du paiement" styleClass="section-card-title"/>
+                            <GridPane hgap="16" vgap="8">
+                                <columnConstraints>
+                                    <ColumnConstraints percentWidth="30"/>
+                                    <ColumnConstraints percentWidth="70"/>
+                                </columnConstraints>
+
+                                <Label text="Bénéficiaire :" styleClass="field-label"
+                                       GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                                <Label fx:id="lblSummaryPerson" text="—"
+                                       GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                                <Label text="Type de frais :" styleClass="field-label"
+                                       GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                                <Label fx:id="lblSummaryFee" text="—"
+                                       GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                                <Label text="Montant :" styleClass="field-label"
+                                       GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                                <Label fx:id="lblSummaryAmount" text="—"
+                                       style="-fx-font-weight: bold; -fx-font-size: 16;"
+                                       GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                                <Label text="Mode :" styleClass="field-label"
+                                       GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                                <Label fx:id="lblSummaryMethod" text="—"
+                                       GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+                                <Label text="Caisse :" styleClass="field-label"
+                                       GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                                <Label fx:id="lblSummaryCash" text="—"
+                                       GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                            </GridPane>
+
+                            <Label fx:id="lblSummaryWarning" text=""
+                                   style="-fx-text-fill: #dc3545;" visible="false" managed="false"/>
+                        </VBox>
+
+                        <!-- Boutons d'action -->
+                        <HBox alignment="CENTER_RIGHT" spacing="12">
+                            <Button fx:id="btnResetPayment" onAction="#handleResetPayment"
+                                    text="Annuler" styleClass="btn-secondary"/>
+                            <Button fx:id="btnValidatePayment" onAction="#handleSubmitPayment"
+                                    text="Valider le paiement" styleClass="btn-primary" disable="true"/>
+                        </HBox>
+                    </VBox>
+                </ScrollPane>
+            </Tab>
+
+            <!-- ═══════════════════════════════════════════════════════════════ -->
+            <!-- ONGLET 2 : Historique des Paiements                           -->
+            <!-- ═══════════════════════════════════════════════════════════════ -->
+            <Tab text="Historique" closable="false">
+                <VBox spacing="10">
+                    <padding><Insets top="12" right="16" bottom="12" left="16"/></padding>
+
+                    <!-- Filtres historique -->
+                    <HBox styleClass="filter-bar" spacing="8" alignment="CENTER_LEFT">
+                        <DatePicker fx:id="dpDateFrom" promptText="Du"/>
+                        <DatePicker fx:id="dpDateTo" promptText="Au"/>
+                        <ComboBox fx:id="cmbFilterSection" promptText="Section" styleClass="filter-combo"/>
+                        <ComboBox fx:id="cmbFilterPromotion" promptText="Promotion" styleClass="filter-combo"/>
+                        <ComboBox fx:id="cmbFilterOption" promptText="Option" styleClass="filter-combo"/>
+                        <ComboBox fx:id="cmbFilterCurrency" promptText="Devise" styleClass="filter-combo"/>
+                        <ComboBox fx:id="cmbFilterStatus" promptText="Statut" styleClass="filter-combo"/>
+                        <Button fx:id="btnResetHistoryFilters" onAction="#handleResetHistoryFilters"
+                                text="Réinitialiser" styleClass="btn-secondary"/>
+                    </HBox>
+
+                    <!-- Résumé totaux séparés USD / CDF -->
+                    <HBox styleClass="summary-bar" spacing="16" alignment="CENTER_LEFT">
+                        <Label fx:id="lblTotalUSD" text="Total USD : —"
+                               style="-fx-font-weight: bold; -fx-font-size: 14;"/>
+                        <Label fx:id="lblTotalCDF" text="Total CDF : —"
+                               style="-fx-font-weight: bold; -fx-font-size: 14;"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Button fx:id="btnToggleAmounts" onAction="#handleToggleAmounts"
+                                text="👁" styleClass="btn-secondary"/>
+                    </HBox>
+
+                    <!-- Tableau historique -->
+                    <TableView fx:id="tblPayments" VBox.vgrow="ALWAYS" styleClass="table-view">
+                        <columns>
+                            <TableColumn fx:id="tcPayDate" text="Date" prefWidth="120"/>
+                            <TableColumn fx:id="tcReceiptNum" text="N° Reçu" prefWidth="130"/>
+                            <TableColumn fx:id="tcPerson" text="Bénéficiaire" prefWidth="180"/>
+                            <TableColumn fx:id="tcPayOption" text="Option" prefWidth="120"/>
+                            <TableColumn fx:id="tcFeeType" text="Type frais" prefWidth="150"/>
+                            <TableColumn fx:id="tcPayAmount" text="Montant" prefWidth="100"/>
+                            <TableColumn fx:id="tcPayCurrency" text="Devise" prefWidth="70"/>
+                            <TableColumn fx:id="tcPayMethod" text="Mode" prefWidth="110"/>
+                            <TableColumn fx:id="tcPayStatus" text="Statut" prefWidth="100"/>
+                            <TableColumn fx:id="tcCashier" text="Caissière" prefWidth="120"/>
+                            <TableColumn fx:id="tcPayActions" text="Actions" prefWidth="120" sortable="false"/>
+                        </columns>
+                    </TableView>
+
+                    <Label fx:id="lblHistoryInfo" text="0 paiement(s) trouvé(s)"
+                           style="-fx-text-fill: #6c757d;"/>
+                </VBox>
+            </Tab>
+
+            <!-- ═══════════════════════════════════════════════════════════════ -->
+            <!-- ONGLET 3 : Journal des Reçus &amp; Duplicatas                     -->
+            <!-- ═══════════════════════════════════════════════════════════════ -->
+            <Tab text="Journal des Reçus" closable="false">
+                <ScrollPane fitToWidth="true" styleClass="app-scroll">
+                    <VBox spacing="16" styleClass="form-page-container">
+                        <padding><Insets top="12" right="16" bottom="12" left="16"/></padding>
+
+                        <VBox styleClass="form-section-card" spacing="12">
+                            <HBox alignment="CENTER_LEFT" spacing="12">
+                                <VBox spacing="2">
+                                    <Label text="Quittances &amp; Reçus Émis" styleClass="section-card-title"/>
+                                    <Label text="Consultez les reçus de caisse ou réimprimez un bordereau officiel." styleClass="text-muted"/>
+                                </VBox>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <TextField fx:id="txtSearchReceipt" promptText="Rechercher par N° reçu..."
+                                           styleClass="input-field" prefWidth="200"/>
+                                <DatePicker fx:id="dpReceiptDate" promptText="Date"/>
+                                <Button fx:id="btnRefreshReceipts" onAction="#handleRefreshReceipts"
+                                        text="Actualiser" styleClass="btn-secondary"/>
+                            </HBox>
+
+                            <TableView fx:id="tblReceipts" prefHeight="380" styleClass="table-view">
+                                <columns>
+                                    <TableColumn fx:id="colReceiptDate" text="Date" prefWidth="120"/>
+                                    <TableColumn fx:id="colReceiptNumber" text="N° Reçu" prefWidth="130"/>
+                                    <TableColumn fx:id="colReceiptBeneficiary" text="Bénéficiaire" prefWidth="180"/>
+                                    <TableColumn fx:id="colReceiptAmount" text="Montant" prefWidth="100"/>
+                                    <TableColumn fx:id="colReceiptCurrency" text="Devise" prefWidth="70"/>
+                                    <TableColumn fx:id="colReceiptCashier" text="Caissière" prefWidth="120"/>
+                                    <TableColumn fx:id="colReceiptActions" text="Actions" prefWidth="160" sortable="false"/>
+                                </columns>
+                            </TableView>
+
+                            <Label fx:id="lblReceiptsInfo" text="0 reçu(s)" style="-fx-text-fill: #6c757d;"/>
+                        </VBox>
+                    </VBox>
+                </ScrollPane>
+            </Tab>
+
+        </TabPane>
+    </center>
+</BorderPane>

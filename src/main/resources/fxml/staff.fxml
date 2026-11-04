@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            styleClass="view-container"
+            fx:controller="com.jenos.gestionecole.controller.StaffController">
+
+    <!-- ─── TOP : Header + Filtres ─── -->
+    <top>
+        <VBox styleClass="view-top-bar" spacing="10">
+            <padding><Insets top="10" right="16" bottom="10" left="16"/></padding>
+
+            <!-- Header -->
+            <HBox alignment="CENTER_LEFT" spacing="12">
+                <VBox spacing="2">
+                    <Label fx:id="lblPageTitle" text="Personnel"
+                           style="-fx-font-size: 22; -fx-font-weight: bold;"/>
+                    <Label fx:id="lblStaffCount" text="0 membre(s)"
+                           style="-fx-text-fill: #6c757d;"/>
+                </VBox>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="btnAddStaff" onAction="#handleNewStaff"
+                        text="+ Nouveau membre" styleClass="btn-primary"/>
+            </HBox>
+
+            <!-- Recherche -->
+            <HBox styleClass="search-bar" spacing="8" alignment="CENTER_LEFT">
+                <TextField fx:id="txtSearch"
+                           promptText="Rechercher par nom, matricule ou téléphone..."
+                           styleClass="input-field, search-input" HBox.hgrow="ALWAYS"/>
+                <Button fx:id="btnSearch" onAction="#handleSearch"
+                        text="🔍" styleClass="btn-primary"/>
+                <Button fx:id="btnClearSearch" onAction="#handleClearSearch"
+                        text="✕" styleClass="btn-secondary"/>
+            </HBox>
+
+            <!-- Filtres -->
+            <HBox styleClass="filter-bar" spacing="10" alignment="CENTER_LEFT">
+                <ComboBox fx:id="cmbDepartment" promptText="Département" styleClass="filter-combo"/>
+                <ComboBox fx:id="cmbFunction" promptText="Fonction" styleClass="filter-combo"/>
+                <ComboBox fx:id="cmbStatus" promptText="Statut" styleClass="filter-combo"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="btnResetFilters" onAction="#handleReset"
+                        text="Réinitialiser" styleClass="btn-secondary"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- ─── CENTER : Tableau du Personnel ─── -->
+    <center>
+        <StackPane fx:id="tableContainer">
+            <TableView fx:id="tblStaff" styleClass="table-view">
+                <columns>
+                    <TableColumn fx:id="tcMatricule" text="Matricule" prefWidth="100"/>
+                    <TableColumn fx:id="tcNom" text="Nom" prefWidth="120"/>
+                    <TableColumn fx:id="tcPostnom" text="Postnom" prefWidth="120"/>
+                    <TableColumn fx:id="tcPrenom" text="Prénom" prefWidth="120"/>
+                    <TableColumn fx:id="tcFonction" text="Fonction" prefWidth="130"/>
+                    <TableColumn fx:id="tcDepartment" text="Département" prefWidth="130"/>
+                    <TableColumn fx:id="tcPhone" text="Téléphone" prefWidth="120"/>
+                    <TableColumn fx:id="tcStatus" text="Statut" prefWidth="100"/>
+                    <TableColumn fx:id="tcActions" text="Actions" prefWidth="180" sortable="false"/>
+                </columns>
+            </TableView>
+
+            <!-- États UI -->
+            <VBox fx:id="boxLoading" alignment="CENTER" spacing="10" visible="false" managed="false">
+                <Label text="Chargement..." style="-fx-font-size: 16; -fx-text-fill: #6c757d;"/>
+            </VBox>
+            <VBox fx:id="boxEmpty" alignment="CENTER" spacing="10" visible="false" managed="false">
+                <Label text="Aucun membre du personnel trouvé." style="-fx-font-size: 16; -fx-text-fill: #6c757d;"/>
+            </VBox>
+            <VBox fx:id="boxError" alignment="CENTER" spacing="10" visible="false" managed="false">
+                <Label text="Erreur lors du chargement." style="-fx-font-size: 16; -fx-text-fill: #dc3545;"/>
+            </VBox>
+        </StackPane>
+    </center>
+
+    <!-- ─── BOTTOM : Pagination ─── -->
+    <bottom>
+        <HBox styleClass="view-bottom-bar" alignment="CENTER_LEFT" spacing="12">
+            <padding><Insets top="8" right="16" bottom="8" left="16"/></padding>
+            <Label fx:id="lblPageInfo" text="Affichage 0 à 0 sur 0" style="-fx-text-fill: #6c757d;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Pagination fx:id="pgStaff" pageCount="1" styleClass="pagination"/>
+        </HBox>
+    </bottom>
+</BorderPane>

@@ -1,0 +1,147 @@
+/* ============================================================
+   dialogs.css — Styles des fenêtres modales et dialogues
+   ============================================================ */
+
+/* ── Fond de la modale (overlay) ── */
+.dialog-overlay {
+    -fx-background-color: rgba(0, 0, 0, 0.45);
+}
+
+/* ── Conteneur principal du dialogue ── */
+.dialog-container {
+    -fx-background-color: -color-surface;
+    -fx-background-radius: 12;
+    -fx-padding: 32;
+    -fx-effect: -shadow-lg;
+    -fx-spacing: 20;
+    -fx-min-width: 360;
+    -fx-max-width: 520;
+}
+
+/* ── Titre ── */
+.dialog-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-text;
+    -fx-wrap-text: true;
+}
+
+/* ── Message ── */
+.dialog-message {
+    -fx-font-size: 13px;
+    -fx-text-fill: -color-text-secondary;
+    -fx-wrap-text: true;
+    -fx-line-spacing: 3;
+}
+
+/* ── Barre de boutons (footer) ── */
+.dialog-footer {
+    -fx-spacing: 10;
+    -fx-alignment: CENTER_RIGHT;
+    -fx-padding: 10 0 0 0;
+}
+
+/* ── PasswordDialog ── */
+.dialog-password-field {
+    -fx-pref-height: 40;
+    -fx-background-radius: 6;
+    -fx-border-color: -color-border;
+    -fx-border-radius: 6;
+    -fx-padding: 6 12 6 12;
+    -fx-font-size: 14px;
+    -fx-pref-width: 300;
+}
+
+.dialog-password-field:focused {
+    -fx-border-color: -color-primary;
+    -fx-border-width: 2;
+}
+
+/* ── CloseCashDialog (dialogue critique) ── */
+.close-cash-dialog {
+    -fx-min-width: 480;
+    -fx-max-width: 640;
+}
+
+/* Indicateur d'état de clôture */
+.close-cash-step {
+    -fx-background-color: #f8fafc;
+    -fx-border-color: -color-border;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 16;
+    -fx-spacing: 8;
+}
+
+.close-cash-step-label {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-text-secondary;
+}
+
+.close-cash-step-done {
+    -fx-background-color: -color-success-light;
+    -fx-border-color: -color-success;
+}
+
+.close-cash-step-active {
+    -fx-background-color: -color-primary-light;
+    -fx-border-color: -color-primary;
+}
+
+.close-cash-step-blocked {
+    -fx-background-color: -color-danger-light;
+    -fx-border-color: -color-danger;
+}
+
+/* Champs comptage physique */
+.counting-field-label {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-muted;
+}
+
+.counting-field-usd {
+    -fx-border-color: -color-success;
+    -fx-border-width: 2;
+}
+
+.counting-field-cdf {
+    -fx-border-color: -color-warning;
+    -fx-border-width: 2;
+}
+
+/* Labels de réconciliation */
+.reconciliation-label-ok {
+    -fx-text-fill: -color-success;
+    -fx-font-weight: bold;
+}
+
+.reconciliation-label-diff {
+    -fx-text-fill: -color-danger;
+    -fx-font-weight: bold;
+}
+
+/* ── OperationDetailsDialog ── */
+.operation-detail-row {
+    -fx-padding: 6 0 6 0;
+    -fx-border-color: transparent transparent -color-border transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+.operation-detail-key {
+    -fx-font-size: 12px;
+    -fx-text-fill: -color-muted;
+    -fx-pref-width: 140;
+}
+
+.operation-detail-value {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-text;
+}
+
+/* Statut dans le détail */
+.status-validee   { -fx-text-fill: -color-success; }
+.status-annulee   { -fx-text-fill: -color-danger; }
+.status-corrigee  { -fx-text-fill: -color-warning; }

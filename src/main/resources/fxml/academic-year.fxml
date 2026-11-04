@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            styleClass="view-container"
+            fx:controller="com.jenos.gestionecole.controller.AcademicYearController">
+
+    <!-- ─── TOP : En-tête ─── -->
+    <top>
+        <VBox styleClass="view-top-bar" spacing="12">
+            <padding><Insets top="14" right="20" bottom="14" left="20"/></padding>
+            <HBox alignment="CENTER_LEFT" spacing="16">
+                <VBox spacing="2" HBox.hgrow="ALWAYS">
+                    <Label text="Gestion des Années Scolaires &amp; Exercices" styleClass="view-title"/>
+                    <Label text="Cycle de vie : Planifiée › Active › Clôturée › Archivée. Règle : une seule année active à la fois." styleClass="text-muted"/>
+                </VBox>
+                <Label fx:id="lblCurrentActiveYear" text="Année en cours : —" styleClass="badge, badge-success"/>
+                <Button fx:id="btnNewYear" onAction="#handleNewYear" text="+ Nouvelle Année" styleClass="btn-primary"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- ─── CENTER : Formulaire d'ajout & Tableau ─── -->
+    <center>
+        <HBox spacing="18" styleClass="form-page-container">
+            <padding><Insets top="16" right="20" bottom="20" left="20"/></padding>
+
+            <!-- 1. Formulaire d'ajout d'année (gauche) -->
+            <VBox fx:id="formSection" prefWidth="380" minWidth="320" styleClass="form-section-card" spacing="14">
+                <Label text="Planifier une Nouvelle Année" styleClass="section-card-title"/>
+                <Label fx:id="lblFormMessage" visible="false" managed="false"/>
+
+                <VBox spacing="4">
+                    <Label text="Code de l'année scolaire *" styleClass="field-label"/>
+                    <TextField fx:id="txtCode" promptText="ex: 2026-2027" styleClass="input-field"/>
+                </VBox>
+
+                <VBox spacing="4">
+                    <Label text="Libellé complet *" styleClass="field-label"/>
+                    <TextField fx:id="txtName" promptText="ex: Année Scolaire 2026-2027" styleClass="input-field"/>
+                </VBox>
+
+                <VBox spacing="4">
+                    <Label text="Date d'ouverture *" styleClass="field-label"/>
+                    <DatePicker fx:id="dpStart" maxWidth="Infinity" styleClass="date-picker"/>
+                </VBox>
+
+                <VBox spacing="4">
+                    <Label text="Date de clôture *" styleClass="field-label"/>
+                    <DatePicker fx:id="dpEnd" maxWidth="Infinity" styleClass="date-picker"/>
+                </VBox>
+
+                <HBox spacing="10" alignment="CENTER_RIGHT" style="-fx-padding: 10 0 0 0;">
+                    <Button fx:id="btnReset" onAction="#handleResetForm" text="Effacer" styleClass="btn-secondary"/>
+                    <Button fx:id="btnSave" onAction="#handleSaveYear" text="Enregistrer l'Année" styleClass="btn-primary"/>
+                </HBox>
+            </VBox>
+
+            <!-- 2. Tableau des années scolaires (droite) -->
+            <VBox HBox.hgrow="ALWAYS" styleClass="form-section-card" spacing="12">
+                <Label text="Historique des Années Scolaires" styleClass="section-card-title"/>
+                <TableView fx:id="tableYears" VBox.vgrow="ALWAYS" styleClass="table-view">
+                    <columns>
+                        <TableColumn fx:id="tcCode" text="Code" prefWidth="120"/>
+                        <TableColumn fx:id="tcName" text="Libellé" prefWidth="220"/>
+                        <TableColumn fx:id="tcStart" text="Ouverture" prefWidth="120"/>
+                        <TableColumn fx:id="tcEnd" text="Clôture" prefWidth="120"/>
+                        <TableColumn fx:id="tcStatus" text="Statut" prefWidth="120"/>
+                        <TableColumn fx:id="tcActions" text="Actions" prefWidth="200" sortable="false"/>
+                    </columns>
+                </TableView>
+            </VBox>
+
+        </HBox>
+    </center>
+
+</BorderPane>

@@ -1,0 +1,88 @@
+/* ============================================================
+   header.css — Styles de la barre supérieure (Header.fxml)
+   ============================================================ */
+
+.header-bar {
+    -fx-background-color: -color-header-bg;
+    -fx-padding: 0 20 0 20;
+    -fx-pref-height: 64;
+    -fx-min-height: 64;
+    -fx-max-height: 64;
+}
+
+/* ── Identité établissement ── */
+.header-identity {
+    -fx-spacing: 12;
+}
+
+.header-logo {
+    /* Propriétés fitWidth/fitHeight définies dans le FXML */
+}
+
+.header-school-info {
+    -fx-spacing: 2;
+}
+
+.header-school-name {
+    -fx-text-fill: white;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+}
+
+.header-system-name {
+    -fx-text-fill: #94a3b8;
+    -fx-font-size: 11px;
+}
+
+/* ── Session ── */
+.header-session {
+    -fx-spacing: 16;
+}
+
+.header-user-info {
+    -fx-spacing: 2;
+    -fx-alignment: CENTER_RIGHT;
+}
+
+.header-username {
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+.header-role {
+    -fx-text-fill: #94a3b8;
+    -fx-font-size: 11px;
+}
+
+.header-cash-register {
+    -fx-text-fill: #64748b;
+    -fx-font-size: 11px;
+}
+
+.header-separator {
+    -fx-background-color: #334155;
+    -fx-pref-width: 1;
+    -fx-padding: 8 0 8 0;
+}
+
+/* ── Boutons icônes du header ── */
+.btn-icon-header {
+    -fx-background-color: transparent;
+    -fx-text-fill: #94a3b8;
+    -fx-cursor: hand;
+    -fx-padding: 8 10 8 10;
+    -fx-font-size: 16px;
+    -fx-background-radius: 6;
+    -fx-border-width: 0;
+}
+
+.btn-icon-header:hover {
+    -fx-background-color: rgba(255,255,255,0.10);
+    -fx-text-fill: white;
+}
+
+.btn-icon-header.btn-logout:hover {
+    -fx-background-color: rgba(220,38,38,0.20);
+    -fx-text-fill: -color-danger;
+}

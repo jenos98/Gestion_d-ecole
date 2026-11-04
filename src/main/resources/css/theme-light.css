@@ -1,0 +1,332 @@
+/* ============================================================
+   theme-light.css — Thème clair de base (1366×768)
+   ============================================================ */
+
+/* --- Variables via looked-up colors --- */
+.root {
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-font-size: 13px;
+    -fx-background-color: #f4f6f9;
+
+    /* Palette */
+    -color-primary:   #2563eb;
+    -color-success:   #16a34a;
+    -color-danger:    #dc2626;
+    -color-warning:   #d97706;
+    -color-muted:     #6b7280;
+    -color-border:    #e5e7eb;
+    -color-surface:   #ffffff;
+    -color-sidebar:   #1e293b;
+    -color-header:    #1e293b;
+}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+.header-bar {
+    -fx-background-color: -color-header;
+    -fx-padding: 10 20 10 20;
+    -fx-pref-height: 60;
+}
+
+.header-school-name {
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.header-username {
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+.header-role {
+    -fx-text-fill: #94a3b8;
+    -fx-font-size: 11px;
+}
+
+.header-cash-register {
+    -fx-text-fill: #94a3b8;
+    -fx-font-size: 12px;
+}
+
+.btn-icon {
+    -fx-background-color: transparent;
+    -fx-text-fill: #94a3b8;
+    -fx-cursor: hand;
+    -fx-padding: 6 10 6 10;
+    -fx-font-size: 12px;
+}
+
+.btn-icon:hover {
+    -fx-text-fill: white;
+}
+
+/* ============================================================
+   SIDEBAR
+   ============================================================ */
+.sidebar {
+    -fx-background-color: -color-sidebar;
+    -fx-pref-width: 200;
+    -fx-padding: 10 0 10 0;
+}
+
+.sidebar-scroll {
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+}
+
+.menu-item {
+    -fx-background-color: transparent;
+    -fx-text-fill: #cbd5e1;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 10 20 10 20;
+    -fx-pref-width: 200;
+    -fx-cursor: hand;
+    -fx-font-size: 13px;
+}
+
+.menu-item:hover {
+    -fx-background-color: rgba(255,255,255,0.08);
+    -fx-text-fill: white;
+}
+
+.menu-item.active {
+    -fx-background-color: -color-primary;
+    -fx-text-fill: white;
+}
+
+.menu-item:disabled {
+    -fx-opacity: 0.4;
+    -fx-cursor: default;
+}
+
+/* ============================================================
+   CONTENT CONTAINER
+   ============================================================ */
+.content-container {
+    -fx-background-color: #f4f6f9;
+    -fx-padding: 20;
+}
+
+/* ============================================================
+   DASHBOARD
+   ============================================================ */
+.dashboard-container {
+    -fx-padding: 20;
+}
+
+.section-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #374151;
+}
+
+.h1 {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #111827;
+}
+
+.text-muted {
+    -fx-text-fill: -color-muted;
+    -fx-font-size: 12px;
+}
+
+/* ============================================================
+   MONEY CARDS
+   ============================================================ */
+.money-card {
+    -fx-background-color: -color-surface;
+    -fx-padding: 20;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 2);
+    -fx-spacing: 8;
+}
+
+.money-card .card-title {
+    -fx-text-fill: -color-muted;
+    -fx-font-size: 12px;
+}
+
+.money-card .card-amount {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #111827;
+}
+
+.money-card .card-subtitle {
+    -fx-text-fill: -color-muted;
+    -fx-font-size: 11px;
+}
+
+.card-primary { -fx-border-color: -color-primary; -fx-border-width: 0 0 0 4; }
+.card-success { -fx-border-color: -color-success; -fx-border-width: 0 0 0 4; }
+.card-danger  { -fx-border-color: -color-danger;  -fx-border-width: 0 0 0 4; }
+.card-warning { -fx-border-color: -color-warning; -fx-border-width: 0 0 0 4; }
+
+/* ============================================================
+   STAT CARDS
+   ============================================================ */
+.stat-card {
+    -fx-background-color: -color-surface;
+    -fx-padding: 16;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 6, 0, 0, 1);
+    -fx-spacing: 8;
+}
+
+.stat-card .card-title {
+    -fx-text-fill: -color-muted;
+    -fx-font-size: 12px;
+}
+
+.stat-card .card-value {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #111827;
+}
+
+/* ============================================================
+   BOUTONS D'ACTIONS RAPIDES
+   ============================================================ */
+.btn-action {
+    -fx-background-color: -color-surface;
+    -fx-border-color: -color-border;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 12 20 12 20;
+    -fx-cursor: hand;
+    -fx-text-fill: #374151;
+    -fx-font-size: 13px;
+}
+
+.btn-action:hover {
+    -fx-background-color: #f3f4f6;
+}
+
+.btn-action.btn-danger {
+    -fx-border-color: -color-danger;
+    -fx-text-fill: -color-danger;
+}
+
+/* ============================================================
+   BOUTONS GÉNÉRAUX
+   ============================================================ */
+.btn-primary {
+    -fx-background-color: -color-primary;
+    -fx-text-fill: white;
+    -fx-background-radius: 6;
+    -fx-padding: 10 20 10 20;
+    -fx-cursor: hand;
+    -fx-font-weight: bold;
+}
+
+.btn-primary:hover {
+    -fx-background-color: #1d4ed8;
+}
+
+.btn-primary:disabled {
+    -fx-opacity: 0.5;
+}
+
+.btn-secondary {
+    -fx-background-color: transparent;
+    -fx-border-color: -color-border;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-padding: 8 16 8 16;
+    -fx-cursor: hand;
+    -fx-text-fill: #374151;
+}
+
+.btn-secondary:hover {
+    -fx-background-color: #f3f4f6;
+}
+
+.btn-full {
+    -fx-pref-width: 10000;
+}
+
+.btn-link {
+    -fx-background-color: transparent;
+    -fx-text-fill: -color-primary;
+    -fx-cursor: hand;
+    -fx-padding: 2 0 2 0;
+    -fx-font-size: 12px;
+}
+
+/* ============================================================
+   LOGIN
+   ============================================================ */
+.login-root {
+    -fx-background-color: #f4f6f9;
+}
+
+.login-container {
+    -fx-background-color: -color-surface;
+    -fx-background-radius: 12;
+    -fx-padding: 40;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.12), 20, 0, 0, 4);
+}
+
+.login-school-name {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #111827;
+}
+
+.login-title {
+    -fx-font-size: 14px;
+    -fx-text-fill: -color-muted;
+}
+
+/* ============================================================
+   FORMULAIRES
+   ============================================================ */
+.input-field {
+    -fx-pref-height: 40;
+    -fx-background-radius: 6;
+    -fx-border-color: -color-border;
+    -fx-border-radius: 6;
+    -fx-padding: 8 12 8 12;
+    -fx-background-color: -color-surface;
+    -fx-font-size: 13px;
+}
+
+.input-field:focused {
+    -fx-border-color: -color-primary;
+    -fx-border-width: 2;
+}
+
+/* ============================================================
+   ERREURS ET MESSAGES
+   ============================================================ */
+.label-error {
+    -fx-text-fill: -color-danger;
+    -fx-font-size: 12px;
+    -fx-wrap-text: true;
+}
+
+/* ============================================================
+   DIALOGUES
+   ============================================================ */
+.dialog-container {
+    -fx-background-color: -color-surface;
+    -fx-padding: 30;
+    -fx-background-radius: 10;
+    -fx-min-width: 350;
+    -fx-max-width: 500;
+}
+
+.dialog-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #111827;
+}
+
+.dialog-message {
+    -fx-text-fill: #374151;
+    -fx-font-size: 13px;
+}

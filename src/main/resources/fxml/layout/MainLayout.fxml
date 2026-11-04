@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:id="root"
+            styleClass="main-layout"
+            minWidth="1366"
+            minHeight="768"
+            fx:controller="com.jenos.gestionecole.controller.MainLayoutController">
+
+    <top>
+        <fx:include fx:id="header" source="Header.fxml"/>
+    </top>
+
+    <left>
+        <fx:include fx:id="sidebar" source="Sidebar.fxml"/>
+    </left>
+
+    <center>
+        <StackPane fx:id="contentContainer" styleClass="content-container"/>
+    </center>
+
+</BorderPane>

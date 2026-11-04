@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            styleClass="view-container"
+            fx:controller="com.jenos.gestionecole.controller.CashRegisterController">
+
+    <!-- ─── TOP : En-tête & Statut de Caisse ─── -->
+    <top>
+        <VBox styleClass="view-top-bar" spacing="10">
+            <padding><Insets top="10" right="16" bottom="10" left="16"/></padding>
+
+            <HBox alignment="CENTER_LEFT" spacing="14">
+                <VBox spacing="2">
+                    <HBox spacing="10" alignment="BASELINE_LEFT">
+                        <Label fx:id="lblRegisterTitle" text="Caisse 01" style="-fx-font-size: 22; -fx-font-weight: bold;"/>
+                        <Label fx:id="lblCashStatus" text="OUVERTE"
+                               style="-fx-background-color: #d1e7dd; -fx-text-fill: #0f5132; -fx-padding: 3 8 3 8; -fx-background-radius: 4; -fx-font-weight: bold;"/>
+                    </HBox>
+                    <HBox spacing="16" alignment="CENTER_LEFT">
+                        <Label fx:id="lblCashierName" text="Caissière : Marie" style="-fx-text-fill: #6c757d;"/>
+                        <Label fx:id="lblOpenTime" text="Ouverture : 07:42" style="-fx-text-fill: #6c757d;"/>
+                        <Label fx:id="lblReportIndicator" text="Rapport : En attente" style="-fx-text-fill: #fd7e14; -fx-font-weight: bold;"/>
+                    </HBox>
+                </VBox>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <!-- Sélecteur de caisses (pour promoteur uniquement) -->
+                <HBox fx:id="boxRegisterSelector" spacing="8" alignment="CENTER_RIGHT" visible="false" managed="false">
+                    <Label text="Sélectionner caisse :" styleClass="field-label"/>
+                    <ComboBox fx:id="cmbRegisters" styleClass="filter-combo"/>
+                </HBox>
+
+                <Button fx:id="btnToggleAmounts" onAction="#handleToggleAmounts"
+                        text="👁 Masquer/Afficher" styleClass="btn-secondary"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- ─── CENTER : Cartes Financières, Actions Rapides & Tableau ─── -->
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="app-scroll">
+            <VBox spacing="18" styleClass="form-page-container">
+                <padding><Insets top="14" right="16" bottom="14" left="16"/></padding>
+
+                <!-- Alerte si caisse fermée -->
+                <VBox fx:id="boxClosedWarning" styleClass="alert-warning" spacing="6" visible="false" managed="false">
+                    <Label text="LA CAISSE EST ACTUELLEMENT FERMÉE." style="-fx-font-weight: bold; -fx-font-size: 14;"/>
+                    <Label text="Aucune opération financière ne peut être enregistrée. Veuillez ouvrir une nouvelle session pour débuter la journée."/>
+                    <HBox spacing="8" alignment="CENTER_LEFT">
+                        <Button fx:id="btnOpenNewSession" onAction="#handleOpenNewSession" text="Ouvrir une nouvelle session" styleClass="btn-primary"/>
+                    </HBox>
+                </VBox>
+
+                <!-- 1. Cartes financières (CDF & USD strictement séparés) -->
+                <GridPane fx:id="cashSummary" hgap="14" vgap="14">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="25"/>
+                        <ColumnConstraints percentWidth="25"/>
+                        <ColumnConstraints percentWidth="25"/>
+                        <ColumnConstraints percentWidth="25"/>
+                    </columnConstraints>
+
+                    <!-- Solde CDF -->
+                    <VBox styleClass="form-section-card" spacing="6" GridPane.columnIndex="0">
+                        <Label text="Solde Actuel CDF" styleClass="section-card-title"/>
+                        <Label fx:id="lblBalanceCDF" text="••••••" style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #0d6efd;"/>
+                        <Label text="Francs Congolais disponibles" styleClass="text-muted"/>
+                    </VBox>
+
+                    <!-- Solde USD -->
+                    <VBox styleClass="form-section-card" spacing="6" GridPane.columnIndex="1">
+                        <Label text="Solde Actuel USD" styleClass="section-card-title"/>
+                        <Label fx:id="lblBalanceUSD" text="••••••" style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #198754;"/>
+                        <Label text="Dollars US disponibles" styleClass="text-muted"/>
+                    </VBox>
+
+                    <!-- Entrées du jour -->
+                    <VBox styleClass="form-section-card" spacing="6" GridPane.columnIndex="2">
+                        <Label text="Entrées du Jour" styleClass="section-card-title"/>
+                        <Label fx:id="lblIncomeUSD" text="USD: ••••••" style="-fx-font-size: 13; -fx-font-weight: bold; -fx-text-fill: #198754;"/>
+                        <Label fx:id="lblIncomeCDF" text="CDF: ••••••" style="-fx-font-size: 13; -fx-font-weight: bold; -fx-text-fill: #0d6efd;"/>
+                    </VBox>
+
+                    <!-- Sorties du jour -->
+                    <VBox styleClass="form-section-card" spacing="6" GridPane.columnIndex="3">
+                        <Label text="Sorties du Jour" styleClass="section-card-title"/>
+                        <Label fx:id="lblExpenseUSD" text="USD: ••••••" style="-fx-font-size: 13; -fx-font-weight: bold; -fx-text-fill: #dc3545;"/>
+                        <Label fx:id="lblExpenseCDF" text="CDF: ••••••" style="-fx-font-size: 13; -fx-font-weight: bold; -fx-text-fill: #dc3545;"/>
+                    </VBox>
+                </GridPane>
+
+                <!-- 2. Actions rapides (Grands boutons confortables) -->
+                <VBox spacing="8">
+                    <Label text="Actions Rapides de Caisse" styleClass="section-card-title"/>
+                    <HBox fx:id="quickActions" spacing="12" alignment="CENTER_LEFT">
+                        <Button fx:id="btnNewPayment" onAction="#handleNewPayment"
+                                text="📥 Nouveau Paiement"
+                                prefHeight="44" styleClass="btn-primary" style="-fx-font-size: 14; -fx-font-weight: bold;"/>
+                        <Button fx:id="btnNewExpense" onAction="#handleNewExpense"
+                                text="📤 Nouvelle Dépense"
+                                prefHeight="44" styleClass="btn-secondary" style="-fx-font-size: 14; -fx-font-weight: bold;"/>
+                        <Button fx:id="btnDailyReport" onAction="#handleDailyReport"
+                                text="📊 Rapport Journalier"
+                                prefHeight="44" styleClass="btn-secondary" style="-fx-font-size: 14; -fx-font-weight: bold;"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Button fx:id="btnCloseCash" onAction="#handleCloseCash"
+                                text="🔒 Fermer la Caisse"
+                                prefHeight="44" style="-fx-background-color: #dc3545; -fx-text-fill: white; -fx-font-size: 14; -fx-font-weight: bold; -fx-background-radius: 6;"/>
+                    </HBox>
+                </VBox>
+
+                <!-- 3. Tableau des opérations du jour -->
+                <VBox spacing="8" VBox.vgrow="ALWAYS">
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <Label text="Opérations du Jour (Caisse Active)" styleClass="section-card-title"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="lblOperationsCount" text="0 opération(s)" styleClass="text-muted"/>
+                        <Button fx:id="btnRefreshOperations" onAction="#handleRefreshOperations" text="Actualiser" styleClass="btn-secondary"/>
+                    </HBox>
+
+                    <TableView fx:id="tblOperations" prefHeight="280" styleClass="table-view" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="colTime" text="Date / Heure" prefWidth="130"/>
+                            <TableColumn fx:id="colRef" text="N° Opération" prefWidth="130"/>
+                            <TableColumn fx:id="colType" text="Type" prefWidth="140"/>
+                            <TableColumn fx:id="colDesc" text="Description" prefWidth="260"/>
+                            <TableColumn fx:id="colMethod" text="Mode" prefWidth="110"/>
+                            <TableColumn fx:id="colCur" text="Devise" prefWidth="70"/>
+                            <TableColumn fx:id="colAmount" text="Montant" prefWidth="120"/>
+                            <TableColumn fx:id="colStatus" text="Statut" prefWidth="100"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+
+            </VBox>
+        </ScrollPane>
+    </center>
+
+</BorderPane>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      styleClass="dialog-container"
+      spacing="14" alignment="TOP_LEFT"
+      prefWidth="520" maxWidth="560"
+      fx:controller="com.jenos.gestionecole.controller.dialog.ErrorDialogController">
+
+    <!-- En-tête -->
+    <HBox alignment="CENTER_LEFT" spacing="12">
+        <Label text="⚠️" style="-fx-font-size: 28px;"/>
+        <VBox spacing="2" HBox.hgrow="ALWAYS">
+            <Label fx:id="lblTitle" styleClass="dialog-title" text="Signalement du Système"/>
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label fx:id="lblErrorCode" styleClass="badge, badge-danger" text="Code : ERR-SYS-001"/>
+                <Label fx:id="lblOperationStatus" styleClass="badge, badge-danger" text="Opération Échouée"/>
+                <Label fx:id="lblTimestamp" styleClass="text-muted" text="19/10/2026 21:00:00"/>
+            </HBox>
+        </VBox>
+    </HBox>
+
+    <Separator styleClass="dialog-separator"/>
+
+    <!-- Message utilisateur clair -->
+    <VBox spacing="6">
+        <Label text="Problème rencontré :" styleClass="field-label" style="-fx-font-weight: bold;"/>
+        <Label fx:id="lblUserMessage"
+               styleClass="dialog-message"
+               text="Une anomalie s'est produite lors de l'exécution de l'opération."
+               wrapText="true"
+               maxWidth="Infinity"
+               style="-fx-font-size: 14px;"/>
+    </VBox>
+
+    <!-- Cause probable & Solution recommandée (Bloc 7) -->
+    <VBox spacing="10" style="-fx-background-color: -color-surface; -fx-padding: 12; -fx-background-radius: 8; -fx-border-color: -color-border; -fx-border-radius: 8;">
+        <VBox spacing="4">
+            <Label text="Cause probable :" style="-fx-font-weight: bold; -fx-text-fill: -color-text; -fx-font-size: 12px;"/>
+            <Label fx:id="lblProbableCause" text="Paramètres non conformes." wrapText="true" styleClass="text-muted"/>
+        </VBox>
+        <Separator/>
+        <VBox spacing="4">
+            <Label text="Action corrective recommandée :" style="-fx-font-weight: bold; -fx-text-fill: -color-primary; -fx-font-size: 12px;"/>
+            <Label fx:id="lblSuggestedAction" text="Vérifiez les données saisies." wrapText="true" style="-fx-text-fill: -color-text;"/>
+        </VBox>
+    </VBox>
+
+    <!-- Bouton pour afficher les détails techniques masqués -->
+    <HBox alignment="CENTER_LEFT">
+        <Button fx:id="btnToggleDetails"
+                text="Détails techniques ▼"
+                onAction="#toggleDetails"
+                styleClass="btn-link"
+                style="-fx-padding: 0; -fx-cursor: hand;"/>
+    </HBox>
+
+    <!-- Zone de détails repliée par défaut -->
+    <VBox fx:id="boxDetails" spacing="6" visible="false" managed="false">
+        <Label text="Journal technique réservé au diagnostic :" styleClass="field-label"/>
+        <TextArea fx:id="txtTechnicalDetails"
+                  editable="false"
+                  wrapText="true"
+                  prefRowCount="4"
+                  styleClass="input-field"
+                  style="-fx-font-family: monospace; -fx-font-size: 11px;"/>
+    </VBox>
+
+    <Separator styleClass="dialog-separator"/>
+
+    <!-- Bouton de fermeture -->
+    <HBox alignment="CENTER_RIGHT" spacing="10">
+        <Button fx:id="btnClose"
+                onAction="#handleClose"
+                text="Compris / Fermer"
+                styleClass="btn-primary"
+                defaultButton="true"/>
+    </HBox>
+
+</VBox>

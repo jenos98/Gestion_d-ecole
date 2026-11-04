@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            styleClass="view-container"
+            fx:controller="com.jenos.gestionecole.controller.StudentFormController">
+
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="app-scroll">
+            <VBox spacing="18" styleClass="form-page-container">
+
+                <!-- ─── En-tête formulaire ─── -->
+                <VBox spacing="4" styleClass="view-top-bar">
+                    <Label fx:id="lblFormTitle" text="Inscription / Dossier Élève" styleClass="view-title"/>
+                    <Label fx:id="lblFormSubtitle" text="Renseignez les informations personnelles, le tuteur légal et le cursus scolaire de l'élève." styleClass="text-muted"/>
+                </VBox>
+
+                <!-- ─── Message d'erreur de validation ─── -->
+                <Label fx:id="lblValidationError" styleClass="label-error, alert-error-box" visible="false" managed="false"/>
+
+                <!-- ─── 1. Informations Personnelles ─── -->
+                <VBox styleClass="form-section-card" spacing="14">
+                    <Label text="1. Informations Personnelles" styleClass="section-card-title"/>
+
+                    <GridPane hgap="16" vgap="12">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="33.33"/>
+                            <ColumnConstraints percentWidth="33.33"/>
+                            <ColumnConstraints percentWidth="33.34"/>
+                        </columnConstraints>
+
+                        <!-- Nom, Postnom, Prénom -->
+                        <VBox spacing="6" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                            <Label text="Nom *" styleClass="field-label"/>
+                            <TextField fx:id="txtNom" promptText="Nom de famille" styleClass="input-field"/>
+                        </VBox>
+
+                        <VBox spacing="6" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                            <Label text="Postnom *" styleClass="field-label"/>
+                            <TextField fx:id="txtPostnom" promptText="Deuxième nom" styleClass="input-field"/>
+                        </VBox>
+
+                        <VBox spacing="6" GridPane.columnIndex="2" GridPane.rowIndex="0">
+                            <Label text="Prénom *" styleClass="field-label"/>
+                            <TextField fx:id="txtPrenom" promptText="Prénom" styleClass="input-field"/>
+                        </VBox>
+
+                        <!-- Sexe, Date de naissance, Lieu de naissance -->
+                        <VBox spacing="6" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                            <Label text="Sexe *" styleClass="field-label"/>
+                            <ComboBox fx:id="cmbSexe" promptText="Sélectionner le sexe..." maxWidth="Infinity" styleClass="filter-combo"/>
+                        </VBox>
+
+                        <VBox spacing="6" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                            <Label text="Date de naissance" styleClass="field-label"/>
+                            <DatePicker fx:id="dpDateNaissance" promptText="JJ/MM/AAAA" maxWidth="Infinity" styleClass="date-picker"/>
+                        </VBox>
+
+                        <VBox spacing="6" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                            <Label text="Lieu de naissance" styleClass="field-label"/>
+                            <TextField fx:id="txtLieuNaissance" promptText="Ville ou localité" styleClass="input-field"/>
+                        </VBox>
+
+                        <!-- Nationalité -->
+                        <VBox spacing="6" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                            <Label text="Nationalité" styleClass="field-label"/>
+                            <TextField fx:id="txtNationalite" text="Congolaise" styleClass="input-field"/>
+                        </VBox>
+                    </GridPane>
+                </VBox>
+
+                <!-- ─── 2. Responsable Légal & Contact ─── -->
+                <VBox styleClass="form-section-card" spacing="14">
+                    <Label text="2. Responsable / Tuteur Légal &amp; Contact" styleClass="section-card-title"/>
+
+                    <GridPane hgap="16" vgap="12">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="33.33"/>
+                            <ColumnConstraints percentWidth="33.33"/>
+                            <ColumnConstraints percentWidth="33.34"/>
+                        </columnConstraints>
+
+                        <!-- Nom tuteur, Téléphone tuteur, Lien de parenté -->
+                        <VBox spacing="6" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                            <Label text="Nom complet du tuteur / parent" styleClass="field-label"/>
+                            <TextField fx:id="txtGuardianName" promptText="Nom et prénom du tuteur" styleClass="input-field"/>
+                        </VBox>
+
+                        <VBox spacing="6" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                            <Label text="Téléphone du tuteur" styleClass="field-label"/>
+                            <TextField fx:id="txtGuardianPhone" promptText="+243..." styleClass="input-field"/>
+                        </VBox>
+
+                        <VBox spacing="6" GridPane.columnIndex="2" GridPane.rowIndex="0">
+                            <Label text="Lien de parenté" styleClass="field-label"/>
+                            <ComboBox fx:id="cmbGuardianRelation" promptText="Sélectionner..." maxWidth="Infinity" styleClass="filter-combo"/>
+                        </VBox>
+
+                        <!-- Adresse du tuteur / domicile élève, Téléphone élève, Email -->
+                        <VBox spacing="6" GridPane.columnIndex="0" GridPane.rowIndex="1" GridPane.columnSpan="2">
+                            <Label text="Adresse résidentielle" styleClass="field-label"/>
+                            <TextField fx:id="txtGuardianAddress" promptText="Commune, Quartier, Avenue, N°" styleClass="input-field"/>
+                        </VBox>
+
+                        <VBox spacing="6" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                            <Label text="Téléphone direct de l'élève" styleClass="field-label"/>
+                            <TextField fx:id="txtTelephone" promptText="+243..." styleClass="input-field"/>
+                        </VBox>
+
+                        <VBox spacing="6" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                            <Label text="Email de contact" styleClass="field-label"/>
+                            <TextField fx:id="txtEmail" promptText="contact@example.com" styleClass="input-field"/>
+                        </VBox>
+                    </GridPane>
+                </VBox>
+
+                <!-- ─── 3. Cursus Scolaire (Cascade Hiérarchique Stricte) ─── -->
+                <VBox styleClass="form-section-card" spacing="14">
+                    <Label text="3. Cursus Scolaire (Section › Promotion › Option › Classe)" styleClass="section-card-title"/>
+
+                    <GridPane hgap="16" vgap="12">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="50"/>
+                            <ColumnConstraints percentWidth="50"/>
+                        </columnConstraints>
+
+                        <!-- Année scolaire & Section -->
+                        <VBox spacing="6" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                            <Label text="Année scolaire en cours *" styleClass="field-label"/>
+                            <ComboBox fx:id="cmbAnneeScolaire" promptText="Année scolaire..." maxWidth="Infinity" styleClass="filter-combo"/>
+                        </VBox>
+
+                        <VBox spacing="6" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                            <Label text="Section d'enseignement *" styleClass="field-label"/>
+                            <ComboBox fx:id="cmbSection" promptText="Sélectionner la section..." maxWidth="Infinity" styleClass="filter-combo"/>
+                        </VBox>
+
+                        <!-- Promotion & Option -->
+                        <VBox spacing="6" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                            <Label text="Promotion / Niveau d'étude *" styleClass="field-label"/>
+                            <ComboBox fx:id="cmbPromotion" promptText="Sélectionner la promotion..." maxWidth="Infinity" styleClass="filter-combo"/>
+                        </VBox>
+
+                        <VBox spacing="6" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                            <Label text="Option / Filière d'étude *" styleClass="field-label"/>
+                            <ComboBox fx:id="cmbOption" promptText="Scientifique, Commerciale..." maxWidth="Infinity" styleClass="filter-combo"/>
+                        </VBox>
+
+                        <!-- Classe & Matricule -->
+                        <VBox spacing="6" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                            <Label text="Classe d'affectation *" styleClass="field-label"/>
+                            <ComboBox fx:id="cmbClasse" promptText="Sélectionner la classe..." maxWidth="Infinity" styleClass="filter-combo"/>
+                        </VBox>
+
+                        <VBox spacing="6" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                            <Label text="Numéro Matricule *" styleClass="field-label"/>
+                            <HBox spacing="8" alignment="CENTER_LEFT">
+                                <TextField fx:id="txtMatricule" promptText="Généré automatiquement ou saisi" HBox.hgrow="ALWAYS" styleClass="input-field"/>
+                                <Button fx:id="btnGenerateMatricule" onAction="#generateMatricule" text="Générer" styleClass="btn-secondary"/>
+                            </HBox>
+                        </VBox>
+                    </GridPane>
+                </VBox>
+
+                <!-- ─── 4. Barre d'actions ─── -->
+                <HBox spacing="12" alignment="CENTER_RIGHT" styleClass="form-action-bar">
+                    <Button fx:id="btnCancel" onAction="#handleCancel" text="Annuler" styleClass="btn-secondary"/>
+                    <Button fx:id="btnSave" onAction="#handleSave" text="Enregistrer l'élève" styleClass="btn-primary"/>
+                </HBox>
+
+            </VBox>
+        </ScrollPane>
+    </center>
+
+</BorderPane>

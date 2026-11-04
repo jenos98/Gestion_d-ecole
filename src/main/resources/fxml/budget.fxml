@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            styleClass="view-container"
+            fx:controller="com.jenos.gestionecole.controller.BudgetController">
+
+    <!-- ─── TOP : En-tête et Cartes Récapitulatives Masquables ─── -->
+    <top>
+        <VBox styleClass="view-top-bar" spacing="12">
+            <padding><Insets top="14" right="20" bottom="14" left="20"/></padding>
+
+            <HBox alignment="CENTER_LEFT" spacing="16">
+                <VBox spacing="2" HBox.hgrow="ALWAYS">
+                    <Label text="Supervision &amp; Allocation Budgétaire" styleClass="view-title"/>
+                    <Label text="Lignes budgétaires par période. Suivi des seuils d'alerte (80%, 90%, 100%) et séparation stricte USD / CDF." styleClass="text-muted"/>
+                </VBox>
+                <Button fx:id="btnToggleVisibility" onAction="#handleToggleVisibility" text="👁 Afficher les montants" styleClass="btn-secondary"/>
+                <Button fx:id="btnNewBudget" onAction="#handleNewBudget" text="+ Nouvelle Ligne" styleClass="btn-primary"/>
+            </HBox>
+
+            <!-- Cartes Synthétiques USD et CDF Étanches (Contrôlées par MoneyVisibilityManager) -->
+            <GridPane hgap="16" vgap="10">
+                <columnConstraints>
+                    <ColumnConstraints percentWidth="50"/>
+                    <ColumnConstraints percentWidth="50"/>
+                </columnConstraints>
+
+                <!-- Carte USD -->
+                <VBox styleClass="form-section-card" spacing="8" GridPane.columnIndex="0" style="-fx-border-color: #198754; -fx-border-width: 0 0 0 4;">
+                    <Label text="BUDGET GLOBAL EN DOLLARS (USD)" styleClass="field-label" style="-fx-font-weight: bold; -fx-text-fill: #198754;"/>
+                    <HBox spacing="24">
+                        <VBox spacing="2">
+                            <Label text="Alloué :" styleClass="text-muted"/>
+                            <Label fx:id="lblAllocatedUSD" text="••••• USD" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+                        </VBox>
+                        <VBox spacing="2">
+                            <Label text="Consommé :" styleClass="text-muted"/>
+                            <Label fx:id="lblSpentUSD" text="••••• USD" style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #dc3545;"/>
+                        </VBox>
+                        <VBox spacing="2">
+                            <Label text="Disponible :" styleClass="text-muted"/>
+                            <Label fx:id="lblRemainingUSD" text="••••• USD" style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #198754;"/>
+                        </VBox>
+                    </HBox>
+                </VBox>
+
+                <!-- Carte CDF -->
+                <VBox styleClass="form-section-card" spacing="8" GridPane.columnIndex="1" style="-fx-border-color: #0d6efd; -fx-border-width: 0 0 0 4;">
+                    <Label text="BUDGET GLOBAL EN FRANCS CONGOLAIS (CDF)" styleClass="field-label" style="-fx-font-weight: bold; -fx-text-fill: #0d6efd;"/>
+                    <HBox spacing="24">
+                        <VBox spacing="2">
+                            <Label text="Alloué :" styleClass="text-muted"/>
+                            <Label fx:id="lblAllocatedCDF" text="••••• CDF" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+                        </VBox>
+                        <VBox spacing="2">
+                            <Label text="Consommé :" styleClass="text-muted"/>
+                            <Label fx:id="lblSpentCDF" text="••••• CDF" style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #dc3545;"/>
+                        </VBox>
+                        <VBox spacing="2">
+                            <Label text="Disponible :" styleClass="text-muted"/>
+                            <Label fx:id="lblRemainingCDF" text="••••• CDF" style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #0d6efd;"/>
+                        </VBox>
+                    </HBox>
+                </VBox>
+            </GridPane>
+
+        </VBox>
+    </top>
+
+    <!-- ─── CENTER : Formulaire et Tableau ─── -->
+    <center>
+        <HBox spacing="18" styleClass="form-page-container">
+            <padding><Insets top="16" right="20" bottom="20" left="20"/></padding>
+
+            <!-- 1. Formulaire d'allocation (gauche) -->
+            <VBox fx:id="formSection" prefWidth="380" minWidth="320" styleClass="form-section-card" spacing="12">
+                <Label fx:id="lblFormTitle" text="Nouvelle Ligne Budgétaire" styleClass="section-card-title"/>
+                <Label fx:id="lblFormMessage" visible="false" managed="false"/>
+
+                <VBox spacing="4">
+                    <Label text="Libellé du budget *" styleClass="field-label"/>
+                    <TextField fx:id="txtBudgetName" promptText="ex: Fournitures Scolaires &amp; Examens" styleClass="input-field"/>
+                </VBox>
+
+                <HBox spacing="10">
+                    <VBox spacing="4" HBox.hgrow="ALWAYS">
+                        <Label text="Code *" styleClass="field-label"/>
+                        <TextField fx:id="txtBudgetCode" promptText="ex: BDG-06" styleClass="input-field"/>
+                    </VBox>
+                    <VBox spacing="4" HBox.hgrow="ALWAYS">
+                        <Label text="Catégorie *" styleClass="field-label"/>
+                        <ComboBox fx:id="cmbCategory" maxWidth="Infinity" styleClass="filter-combo"/>
+                    </VBox>
+                </HBox>
+
+                <HBox spacing="10">
+                    <VBox spacing="4" HBox.hgrow="ALWAYS">
+                        <Label text="Montant alloué *" styleClass="field-label"/>
+                        <TextField fx:id="txtAmount" promptText="0.00" styleClass="input-field"/>
+                    </VBox>
+                    <VBox spacing="4" prefWidth="110">
+                        <Label text="Devise *" styleClass="field-label"/>
+                        <ComboBox fx:id="cmbCurrency" maxWidth="Infinity" styleClass="filter-combo"/>
+                    </VBox>
+                </HBox>
+
+                <VBox spacing="4">
+                    <Label text="Année scolaire / Exercice *" styleClass="field-label"/>
+                    <ComboBox fx:id="cmbFiscalYear" maxWidth="Infinity" styleClass="filter-combo"/>
+                </VBox>
+
+                <HBox spacing="10" alignment="CENTER_RIGHT" style="-fx-padding: 10 0 0 0;">
+                    <Button fx:id="btnResetForm" onAction="#handleResetForm" text="Effacer" styleClass="btn-secondary"/>
+                    <Button fx:id="btnSaveBudget" onAction="#handleSaveBudget" text="Enregistrer la Ligne" styleClass="btn-primary"/>
+                </HBox>
+            </VBox>
+
+            <!-- 2. Tableau des lignes budgétaires avec seuils (droite) -->
+            <VBox HBox.hgrow="ALWAYS" styleClass="form-section-card" spacing="12">
+                <HBox alignment="CENTER_LEFT" spacing="12">
+                    <Label text="Lignes Budgétaires &amp; Consommation" styleClass="section-card-title"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label text="Légende : Vert &lt; 80% • Orange 80-99% • Rouge ≥ 100%" styleClass="text-muted"/>
+                </HBox>
+
+                <TableView fx:id="tableBudgets" VBox.vgrow="ALWAYS" styleClass="table-view">
+                    <columns>
+                        <TableColumn fx:id="tcCode" text="Code" prefWidth="85"/>
+                        <TableColumn fx:id="tcName" text="Ligne Budgétaire" prefWidth="180"/>
+                        <TableColumn fx:id="tcCategory" text="Catégorie" prefWidth="120"/>
+                        <TableColumn fx:id="tcCurrency" text="Devise" prefWidth="70"/>
+                        <TableColumn fx:id="tcAllocated" text="Alloué" prefWidth="110"/>
+                        <TableColumn fx:id="tcSpent" text="Consommé" prefWidth="110"/>
+                        <TableColumn fx:id="tcRemaining" text="Disponible" prefWidth="110"/>
+                        <TableColumn fx:id="tcRate" text="Taux (%)" prefWidth="100"/>
+                        <TableColumn fx:id="tcStatus" text="Statut" prefWidth="95"/>
+                    </columns>
+                </TableView>
+            </VBox>
+
+        </HBox>
+    </center>
+
+</BorderPane>

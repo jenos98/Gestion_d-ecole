@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            styleClass="view-container"
+            fx:controller="com.jenos.gestionecole.controller.NotificationsController">
+
+    <!-- ─── TOP : Titre & Filtres ─── -->
+    <top>
+        <VBox styleClass="view-top-bar" spacing="12">
+            <HBox alignment="CENTER_LEFT" spacing="12">
+                <VBox spacing="2">
+                    <Label text="Centre de Notifications &amp; Alertes Système" styleClass="view-title"/>
+                    <Label text="Surveillance opérationnelle, alertes de caisse, seuils budgétaires et intégrité." styleClass="text-muted"/>
+                </VBox>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="lblUnreadCount" styleClass="badge, badge-danger" text="0 alerte non lue"/>
+                <Button fx:id="btnMarkAllRead" onAction="#handleMarkAllRead" text="Tout marquer comme lu" styleClass="btn-secondary"/>
+                <Button fx:id="btnRefresh" onAction="#handleRefresh" text="Actualiser" styleClass="btn-secondary"/>
+            </HBox>
+
+            <!-- Barre de filtrage -->
+            <HBox spacing="12" alignment="CENTER_LEFT" styleClass="filter-bar">
+                <Label text="Filtrer par sévérité :" styleClass="field-label"/>
+                <ComboBox fx:id="cmbPriorityFilter" prefWidth="180" styleClass="filter-combo"/>
+                <CheckBox fx:id="chkUnreadOnly" text="Uniquement les non lues" styleClass="field-label"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="lblTotalResults" text="Total : 0 alertes" styleClass="text-muted"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- ─── CENTER : TableView des notifications ─── -->
+    <center>
+        <StackPane styleClass="table-container">
+            <TableView fx:id="tableNotifications" styleClass="app-table">
+                <columns>
+                    <TableColumn fx:id="colPriority" text="Priorité" prefWidth="120" styleClass="col-center"/>
+                    <TableColumn fx:id="colTimestamp" text="Date &amp; Heure" prefWidth="140" styleClass="col-center"/>
+                    <TableColumn fx:id="colTitle" text="Titre" prefWidth="220"/>
+                    <TableColumn fx:id="colMessage" text="Message / Description" prefWidth="380"/>
+                    <TableColumn fx:id="colStatus" text="Statut" prefWidth="100" styleClass="col-center"/>
+                    <TableColumn fx:id="colActions" text="Action" prefWidth="180" styleClass="col-center"/>
+                </columns>
+                <columnResizePolicy>
+                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                </columnResizePolicy>
+            </TableView>
+        </StackPane>
+    </center>
+
+</BorderPane>

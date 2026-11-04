@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<ScrollPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            styleClass="app-scroll"
+            fitToWidth="true"
+            fx:controller="com.jenos.gestionecole.controller.dialog.CashClosingDialogController">
+
+    <VBox spacing="18" styleClass="form-page-container, close-cash-dialog">
+        <padding><Insets top="16" right="20" bottom="20" left="20"/></padding>
+
+        <!-- ─── En-tête ─── -->
+        <VBox spacing="4">
+            <Label text="Procédure de Clôture Définitive de Caisse" styleClass="view-title"/>
+            <Label text="Vérification des rapports obligatoires, comptage physique séparé USD / CDF et réconciliation." styleClass="text-muted"/>
+        </VBox>
+
+        <Label fx:id="lblStatusMessage" visible="false" managed="false"/>
+
+        <!-- ─── Étape 1 : Vérification du Rapport Journalier ─── -->
+        <VBox styleClass="form-section-card" spacing="12">
+            <Label text="Étape 1 : Contrôle du Rapport Journalier de Caisse" styleClass="section-card-title"/>
+            <GridPane hgap="20" vgap="10">
+                <columnConstraints>
+                    <ColumnConstraints percentWidth="50"/>
+                    <ColumnConstraints percentWidth="50"/>
+                </columnConstraints>
+
+                <HBox spacing="10" alignment="CENTER_LEFT" GridPane.columnIndex="0">
+                    <Label text="Rapport journalier généré :" styleClass="field-label"/>
+                    <Label fx:id="lblReportGenStatus" text="✓ Généré" style="-fx-text-fill: #198754; -fx-font-weight: bold;"/>
+                </HBox>
+
+                <HBox spacing="10" alignment="CENTER_LEFT" GridPane.columnIndex="1">
+                    <Label text="Rapport journalier imprimé :" styleClass="field-label"/>
+                    <Label fx:id="lblReportPrintStatus" text="✓ Imprimé" style="-fx-text-fill: #198754; -fx-font-weight: bold;"/>
+                </HBox>
+            </GridPane>
+        </VBox>
+
+        <!-- ─── Étape 2 : Comptage Physique CDF ─── -->
+        <VBox styleClass="form-section-card" spacing="12">
+            <Label text="Étape 2 : Comptage Physique Francs Congolais (CDF)" styleClass="section-card-title"
+                   style="-fx-text-fill: #0d6efd;"/>
+
+            <GridPane hgap="16" vgap="10">
+                <columnConstraints>
+                    <ColumnConstraints percentWidth="33.33"/>
+                    <ColumnConstraints percentWidth="33.33"/>
+                    <ColumnConstraints percentWidth="33.34"/>
+                </columnConstraints>
+
+                <VBox spacing="4" GridPane.columnIndex="0">
+                    <Label text="Solde Théorique CDF :" styleClass="field-label"/>
+                    <Label fx:id="lblTheoCDF" text="0 CDF" style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #0d6efd;"/>
+                </VBox>
+
+                <VBox spacing="4" GridPane.columnIndex="1">
+                    <Label text="Montant Physique Compté (CDF) *" styleClass="field-label"/>
+                    <TextField fx:id="txtCountedCDF" promptText="0" styleClass="input-field"/>
+                </VBox>
+
+                <VBox spacing="4" GridPane.columnIndex="2">
+                    <Label text="Résultat Rapprochement CDF :" styleClass="field-label"/>
+                    <Label fx:id="lblDiffCDF" text="En attente de saisie" style="-fx-font-size: 14; -fx-font-weight: bold;"/>
+                </VBox>
+            </GridPane>
+
+            <!-- Motif d'écart CDF obligatoire si écart -->
+            <VBox fx:id="boxReasonCDF" spacing="4" visible="false" managed="false">
+                <Label text="Motif obligatoire de l'écart CDF *" styleClass="field-label" style="-fx-text-fill: #dc3545;"/>
+                <TextField fx:id="txtReasonCDF" promptText="Expliquer la cause de la différence constatée..." styleClass="input-field"/>
+            </VBox>
+        </VBox>
+
+        <!-- ─── Étape 3 : Comptage Physique USD ─── -->
+        <VBox styleClass="form-section-card" spacing="12">
+            <Label text="Étape 3 : Comptage Physique Dollars Américains (USD)" styleClass="section-card-title"
+                   style="-fx-text-fill: #198754;"/>
+
+            <GridPane hgap="16" vgap="10">
+                <columnConstraints>
+                    <ColumnConstraints percentWidth="33.33"/>
+                    <ColumnConstraints percentWidth="33.33"/>
+                    <ColumnConstraints percentWidth="33.34"/>
+                </columnConstraints>
+
+                <VBox spacing="4" GridPane.columnIndex="0">
+                    <Label text="Solde Théorique USD :" styleClass="field-label"/>
+                    <Label fx:id="lblTheoUSD" text="0.00 USD" style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #198754;"/>
+                </VBox>
+
+                <VBox spacing="4" GridPane.columnIndex="1">
+                    <Label text="Montant Physique Compté (USD) *" styleClass="field-label"/>
+                    <TextField fx:id="txtCountedUSD" promptText="0.00" styleClass="input-field"/>
+                </VBox>
+
+                <VBox spacing="4" GridPane.columnIndex="2">
+                    <Label text="Résultat Rapprochement USD :" styleClass="field-label"/>
+                    <Label fx:id="lblDiffUSD" text="En attente de saisie" style="-fx-font-size: 14; -fx-font-weight: bold;"/>
+                </VBox>
+            </GridPane>
+
+            <!-- Motif d'écart USD obligatoire si écart -->
+            <VBox fx:id="boxReasonUSD" spacing="4" visible="false" managed="false">
+                <Label text="Motif obligatoire de l'écart USD *" styleClass="field-label" style="-fx-text-fill: #dc3545;"/>
+                <TextField fx:id="txtReasonUSD" promptText="Expliquer la cause de la différence constatée..." styleClass="input-field"/>
+            </VBox>
+        </VBox>
+
+        <!-- ─── Étape 4 : Observations globales & Confirmation ─── -->
+        <VBox styleClass="form-section-card" spacing="12">
+            <Label text="Étape 4 : Confirmation Définitive de Clôture" styleClass="section-card-title"/>
+            <VBox spacing="6">
+                <Label text="Remarques générales / Observations de clôture :" styleClass="field-label"/>
+                <TextArea fx:id="txtClosureNotes" promptText="Remarques éventuelles sur la journée de caisse..." prefRowCount="2" styleClass="input-field"/>
+            </VBox>
+
+            <HBox spacing="14" alignment="CENTER_RIGHT">
+                <Button fx:id="btnCancel" onAction="#handleCancel" text="Annuler" styleClass="btn-secondary"/>
+                <Button fx:id="btnConfirmClosure" onAction="#handleConfirmClosure"
+                        text="🔒 Confirmer la Clôture Définitive"
+                        styleClass="btn-primary, btn-danger" prefHeight="40" style="-fx-font-weight: bold;"/>
+            </HBox>
+        </VBox>
+
+        <!-- ─── Clôture Exceptionnelle (Superviseur / Promoteur) ─── -->
+        <TitledPane fx:id="paneExceptionalClosure" text="Clôture Exceptionnelle Forcée (Réservé au Superviseur / Promoteur)" expanded="false">
+            <VBox spacing="10" style="-fx-padding: 10;">
+                <Label text="Une clôture exceptionnelle force la fermeture de la caisse même en cas de rapport manquant. Cette action est irréversible et entièrement auditée."
+                       style="-fx-text-fill: #dc3545;" wrapText="true"/>
+                <VBox spacing="4">
+                    <Label text="Motif impératif de la dérogation *" styleClass="field-label"/>
+                    <TextField fx:id="txtSupervisorReason" promptText="Justification administrative requise..." styleClass="input-field"/>
+                </VBox>
+                <HBox alignment="CENTER_RIGHT">
+                    <Button fx:id="btnForceClosure" onAction="#handleForceClosure"
+                            text="⚠️ Forcer la Clôture Exceptionnelle" style="-fx-background-color: #dc3545; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                </HBox>
+            </VBox>
+        </TitledPane>
+
+    </VBox>
+</ScrollPane>

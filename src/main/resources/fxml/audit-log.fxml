@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            styleClass="view-container"
+            fx:controller="com.jenos.gestionecole.controller.AuditLogController">
+
+    <!-- ─── TOP : Titre & Filtres ─── -->
+    <top>
+        <VBox styleClass="view-top-bar" spacing="12">
+            <HBox alignment="CENTER_LEFT" spacing="12">
+                <VBox spacing="2">
+                    <Label text="Journal d'Audit &amp; Traçabilité Système" styleClass="view-title"/>
+                    <Label text="Registre immuable des connexions, opérations sensibles et modifications de configuration." styleClass="text-muted"/>
+                </VBox>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="btnRefresh" onAction="#handleRefresh" text="Actualiser" styleClass="btn-secondary"/>
+                <Button fx:id="btnExport" onAction="#handleExport" text="Exporter CSV" styleClass="btn-primary"/>
+            </HBox>
+
+            <!-- Filtres multi-critères -->
+            <HBox spacing="10" alignment="CENTER_LEFT" styleClass="filter-bar">
+                <TextField fx:id="txtSearch" promptText="Recherche mot-clé, utilisateur, cible..." prefWidth="240" styleClass="search-field"/>
+                <ComboBox fx:id="cmbModuleFilter" prefWidth="160" promptText="Tous les modules" styleClass="filter-combo"/>
+                <ComboBox fx:id="cmbResultFilter" prefWidth="130" promptText="Tous les résultats" styleClass="filter-combo"/>
+                <ComboBox fx:id="cmbActionFilter" prefWidth="160" promptText="Toutes les actions" styleClass="filter-combo"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="lblTotalResults" text="Total : 0 événements enregistrés" styleClass="text-muted"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- ─── CENTER : TableView du journal & Message d'accès restreint ─── -->
+    <center>
+        <StackPane styleClass="table-container">
+            <!-- Table principale -->
+            <TableView fx:id="tableAudit" styleClass="app-table">
+                <columns>
+                    <TableColumn fx:id="colTimestamp" text="Date &amp; Heure" prefWidth="140" styleClass="col-center"/>
+                    <TableColumn fx:id="colUser" text="Utilisateur" prefWidth="120"/>
+                    <TableColumn fx:id="colModule" text="Module" prefWidth="120" styleClass="col-center"/>
+                    <TableColumn fx:id="colAction" text="Action Réalisée" prefWidth="160" styleClass="col-center"/>
+                    <TableColumn fx:id="colResult" text="Résultat" prefWidth="90" styleClass="col-center"/>
+                    <TableColumn fx:id="colEntity" text="Entité Cible" prefWidth="130"/>
+                    <TableColumn fx:id="colDetails" text="Détails de l'Opération" prefWidth="300"/>
+                </columns>
+                <columnResizePolicy>
+                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                </columnResizePolicy>
+            </TableView>
+
+            <!-- Overlay d'accès refusé si rôle non autorisé -->
+            <VBox fx:id="boxAccessDenied" alignment="CENTER" spacing="12"
+                  styleClass="charts-overlay" visible="false" managed="false">
+                <Label styleClass="error-icon" text="🔒"/>
+                <Label styleClass="error-title" text="Accès Restreint au Journal d'Audit"/>
+                <Label styleClass="error-subtitle"
+                       text="La consultation et l'exportation du journal d'audit sont strictement réservées à la Direction et aux Administrateurs habilités."/>
+            </VBox>
+        </StackPane>
+    </center>
+
+</BorderPane>

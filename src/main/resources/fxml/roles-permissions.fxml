@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            styleClass="view-container"
+            fx:controller="com.jenos.gestionecole.controller.RolesPermissionsController">
+
+    <!-- ─── TOP : En-tête & Sélecteur de Rôle ─── -->
+    <top>
+        <VBox styleClass="view-top-bar" spacing="12">
+            <padding><Insets top="14" right="20" bottom="14" left="20"/></padding>
+            <HBox alignment="CENTER_LEFT" spacing="16">
+                <VBox spacing="2" HBox.hgrow="ALWAYS">
+                    <Label text="Matrice des Rôles &amp; Permissions du Système" styleClass="view-title"/>
+                    <Label text="Consultation et audit des habilitations par profil d'accès (séparation étanche des responsabilités)." styleClass="text-muted"/>
+                </VBox>
+                <Label text="Rôle à examiner :" styleClass="field-label" style="-fx-font-weight: bold;"/>
+                <ComboBox fx:id="cmbRoleSelector" prefWidth="240" styleClass="filter-combo"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- ─── CENTER : Panneau de permissions par domaine ─── -->
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="app-scroll">
+            <VBox spacing="16" styleClass="form-page-container">
+                <padding><Insets top="16" right="24" bottom="24" left="24"/></padding>
+
+                <!-- Avertissement de sécurité / Principe de moindre privilège -->
+                <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-background-color: #cff4fc; -fx-padding: 12; -fx-background-radius: 6; -fx-border-color: #b6effb;">
+                    <Label text="ℹ️" style="-fx-font-size: 16;"/>
+                    <Label text="Règle d'or : L'Administrateur Technique administre les comptes et la configuration sans JAMAIS accéder aux montants financiers, recettes ou soldes de caisse."
+                           style="-fx-text-fill: #055160; -fx-font-weight: bold;" wrapText="true"/>
+                </HBox>
+
+                <GridPane hgap="16" vgap="16">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="33.33"/>
+                        <ColumnConstraints percentWidth="33.33"/>
+                        <ColumnConstraints percentWidth="33.34"/>
+                    </columnConstraints>
+
+                    <!-- 1. Domaine Élèves -->
+                    <VBox styleClass="form-section-card" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                        <Label text="📚 Module Élèves &amp; Inscriptions" styleClass="section-card-title"/>
+                        <CheckBox fx:id="chkStudentView" text="Consulter les listes élèves" disable="true"/>
+                        <CheckBox fx:id="chkStudentCreate" text="Inscrire un nouvel élève" disable="true"/>
+                        <CheckBox fx:id="chkStudentEdit" text="Modifier le profil d'un élève" disable="true"/>
+                        <CheckBox fx:id="chkStudentArchive" text="Désactiver / Archiver un élève" disable="true"/>
+                    </VBox>
+
+                    <!-- 2. Domaine Personnel -->
+                    <VBox styleClass="form-section-card" spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                        <Label text="👥 Gestion du Personnel" styleClass="section-card-title"/>
+                        <CheckBox fx:id="chkStaffView" text="Consulter la liste du personnel" disable="true"/>
+                        <CheckBox fx:id="chkStaffCreate" text="Créer un nouveau membre" disable="true"/>
+                        <CheckBox fx:id="chkStaffEdit" text="Modifier la fiche agent" disable="true"/>
+                        <CheckBox fx:id="chkStaffArchive" text="Archiver un membre (non destructif)" disable="true"/>
+                    </VBox>
+
+                    <!-- 3. Domaine Caisse -->
+                    <VBox styleClass="form-section-card" spacing="10" GridPane.columnIndex="2" GridPane.rowIndex="0">
+                        <Label text="💵 Cycle de Caisse" styleClass="section-card-title"/>
+                        <CheckBox fx:id="chkCashOpen" text="Ouvrir sa session de caisse" disable="true"/>
+                        <CheckBox fx:id="chkCashViewOwn" text="Voir le solde de sa propre caisse" disable="true"/>
+                        <CheckBox fx:id="chkCashViewAll" text="Consulter les caisses des pairs" disable="true"/>
+                        <CheckBox fx:id="chkCashReportGen" text="Générer le rapport journalier" disable="true"/>
+                        <CheckBox fx:id="chkCashReportPrint" text="Imprimer le rapport de caisse" disable="true"/>
+                        <CheckBox fx:id="chkCashClose" text="Clôturer normalement sa caisse" disable="true"/>
+                        <CheckBox fx:id="chkCashForceClose" text="Forcer une clôture exceptionnelle" disable="true"/>
+                    </VBox>
+
+                    <!-- 4. Domaine Encaissements -->
+                    <VBox styleClass="form-section-card" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                        <Label text="📥 Encaissements &amp; Reçus" styleClass="section-card-title"/>
+                        <CheckBox fx:id="chkPaymentCreate" text="Encaisser les frais scolaires" disable="true"/>
+                        <CheckBox fx:id="chkPaymentViewOwn" text="Consulter ses encaissements" disable="true"/>
+                        <CheckBox fx:id="chkPaymentViewAll" text="Consulter tous les encaissements" disable="true"/>
+                        <CheckBox fx:id="chkPaymentCorrect" text="Rectifier / Corriger une opération" disable="true"/>
+                        <CheckBox fx:id="chkPaymentCancel" text="Annuler définitivement un reçu" disable="true"/>
+                    </VBox>
+
+                    <!-- 5. Domaine Dépenses -->
+                    <VBox styleClass="form-section-card" spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <Label text="📤 Dépenses &amp; Décaissements" styleClass="section-card-title"/>
+                        <CheckBox fx:id="chkExpenseCreate" text="Enregistrer une sortie de caisse" disable="true"/>
+                        <CheckBox fx:id="chkExpenseViewOwn" text="Consulter ses propres dépenses" disable="true"/>
+                        <CheckBox fx:id="chkExpenseViewAll" text="Consulter toutes les dépenses" disable="true"/>
+                        <CheckBox fx:id="chkExpenseApprove" text="Approuver les dépenses au-delà du seuil" disable="true"/>
+                        <CheckBox fx:id="chkExpenseCancel" text="Annuler une dépense validée" disable="true"/>
+                    </VBox>
+
+                    <!-- 6. Domaine Rapports & Exports -->
+                    <VBox styleClass="form-section-card" spacing="10" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                        <Label text="📊 Rapports, Audit &amp; Exports" styleClass="section-card-title"/>
+                        <CheckBox fx:id="chkReportView" text="Accéder au catalogue de rapports" disable="true"/>
+                        <CheckBox fx:id="chkReportFinancial" text="Générer les rapports financiers (USD/CDF)" disable="true"/>
+                        <CheckBox fx:id="chkReportStudent" text="Générer les listes &amp; effectifs élèves" disable="true"/>
+                        <CheckBox fx:id="chkReportStaff" text="Générer les listes du personnel" disable="true"/>
+                        <CheckBox fx:id="chkReportExport" text="Exporter en Excel / PDF / CSV" disable="true"/>
+                    </VBox>
+
+                    <!-- 7. Domaine Administration & Configuration -->
+                    <VBox styleClass="form-section-card" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="2" GridPane.columnSpan="3">
+                        <Label text="⚙️ Administration &amp; Paramétrage Système" styleClass="section-card-title"/>
+                        <FlowPane hgap="24" vgap="10">
+                            <CheckBox fx:id="chkUserManage" text="Gestion des comptes utilisateurs" disable="true"/>
+                            <CheckBox fx:id="chkRoleView" text="Visualiser la matrice des rôles" disable="true"/>
+                            <CheckBox fx:id="chkSchoolEdit" text="Modifier les paramètres d'établissement" disable="true"/>
+                            <CheckBox fx:id="chkAcademicManage" text="Gérer les Sections, Promotions, Options, Classes" disable="true"/>
+                            <CheckBox fx:id="chkFeeManage" text="Configurer la grille tarifaire des frais" disable="true"/>
+                            <CheckBox fx:id="chkPaymentMethodManage" text="Configurer les modes de paiement" disable="true"/>
+                            <CheckBox fx:id="chkBudgetManage" text="Allouer et superviser les budgets financiers" disable="true"/>
+                        </FlowPane>
+                    </VBox>
+
+                </GridPane>
+
+            </VBox>
+        </ScrollPane>
+    </center>
+
+</BorderPane>

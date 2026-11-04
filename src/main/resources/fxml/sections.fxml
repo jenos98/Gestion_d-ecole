@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            styleClass="view-container"
+            fx:controller="com.jenos.gestionecole.controller.SectionsController">
+
+    <!-- ─── TOP : En-tête ─── -->
+    <top>
+        <VBox styleClass="view-top-bar" spacing="6">
+            <padding><Insets top="14" right="20" bottom="14" left="20"/></padding>
+            <Label text="Gestion des Sections Scolaires" styleClass="view-title"/>
+            <Label text="Niveau 1 de la structure académique : Section › Promotion › Option › Classe." styleClass="text-muted"/>
+        </VBox>
+    </top>
+
+    <!-- ─── CENTER : Formulaire et Tableau ─── -->
+    <center>
+        <HBox spacing="18" styleClass="form-page-container">
+            <padding><Insets top="16" right="20" bottom="20" left="20"/></padding>
+
+            <!-- 1. Formulaire (gauche) -->
+            <VBox fx:id="formSection" prefWidth="380" minWidth="320" styleClass="form-section-card" spacing="14">
+                <Label fx:id="lblFormTitle" text="Nouvelle Section" styleClass="section-card-title"/>
+                <Label fx:id="lblMessage" visible="false" managed="false"/>
+
+                <VBox spacing="4">
+                    <Label text="Code de la section *" styleClass="field-label"/>
+                    <TextField fx:id="txtCode" promptText="ex: SEC, PRIM, MAT" styleClass="input-field"/>
+                </VBox>
+
+                <VBox spacing="4">
+                    <Label text="Nom de la section *" styleClass="field-label"/>
+                    <TextField fx:id="txtName" promptText="ex: Secondaire, Primaire, Maternelle" styleClass="input-field"/>
+                </VBox>
+
+                <VBox spacing="4">
+                    <Label text="Description" styleClass="field-label"/>
+                    <TextArea fx:id="txtDescription" promptText="Description générale de la section..." prefRowCount="3" styleClass="input-field"/>
+                </VBox>
+
+                <CheckBox fx:id="chkActive" text="Section active pour les inscriptions" selected="true" styleClass="field-label"/>
+
+                <HBox spacing="10" alignment="CENTER_RIGHT" style="-fx-padding: 10 0 0 0;">
+                    <Button fx:id="btnReset" onAction="#handleReset" text="Effacer" styleClass="btn-secondary"/>
+                    <Button fx:id="btnSave" onAction="#handleSave" text="Enregistrer la Section" styleClass="btn-primary"/>
+                </HBox>
+            </VBox>
+
+            <!-- 2. Tableau des sections (droite) -->
+            <VBox HBox.hgrow="ALWAYS" styleClass="form-section-card" spacing="12">
+                <Label text="Sections Actuellement Configurées" styleClass="section-card-title"/>
+                <TableView fx:id="tableSections" VBox.vgrow="ALWAYS" styleClass="table-view">
+                    <columns>
+                        <TableColumn fx:id="tcCode" text="Code" prefWidth="100"/>
+                        <TableColumn fx:id="tcName" text="Nom de la Section" prefWidth="200"/>
+                        <TableColumn fx:id="tcDescription" text="Description" prefWidth="240"/>
+                        <TableColumn fx:id="tcStatus" text="Statut" prefWidth="100"/>
+                        <TableColumn fx:id="tcActions" text="Actions" prefWidth="140" sortable="false"/>
+                    </columns>
+                </TableView>
+            </VBox>
+
+        </HBox>
+    </center>
+
+</BorderPane>

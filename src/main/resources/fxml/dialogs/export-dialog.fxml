@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<DialogPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.jenos.gestionecole.controller.dialog.ExportDialogController"
+            prefWidth="520"
+            styleClass="dialog-container">
+
+    <header>
+        <VBox spacing="4" style="-fx-padding: 16 20 8 20;">
+            <Label text="Exportation des Données" styleClass="dialog-title"/>
+            <Label fx:id="lblReportContext" text="Document : —" styleClass="dialog-message"/>
+        </VBox>
+    </header>
+
+    <content>
+        <VBox spacing="16" style="-fx-padding: 12 20 16 20;">
+            <!-- Format d'export -->
+            <VBox spacing="6">
+                <Label text="Format d'exportation *" styleClass="field-label" style="-fx-font-weight: bold;"/>
+                <HBox spacing="20" alignment="CENTER_LEFT">
+                    <fx:define>
+                        <ToggleGroup fx:id="tgFormat"/>
+                    </fx:define>
+                    <RadioButton fx:id="rbExcel" text="Excel (.xlsx)" toggleGroup="$tgFormat" selected="true"/>
+                    <RadioButton fx:id="rbPdf" text="PDF (.pdf)" toggleGroup="$tgFormat"/>
+                    <RadioButton fx:id="rbCsv" text="CSV (.csv)" toggleGroup="$tgFormat"/>
+                </HBox>
+            </VBox>
+
+            <!-- Périmètre des données -->
+            <VBox spacing="6">
+                <Label text="Périmètre des données" styleClass="field-label" style="-fx-font-weight: bold;"/>
+                <CheckBox fx:id="chkFilteredOnly" text="Exporter uniquement les résultats filtrés" selected="true"/>
+                <Label fx:id="lblDataCount" text="Nombre d'enregistrements : 0" style="-fx-text-fill: #6c757d; -fx-font-size: 11;"/>
+            </VBox>
+
+            <!-- Nom du fichier -->
+            <VBox spacing="6">
+                <Label text="Nom du fichier *" styleClass="field-label" style="-fx-font-weight: bold;"/>
+                <TextField fx:id="txtFilename" promptText="nom_du_fichier" styleClass="input-field"/>
+            </VBox>
+
+            <!-- Dossier de destination -->
+            <VBox spacing="6">
+                <Label text="Dossier de destination *" styleClass="field-label" style="-fx-font-weight: bold;"/>
+                <HBox spacing="8" alignment="CENTER_LEFT">
+                    <TextField fx:id="txtDestination" promptText="Sélectionnez un répertoire..." HBox.hgrow="ALWAYS" styleClass="input-field"/>
+                    <Button fx:id="btnBrowse" text="Parcourir..." onAction="#handleBrowse" styleClass="btn-secondary"/>
+                </HBox>
+            </VBox>
+
+            <!-- Avertissement / Permissions RoleGuard -->
+            <Label fx:id="lblPermissionNotice" text="" wrapText="true" visible="false" managed="false"
+                   style="-fx-font-size: 11; -fx-padding: 8; -fx-background-color: #f8d7da; -fx-text-fill: #842029; -fx-background-radius: 4;"/>
+        </VBox>
+    </content>
+
+    <buttonTypes>
+        <ButtonType fx:id="btnTypeExport" text="Exporter" buttonData="OK_DONE"/>
+        <ButtonType fx:id="btnTypeCancel" text="Annuler" buttonData="CANCEL_CLOSE"/>
+    </buttonTypes>
+
+</DialogPane>

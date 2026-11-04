@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            styleClass="view-container"
+            fx:controller="com.jenos.gestionecole.controller.StudentsController">
+
+    <!-- ─── CENTER : Contenu principal ─── -->
+    <center>
+        <VBox spacing="14" VBox.vgrow="ALWAYS">
+
+            <!-- 1. En-tête de la page -->
+            <VBox spacing="4" styleClass="view-top-bar">
+                <HBox alignment="CENTER_LEFT" spacing="12">
+                    <Label fx:id="lblPageTitle" text="Élèves" styleClass="view-title"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label fx:id="lblStudentCount" styleClass="text-muted" text="Chargement..."/>
+                </HBox>
+                <Label text="Gestion des inscriptions et consultation des dossiers scolaires" styleClass="text-muted"/>
+            </VBox>
+
+            <!-- 2. Barre de recherche et filtres hiérarchiques -->
+            <VBox styleClass="form-section-card" spacing="10">
+                
+                <!-- Ligne de recherche textuelle rapide -->
+                <HBox spacing="8" alignment="CENTER_LEFT">
+                    <TextField fx:id="txtSearch"
+                               promptText="🔍 Rechercher par matricule, nom, postnom, prénom, téléphone..."
+                               styleClass="input-field, search-input"
+                               HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="btnSearch" onAction="#handleSearch" styleClass="btn-primary" text="Rechercher"/>
+                    <Button fx:id="btnClearSearch" onAction="#handleClearSearch" styleClass="btn-secondary" text="Effacer"/>
+                </HBox>
+
+                <!-- Ligne de filtres en cascade : Année › Section › Promotion › Option › Classe -->
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <ComboBox fx:id="cmbAcademicYear" promptText="Année scolaire" prefWidth="150" styleClass="filter-combo"/>
+                    <ComboBox fx:id="cmbSection" promptText="Toutes les sections" prefWidth="160" styleClass="filter-combo"/>
+                    <ComboBox fx:id="cmbPromotion" promptText="Toutes les promotions" prefWidth="170" styleClass="filter-combo"/>
+                    <ComboBox fx:id="cmbOption" promptText="Toutes les options" prefWidth="170" styleClass="filter-combo"/>
+                    <ComboBox fx:id="cmbClasse" promptText="Toutes les classes" prefWidth="160" styleClass="filter-combo"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="btnResetFilters" onAction="#handleReset" styleClass="btn-secondary" text="Réinitialiser filtres"/>
+                </HBox>
+            </VBox>
+
+            <!-- 3. Barre d'actions (Nouveau, Exporter, Imprimer) -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Button fx:id="btnAddStudent" onAction="#goToStudentForm"
+                        text="+ Nouvel élève" styleClass="btn-primary"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="btnExport" onAction="#handleExport" text="Exporter CSV" styleClass="btn-secondary"/>
+                <Button fx:id="btnPrint" onAction="#handlePrint" text="Imprimer la liste" styleClass="btn-secondary"/>
+            </HBox>
+
+            <!-- 4. Zone d'affichage : Tableau des élèves & États (StackPane) -->
+            <StackPane VBox.vgrow="ALWAYS">
+
+                <!-- Tableau principal (12 colonnes avec Option comme citoyen de 1er rang) -->
+                <TableView fx:id="tableStudents" styleClass="table-view">
+                    <columns>
+                        <TableColumn fx:id="tcMatricule" text="Matricule" prefWidth="120"/>
+                        <TableColumn fx:id="tcNom" text="Nom" prefWidth="120"/>
+                        <TableColumn fx:id="tcPostnom" text="Postnom" prefWidth="120"/>
+                        <TableColumn fx:id="tcPrenom" text="Prénom" prefWidth="120"/>
+                        <TableColumn fx:id="tcSexe" text="Sexe" prefWidth="55"/>
+                        <TableColumn fx:id="tcAcademicYear" text="Année" prefWidth="100"/>
+                        <TableColumn fx:id="tcSection" text="Section" prefWidth="110"/>
+                        <TableColumn fx:id="tcPromotion" text="Promotion" prefWidth="110"/>
+                        <TableColumn fx:id="tcOption" text="Option" prefWidth="140"/>
+                        <TableColumn fx:id="tcClasse" text="Classe" prefWidth="110"/>
+                        <TableColumn fx:id="tcStatut" text="Statut" prefWidth="95"/>
+                        <TableColumn fx:id="tcActions" text="Actions" prefWidth="170" sortable="false"/>
+                    </columns>
+                </TableView>
+
+                <!-- État de chargement (Overlay) -->
+                <VBox fx:id="boxLoading" alignment="CENTER" spacing="12" styleClass="dialog-overlay" visible="false" managed="false">
+                    <ProgressIndicator/>
+                    <Label text="Chargement des élèves..." styleClass="h2"/>
+                </VBox>
+
+                <!-- État vide (Aucun résultat) -->
+                <VBox fx:id="boxEmpty" alignment="CENTER" spacing="10" styleClass="empty-state" visible="false" managed="false">
+                    <Label text="🔍" styleClass="empty-state-icon"/>
+                    <Label text="Aucun élève ne correspond aux critères sélectionnés." styleClass="empty-state-message"/>
+                    <Button onAction="#handleReset" text="Réinitialiser les filtres" styleClass="btn-secondary"/>
+                </VBox>
+
+                <!-- État d'erreur -->
+                <VBox fx:id="boxError" alignment="CENTER" spacing="12" styleClass="alert-error-box" visible="false" managed="false">
+                    <Label text="Impossible de charger la liste des élèves." styleClass="label-error"/>
+                    <Button onAction="#handleRetry" text="Réessayer" styleClass="btn-secondary"/>
+                </VBox>
+
+            </StackPane>
+
+            <!-- 5. Barre de pagination et info -->
+            <HBox alignment="CENTER" spacing="16" styleClass="view-bottom-bar">
+                <Label fx:id="lblPageInfo" styleClass="text-muted" text="Affichage 0 à 0 sur 0 élèves"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Pagination fx:id="pagination" pageCount="1" maxPageIndicatorCount="5" styleClass="pagination"/>
+                <HBox spacing="8" alignment="CENTER_RIGHT">
+                    <Label text="Élèves par page :" styleClass="text-muted"/>
+                    <ComboBox fx:id="cmbPageSize" prefWidth="85" styleClass="filter-combo"/>
+                </HBox>
+            </HBox>
+
+        </VBox>
+    </center>
+
+</BorderPane>

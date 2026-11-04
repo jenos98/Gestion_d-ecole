@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            styleClass="view-container"
+            fx:controller="com.jenos.gestionecole.controller.ReportsController">
+
+    <!-- ─── TOP : Header ─── -->
+    <top>
+        <VBox styleClass="view-top-bar" spacing="6">
+            <padding><Insets top="10" right="16" bottom="10" left="16"/></padding>
+            <HBox alignment="CENTER_LEFT" spacing="12">
+                <VBox spacing="2">
+                    <Label text="Centre d'Édition des Rapports &amp; États" styleClass="view-title"/>
+                    <Label fx:id="lblReportDescription" text="Catalogue officiel des états scolaires, comptables et administratifs." styleClass="text-muted"/>
+                </VBox>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="btnViewHistory" onAction="#handleViewReportHistory" text="📜 Historique des Rapports" styleClass="btn-secondary"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- ─── LEFT : Catalogue des rapports disponibles ─── -->
+    <left>
+        <VBox styleClass="sidebar, form-section-card" spacing="10" prefWidth="280">
+            <padding><Insets top="12" right="12" bottom="12" left="12"/></padding>
+            <Label text="CATALOGUE DES RAPPORTS" style="-fx-font-weight: bold; -fx-font-size: 11; -fx-text-fill: #6c757d;"/>
+
+            <ListView fx:id="lvReportCatalog" VBox.vgrow="ALWAYS" styleClass="list-view"/>
+        </VBox>
+    </left>
+
+    <!-- ─── CENTER : Panneau de configuration du rapport sélectionné ─── -->
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="app-scroll">
+            <VBox spacing="18" styleClass="form-page-container">
+                <padding><Insets top="14" right="16" bottom="16" left="16"/></padding>
+
+                <!-- Titre du rapport sélectionné -->
+                <VBox spacing="4">
+                    <Label fx:id="lblSelectedReportTitle" text="Sélectionnez un rapport" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
+                    <Label fx:id="lblSelectedReportSubtitle" text="Configurez les paramètres ci-dessous avant génération." styleClass="text-muted"/>
+                </VBox>
+
+                <!-- 1. Filtres Académiques (Section → Promotion → Option → Classe) -->
+                <VBox fx:id="panelAcademicFilters" styleClass="form-section-card" spacing="12">
+                    <Label text="1. Filtres Scolaires &amp; Hiérarchiques (Section › Promotion › Option › Classe)" styleClass="section-card-title"/>
+                    <GridPane hgap="16" vgap="12">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="33.33"/>
+                            <ColumnConstraints percentWidth="33.33"/>
+                            <ColumnConstraints percentWidth="33.34"/>
+                        </columnConstraints>
+
+                        <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                            <Label text="Année scolaire :" styleClass="field-label"/>
+                            <ComboBox fx:id="cmbAnnee" maxWidth="Infinity" styleClass="filter-combo"/>
+                        </VBox>
+
+                        <VBox spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                            <Label text="Section :" styleClass="field-label"/>
+                            <ComboBox fx:id="cmbSection" maxWidth="Infinity" styleClass="filter-combo"/>
+                        </VBox>
+
+                        <VBox spacing="4" GridPane.columnIndex="2" GridPane.rowIndex="0">
+                            <Label text="Promotion :" styleClass="field-label"/>
+                            <ComboBox fx:id="cmbPromotion" maxWidth="Infinity" styleClass="filter-combo"/>
+                        </VBox>
+
+                        <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                            <Label text="Option d'étude (Indépendante) :" styleClass="field-label"/>
+                            <ComboBox fx:id="cmbOption" maxWidth="Infinity" styleClass="filter-combo"/>
+                        </VBox>
+
+                        <VBox spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                            <Label text="Classe spécifique :" styleClass="field-label"/>
+                            <ComboBox fx:id="cmbClasse" maxWidth="Infinity" styleClass="filter-combo"/>
+                        </VBox>
+
+                        <VBox spacing="4" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                            <Label text="Statut de scolarité :" styleClass="field-label"/>
+                            <ComboBox fx:id="cmbStudentStatus" maxWidth="Infinity" styleClass="filter-combo"/>
+                        </VBox>
+                    </GridPane>
+                </VBox>
+
+                <!-- 2. Filtres Financiers & Période -->
+                <VBox fx:id="panelCashFilters" styleClass="form-section-card" spacing="12">
+                    <Label text="2. Filtres Temporels &amp; Financiers" styleClass="section-card-title"/>
+                    <GridPane hgap="16" vgap="12">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="33.33"/>
+                            <ColumnConstraints percentWidth="33.33"/>
+                            <ColumnConstraints percentWidth="33.34"/>
+                        </columnConstraints>
+
+                        <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                            <Label text="Date de début :" styleClass="field-label"/>
+                            <DatePicker fx:id="dpStartDate" maxWidth="Infinity" styleClass="date-picker"/>
+                        </VBox>
+
+                        <VBox spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                            <Label text="Date de fin :" styleClass="field-label"/>
+                            <DatePicker fx:id="dpEndDate" maxWidth="Infinity" styleClass="date-picker"/>
+                        </VBox>
+
+                        <VBox spacing="4" GridPane.columnIndex="2" GridPane.rowIndex="0">
+                            <Label text="Devise ciblée :" styleClass="field-label"/>
+                            <ComboBox fx:id="cmbCurrency" maxWidth="Infinity" styleClass="filter-combo"/>
+                        </VBox>
+
+                        <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                            <Label text="Caisse :" styleClass="field-label"/>
+                            <ComboBox fx:id="cmbCashRegister" promptText="Toutes les caisses" maxWidth="Infinity" styleClass="filter-combo"/>
+                        </VBox>
+
+                        <VBox spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                            <Label text="Mode de paiement :" styleClass="field-label"/>
+                            <ComboBox fx:id="cmbPaymentMethod" maxWidth="Infinity" styleClass="filter-combo"/>
+                        </VBox>
+                    </GridPane>
+                </VBox>
+
+                <!-- 3. Tableau Historique des Rapports (visible si sélectionné) -->
+                <VBox fx:id="panelReportLogs" styleClass="form-section-card" spacing="10" visible="false" managed="false">
+                    <Label text="Journal d'Audit des Rapports Produits" styleClass="section-card-title"/>
+                    <TableView fx:id="tblReportLogs" prefHeight="260" styleClass="table-view">
+                        <columns>
+                            <TableColumn fx:id="colLogDate" text="Date / Heure" prefWidth="130"/>
+                            <TableColumn fx:id="colLogId" text="N° Rapport" prefWidth="130"/>
+                            <TableColumn fx:id="colLogType" text="Type d'État" prefWidth="200"/>
+                            <TableColumn fx:id="colLogUser" text="Généré par" prefWidth="110"/>
+                            <TableColumn fx:id="colLogPeriod" text="Période" prefWidth="140"/>
+                            <TableColumn fx:id="colLogStatus" text="Statut" prefWidth="110"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+
+                <!-- 4. Actions de génération -->
+                <HBox spacing="14" alignment="CENTER_RIGHT" styleClass="form-action-bar">
+                    <Button fx:id="btnResetFilters" onAction="#handleResetFilters" text="Réinitialiser" styleClass="btn-secondary"/>
+                    <Button fx:id="btnExport" onAction="#handleExport" text="📥 Exporter (PDF / Excel)" styleClass="btn-secondary"/>
+                    <Button fx:id="btnGenerateAndPreview" onAction="#handleGenerateAndPreview"
+                            text="👁 Générer &amp; Prévisualiser le Rapport" styleClass="btn-primary" prefHeight="40" style="-fx-font-weight: bold;"/>
+                </HBox>
+
+            </VBox>
+        </ScrollPane>
+    </center>
+
+</BorderPane>

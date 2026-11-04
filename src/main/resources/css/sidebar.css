@@ -1,0 +1,72 @@
+/* ============================================================
+   sidebar.css — Styles du menu de navigation latéral
+   ============================================================ */
+
+.sidebar {
+    -fx-background-color: -color-sidebar-bg;
+    -fx-pref-width: 240;
+    -fx-min-width: 240;
+    -fx-max-width: 240;
+    -fx-padding: 8 0 8 0;
+}
+
+.sidebar-scroll {
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+    -fx-hbar-policy: NEVER;
+}
+
+.sidebar-scroll .viewport {
+    -fx-background-color: transparent;
+}
+
+.sidebar-menu {
+    -fx-background-color: transparent;
+    -fx-spacing: 2;
+    -fx-padding: 4 0 4 0;
+}
+
+/* ── Labels de section ── */
+.menu-section-label {
+    -fx-text-fill: #475569;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-padding: 12 16 4 16;
+    -fx-text-transform: uppercase;
+}
+
+/* ── Séparateur ── */
+.menu-separator {
+    -fx-background-color: #334155;
+    -fx-padding: 1 0 1 0;
+}
+
+/* ── Boutons de menu ── */
+.menu-item {
+    -fx-background-color: transparent;
+    -fx-text-fill: -color-sidebar-text;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 10 16 10 20;
+    -fx-pref-width: 240;
+    -fx-max-width: Infinity;
+    -fx-cursor: hand;
+    -fx-font-size: 13px;
+    -fx-background-radius: 0;
+    -fx-border-width: 0;
+}
+
+.menu-item:hover {
+    -fx-background-color: -color-sidebar-hover;
+    -fx-text-fill: white;
+}
+
+.menu-item.active {
+    -fx-background-color: -color-primary;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.menu-item:disabled {
+    -fx-opacity: 0.35;
+    -fx-cursor: default;
+}

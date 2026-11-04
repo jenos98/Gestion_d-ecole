@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            styleClass="view-container"
+            fx:controller="com.jenos.gestionecole.controller.StudentDetailsController">
+
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="app-scroll">
+            <VBox spacing="18" styleClass="form-page-container">
+
+                <!-- ─── En-tête Dossier ─── -->
+                <HBox alignment="CENTER_LEFT" spacing="14" styleClass="view-top-bar">
+                    <VBox spacing="4" HBox.hgrow="ALWAYS">
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Label fx:id="lblFullName" text="Nom de l'étudiant" styleClass="view-title"/>
+                            <Label fx:id="lblStatut" text="ACTIF" styleClass="badge, badge-success"/>
+                        </HBox>
+                        <Label fx:id="lblMatricule" text="Matricule : —" styleClass="text-muted"/>
+                    </VBox>
+
+                    <Button onAction="#handleEdit" text="Modifier le dossier" styleClass="btn-primary"/>
+                    <Button onAction="#handleHistory" text="Historique financier" styleClass="btn-secondary"/>
+                    <Button onAction="#handleBack" text="Retour à la liste" styleClass="btn-secondary"/>
+                </HBox>
+
+                <!-- ─── 1. État Civil ─── -->
+                <VBox styleClass="form-section-card" spacing="12">
+                    <Label text="État Civil &amp; Identité" styleClass="section-card-title"/>
+                    <GridPane hgap="16" vgap="10">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="25"/>
+                            <ColumnConstraints percentWidth="25"/>
+                            <ColumnConstraints percentWidth="25"/>
+                            <ColumnConstraints percentWidth="25"/>
+                        </columnConstraints>
+
+                        <VBox spacing="2" GridPane.columnIndex="0">
+                            <Label text="Sexe :" styleClass="field-label"/>
+                            <Label fx:id="lblSexe" text="—" styleClass="h2"/>
+                        </VBox>
+
+                        <VBox spacing="2" GridPane.columnIndex="1">
+                            <Label text="Date de naissance :" styleClass="field-label"/>
+                            <Label fx:id="lblDateNaissance" text="—" styleClass="h2"/>
+                        </VBox>
+
+                        <VBox spacing="2" GridPane.columnIndex="2">
+                            <Label text="Lieu de naissance :" styleClass="field-label"/>
+                            <Label fx:id="lblLieuNaissance" text="—" styleClass="h2"/>
+                        </VBox>
+
+                        <VBox spacing="2" GridPane.columnIndex="3">
+                            <Label text="Nationalité :" styleClass="field-label"/>
+                            <Label fx:id="lblNationalite" text="Congolaise" styleClass="h2"/>
+                        </VBox>
+                    </GridPane>
+                </VBox>
+
+                <!-- ─── 2. Cursus Académique ─── -->
+                <VBox styleClass="form-section-card" spacing="12">
+                    <Label text="Affectation Scolaire (Section › Promotion › Option › Classe)" styleClass="section-card-title"/>
+                    <GridPane hgap="16" vgap="10">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="33.33"/>
+                            <ColumnConstraints percentWidth="33.33"/>
+                            <ColumnConstraints percentWidth="33.34"/>
+                        </columnConstraints>
+
+                        <VBox spacing="2" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                            <Label text="Année scolaire :" styleClass="field-label"/>
+                            <Label fx:id="lblAnneeScolaire" text="—" styleClass="h2"/>
+                        </VBox>
+
+                        <VBox spacing="2" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                            <Label text="Section :" styleClass="field-label"/>
+                            <Label fx:id="lblSection" text="—" styleClass="h2"/>
+                        </VBox>
+
+                        <VBox spacing="2" GridPane.columnIndex="2" GridPane.rowIndex="0">
+                            <Label text="Promotion :" styleClass="field-label"/>
+                            <Label fx:id="lblPromotion" text="—" styleClass="h2"/>
+                        </VBox>
+
+                        <VBox spacing="2" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                            <Label text="Option / Filière :" styleClass="field-label"/>
+                            <Label fx:id="lblOption" text="—" styleClass="h2"/>
+                        </VBox>
+
+                        <VBox spacing="2" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                            <Label text="Classe :" styleClass="field-label"/>
+                            <Label fx:id="lblClasse" text="—" styleClass="h2"/>
+                        </VBox>
+
+                        <VBox spacing="2" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                            <Label text="Date d'inscription :" styleClass="field-label"/>
+                            <Label fx:id="lblDateInscription" text="—" styleClass="h2"/>
+                        </VBox>
+                    </GridPane>
+                </VBox>
+
+                <!-- ─── 3. Responsable Légal & Contact ─── -->
+                <VBox styleClass="form-section-card" spacing="12">
+                    <Label text="Responsable / Tuteur Légal &amp; Contact" styleClass="section-card-title"/>
+                    <GridPane hgap="16" vgap="10">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="33.33"/>
+                            <ColumnConstraints percentWidth="33.33"/>
+                            <ColumnConstraints percentWidth="33.34"/>
+                        </columnConstraints>
+
+                        <VBox spacing="2" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                            <Label text="Nom du tuteur / parent :" styleClass="field-label"/>
+                            <Label fx:id="lblGuardianName" text="—" styleClass="h2"/>
+                        </VBox>
+
+                        <VBox spacing="2" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                            <Label text="Téléphone du tuteur :" styleClass="field-label"/>
+                            <Label fx:id="lblGuardianPhone" text="—" styleClass="h2"/>
+                        </VBox>
+
+                        <VBox spacing="2" GridPane.columnIndex="2" GridPane.rowIndex="0">
+                            <Label text="Lien de parenté :" styleClass="field-label"/>
+                            <Label fx:id="lblGuardianRelation" text="—" styleClass="h2"/>
+                        </VBox>
+
+                        <VBox spacing="2" GridPane.columnIndex="0" GridPane.rowIndex="1" GridPane.columnSpan="2">
+                            <Label text="Adresse résidentielle :" styleClass="field-label"/>
+                            <Label fx:id="lblGuardianAddress" text="—" styleClass="h2"/>
+                        </VBox>
+
+                        <VBox spacing="2" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                            <Label text="Email de contact :" styleClass="field-label"/>
+                            <Label fx:id="lblEmail" text="—" styleClass="h2"/>
+                        </VBox>
+                    </GridPane>
+                </VBox>
+
+            </VBox>
+        </ScrollPane>
+    </center>
+</BorderPane>

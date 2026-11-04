@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            styleClass="view-container"
+            fx:controller="com.jenos.gestionecole.controller.HistoryController">
+
+    <!-- ─── TOP : Header & Filtres Complets ─── -->
+    <top>
+        <VBox styleClass="view-top-bar" spacing="10">
+            <padding><Insets top="10" right="16" bottom="10" left="16"/></padding>
+
+            <!-- Ligne En-tête -->
+            <HBox alignment="CENTER_LEFT" spacing="14">
+                <VBox spacing="2">
+                    <Label text="Historique des Opérations" styleClass="view-title"/>
+                    <Label text="Consultation d'audit, traçabilité et historique complet des mouvements." styleClass="text-muted"/>
+                </VBox>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="lblResultCount" text="0 résultat(s)" style="-fx-font-weight: bold; -fx-text-fill: #0d6efd;"/>
+                <Button fx:id="btnToggleAmounts" onAction="#handleToggleAmounts" text="👁" styleClass="btn-secondary"/>
+                <Button fx:id="btnRefresh" onAction="#handleRefresh" text="Actualiser" styleClass="btn-secondary"/>
+                <Button fx:id="btnExport" onAction="#handleExport" text="📥 Exporter" styleClass="btn-primary"/>
+            </HBox>
+
+            <!-- Ligne 1 : Recherche textuelle & Période -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <TextField fx:id="txtSearch" promptText="Rechercher par nom, matricule, N° reçu, référence, libellé..."
+                           styleClass="input-field, search-input" HBox.hgrow="ALWAYS"/>
+                <Label text="Du :" styleClass="field-label"/>
+                <DatePicker fx:id="dpStart" prefWidth="135" styleClass="date-picker"/>
+                <Label text="Au :" styleClass="field-label"/>
+                <DatePicker fx:id="dpEnd" prefWidth="135" styleClass="date-picker"/>
+                <Button fx:id="btnSearch" onAction="#handleSearch" styleClass="btn-primary" text="🔍"/>
+            </HBox>
+
+            <!-- Ligne 2 : Filtres Opérationnels (Type, Statut, Caisse, Utilisateur) -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <ComboBox fx:id="cmbType" promptText="Type d'opération" styleClass="filter-combo" prefWidth="160"/>
+                <ComboBox fx:id="cmbStatus" promptText="Statut" styleClass="filter-combo" prefWidth="130"/>
+                <ComboBox fx:id="cmbCashRegister" promptText="Toutes les caisses" styleClass="filter-combo" prefWidth="160"/>
+                <TextField fx:id="txtUser" promptText="Caissière..." styleClass="input-field" prefWidth="140"/>
+            </HBox>
+
+            <!-- Ligne 3 : Filtrage Scolaire en Cascade (Section → Promotion → Option → Classe) -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Structure scolaire :" styleClass="field-label"/>
+                <ComboBox fx:id="cmbSection" promptText="Section" styleClass="filter-combo" prefWidth="140"/>
+                <ComboBox fx:id="cmbPromotion" promptText="Promotion" styleClass="filter-combo" prefWidth="140"/>
+                <ComboBox fx:id="cmbOption" promptText="Option" styleClass="filter-combo" prefWidth="160"/>
+                <ComboBox fx:id="cmbClasse" promptText="Classe" styleClass="filter-combo" prefWidth="130"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="btnReset" onAction="#handleReset" styleClass="btn-secondary" text="Réinitialiser les filtres"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- ─── CENTER : TableView Historique Complet ─── -->
+    <center>
+        <TableView fx:id="tableHistory" styleClass="table-view" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="colDateTime" text="Date / Heure" prefWidth="130"/>
+                <TableColumn fx:id="colRef" text="N° Opération" prefWidth="130"/>
+                <TableColumn fx:id="colType" text="Type" prefWidth="130"/>
+                <TableColumn fx:id="colBeneficiary" text="Élève / Bénéficiaire" prefWidth="180"/>
+                <TableColumn fx:id="colSection" text="Section" prefWidth="100"/>
+                <TableColumn fx:id="colPromotion" text="Promotion" prefWidth="90"/>
+                <TableColumn fx:id="colOption" text="Option" prefWidth="120"/>
+                <TableColumn fx:id="colClasse" text="Classe" prefWidth="90"/>
+                <TableColumn fx:id="colCur" text="Devise" prefWidth="65"/>
+                <TableColumn fx:id="colAmount" text="Montant" prefWidth="110"/>
+                <TableColumn fx:id="colMethod" text="Mode" prefWidth="100"/>
+                <TableColumn fx:id="colCashRegister" text="Caisse" prefWidth="130"/>
+                <TableColumn fx:id="colUser" text="Opérateur" prefWidth="100"/>
+                <TableColumn fx:id="colStatus" text="Statut" prefWidth="100"/>
+                <TableColumn fx:id="colActions" text="Actions" prefWidth="80" sortable="false"/>
+            </columns>
+        </TableView>
+    </center>
+
+    <!-- ─── BOTTOM : Pagination ─── -->
+    <bottom>
+        <HBox styleClass="view-bottom-bar" alignment="CENTER_LEFT" spacing="14">
+            <padding><Insets top="8" right="16" bottom="8" left="16"/></padding>
+            <Label fx:id="lblPageInfo" text="Affichage 0 à 0 sur 0" style="-fx-text-fill: #6c757d;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Pagination fx:id="pagination" pageCount="1" styleClass="pagination"/>
+        </HBox>
+    </bottom>
+</BorderPane>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<ScrollPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            styleClass="app-scroll"
+            fitToWidth="true"
+            fx:controller="com.jenos.gestionecole.controller.dialog.CloseCashDialogController">
+
+    <VBox spacing="18" styleClass="form-page-container, close-cash-dialog">
+
+        <!-- ─── En-tête ─── -->
+        <VBox spacing="4">
+            <Label text="Procédure de Clôture Journalière de Caisse" styleClass="view-title"/>
+            <Label text="Vérification des rapports obligatoires, comptage physique et réconciliation." styleClass="text-muted"/>
+        </VBox>
+
+        <Label fx:id="lblStatusMessage" visible="false" managed="false"/>
+
+        <!-- ─── Étape 1 : Contrôle du Rapport Journalier ─── -->
+        <VBox fx:id="stepReportSection" styleClass="close-cash-step" spacing="12">
+            <Label text="Étape 1 : Rapport Journalier Obligatoire" styleClass="close-cash-step-label"/>
+            
+            <Label fx:id="lblReportWarning" styleClass="alert-warning" wrapText="true"
+                   text="ATTENTION : La clôture est strictement bloquée tant que le rapport journalier n'a pas été généré et imprimé."/>
+
+            <GridPane hgap="16" vgap="10">
+                <columnConstraints>
+                    <ColumnConstraints percentWidth="50"/>
+                    <ColumnConstraints percentWidth="50"/>
+                </columnConstraints>
+
+                <HBox spacing="8" alignment="CENTER_LEFT" GridPane.columnIndex="0">
+                    <Label text="Rapport généré :" styleClass="field-label"/>
+                    <Label fx:id="lblReportStatus" text="Non généré ✗" styleClass="h2"/>
+                </HBox>
+
+                <HBox spacing="8" alignment="CENTER_LEFT" GridPane.columnIndex="1">
+                    <Label text="Rapport imprimé :" styleClass="field-label"/>
+                    <Label fx:id="lblPrintStatus" text="Non imprimé ✗" styleClass="h2"/>
+                </HBox>
+            </GridPane>
+
+            <HBox spacing="12" alignment="CENTER_LEFT">
+                <Button fx:id="btnGenerateReport" onAction="#handleGenerateReport"
+                        text="1. Générer le Rapport Journalier" styleClass="btn-secondary"/>
+                <Button fx:id="btnPrintReport" onAction="#handlePrintReport"
+                        text="2. Imprimer &amp; Valider l'Impression" styleClass="btn-primary"/>
+            </HBox>
+        </VBox>
+
+        <!-- ─── Étape 2 : Comptage Physique & Réconciliation ─── -->
+        <VBox fx:id="stepCountingSection" styleClass="close-cash-step" spacing="14">
+            <Label text="Étape 2 : Comptage Physique des Espèces &amp; Réconciliation" styleClass="close-cash-step-label"/>
+
+            <GridPane hgap="16" vgap="12">
+                <columnConstraints>
+                    <ColumnConstraints percentWidth="33.33"/>
+                    <ColumnConstraints percentWidth="33.33"/>
+                    <ColumnConstraints percentWidth="33.34"/>
+                </columnConstraints>
+
+                <!-- Ligne Titres -->
+                <Label text="Devise" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                <Label text="Solde Théorique Caisse" styleClass="field-label" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                <Label text="Comptage Physique Réel" styleClass="field-label" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+
+                <!-- Ligne USD -->
+                <Label text="Dollars Américains (USD)" styleClass="h2" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                <Label fx:id="lblExpectedUSD" text="0.00 USD" styleClass="h2" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                <VBox spacing="4" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                    <TextField fx:id="txtCountedUSD" promptText="0.00" styleClass="input-field, counting-field-usd"/>
+                    <HBox spacing="6">
+                        <Label text="Écart :" styleClass="text-muted"/>
+                        <Label fx:id="lblDiffUSD" text="+0.00 USD" styleClass="h2"/>
+                    </HBox>
+                </VBox>
+
+                <!-- Ligne CDF -->
+                <Label text="Francs Congolais (CDF)" styleClass="h2" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                <Label fx:id="lblExpectedCDF" text="0 CDF" styleClass="h2" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                <VBox spacing="4" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                    <TextField fx:id="txtCountedCDF" promptText="0" styleClass="input-field, counting-field-cdf"/>
+                    <HBox spacing="6">
+                        <Label text="Écart :" styleClass="text-muted"/>
+                        <Label fx:id="lblDiffCDF" text="+0 CDF" styleClass="h2"/>
+                    </HBox>
+                </VBox>
+            </GridPane>
+
+            <VBox spacing="6">
+                <Label text="Observations / Justification d'éventuels écarts :" styleClass="field-label"/>
+                <TextArea fx:id="txtNotes" promptText="Remarques éventuelles sur la clôture..." prefRowCount="2" styleClass="input-field"/>
+            </VBox>
+        </VBox>
+
+        <!-- ─── Clôture Exceptionnelle (Superviseur) ─── -->
+        <TitledPane fx:id="paneExceptionalClosure" text="Clôture Exceptionnelle (Réservé au Superviseur / Promoteur)" expanded="false">
+            <VBox spacing="10" styleClass="form-page-container">
+                <Label text="À n'utiliser qu'en cas d'urgence absolue justifiée. L'action sera consignée dans l'audit." styleClass="label-error"/>
+                <TextField fx:id="txtExceptionReason" promptText="Motif obligatoire de dérogation..." styleClass="input-field"/>
+                <PasswordField fx:id="txtSupervisorPass" promptText="Mot de passe d'autorisation superviseur" styleClass="input-field"/>
+                <Button fx:id="btnForceClosure" onAction="#handleForceClosure" text="Forcer la Clôture de Caisse" styleClass="btn-danger"/>
+            </VBox>
+        </TitledPane>
+
+        <!-- ─── Boutons Finaux ─── -->
+        <HBox spacing="14" alignment="CENTER_RIGHT" styleClass="form-action-bar">
+            <Button fx:id="btnCancel" onAction="#handleCancel" text="Annuler &amp; Retourner" styleClass="btn-secondary"/>
+            <Button fx:id="btnConfirmClosure" onAction="#handleConfirmClosure"
+                    text="Confirmer la Clôture Définitive" styleClass="btn-primary, btn-danger"/>
+        </HBox>
+
+    </VBox>
+</ScrollPane>

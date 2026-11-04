@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+
+<HBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:id="headerBar"
+      styleClass="header-bar"
+      alignment="CENTER_LEFT"
+      fx:controller="com.jenos.gestionecole.controller.HeaderController">
+
+    <!-- Identité établissement & Année scolaire -->
+    <HBox fx:id="identity" styleClass="header-identity" alignment="CENTER_LEFT" spacing="12">
+        <ImageView fx:id="imgLogo"
+                   fitWidth="42" fitHeight="42"
+                   preserveRatio="true"
+                   styleClass="header-logo"/>
+        <VBox fx:id="schoolInfo" styleClass="header-school-info" alignment="CENTER_LEFT" spacing="2">
+            <Label fx:id="lblSchoolName" styleClass="header-school-name" text="Établissement"/>
+            <Label fx:id="lblSystemName" styleClass="header-system-name" text="Gestion scolaire"/>
+        </VBox>
+        <Label fx:id="lblAcademicYear" styleClass="badge, badge-info" text="Année : 2024-2025" style="-fx-font-weight: bold; -fx-padding: 3 8 3 8;"/>
+    </HBox>
+
+    <!-- Espaceur flexible -->
+    <Region HBox.hgrow="ALWAYS"/>
+
+    <!-- Informations de session -->
+    <HBox fx:id="sessionInfo" styleClass="header-session" alignment="CENTER_RIGHT" spacing="14">
+
+        <!-- Infos utilisateur -->
+        <VBox fx:id="userInfo" styleClass="header-user-info" alignment="CENTER_RIGHT" spacing="2">
+            <Label fx:id="lblUsername" styleClass="header-username" text="Utilisateur"/>
+            <Label fx:id="lblRole"     styleClass="header-role"     text="Rôle"/>
+            <Label fx:id="lblCashRegister" styleClass="header-cash-register" text="" managed="false" visible="false"/>
+        </VBox>
+
+        <!-- Séparateur vertical -->
+        <Separator orientation="VERTICAL" styleClass="header-separator"/>
+
+        <!-- Bouton visibilité montants -->
+        <Button fx:id="btnMoneyVisibility"
+                onAction="#toggleMoneyVisibility"
+                styleClass="btn-icon-header"
+                text="👁"
+                mnemonicParsing="false">
+            <tooltip><Tooltip fx:id="tooltipVisibility" text="Masquer les montants"/></tooltip>
+        </Button>
+
+        <!-- Bouton Notifications avec badge -->
+        <StackPane alignment="TOP_RIGHT">
+            <Button fx:id="btnNotifications"
+                    onAction="#openNotifications"
+                    styleClass="btn-icon-header"
+                    text="🔔"
+                    mnemonicParsing="false">
+                <tooltip><Tooltip text="Centre de notifications &amp; alertes"/></tooltip>
+            </Button>
+            <Label fx:id="lblNotificationBadge"
+                   text="0"
+                   styleClass="badge, badge-danger"
+                   style="-fx-font-size: 9px; -fx-font-weight: bold; -fx-padding: 1 4 1 4; -fx-translate-x: 6; -fx-translate-y: -4;"
+                   visible="false" managed="false"/>
+        </StackPane>
+
+        <!-- Bouton Profil -->
+        <Button fx:id="btnProfile"
+                onAction="#openProfile"
+                styleClass="btn-icon-header"
+                text="👤"
+                mnemonicParsing="false">
+            <tooltip><Tooltip text="Mon Profil &amp; Sécurité"/></tooltip>
+        </Button>
+
+        <!-- Bouton thème (dimensionnement fixe pour prévenir tout décalage) -->
+        <Button fx:id="btnTheme"
+                onAction="#toggleTheme"
+                styleClass="btn-icon-header"
+                text="☀"
+                minWidth="38" prefWidth="38" maxWidth="38"
+                minHeight="38" prefHeight="38" maxHeight="38"
+                mnemonicParsing="false">
+            <tooltip><Tooltip fx:id="tooltipTheme" text="Activer le mode sombre"/></tooltip>
+        </Button>
+
+        <!-- Bouton paramètres (contrôlé par RoleGuard) -->
+        <Button fx:id="btnSettings"
+                onAction="#openSettings"
+                styleClass="btn-icon-header"
+                text="⚙"
+                mnemonicParsing="false">
+            <tooltip><Tooltip text="Paramètres"/></tooltip>
+        </Button>
+
+        <!-- Bouton déconnexion -->
+        <Button fx:id="btnLogout"
+                onAction="#confirmLogout"
+                styleClass="btn-icon-header, btn-logout"
+                text="⏻"
+                mnemonicParsing="false">
+            <tooltip><Tooltip text="Se déconnecter"/></tooltip>
+        </Button>
+    </HBox>
+</HBox>

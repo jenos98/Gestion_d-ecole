@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            styleClass="view-container"
+            fx:controller="com.jenos.gestionecole.controller.FeesController">
+
+    <!-- ─── TOP : En-tête de la page ─── -->
+    <top>
+        <VBox styleClass="view-top-bar" spacing="6">
+            <Label text="Grille Tarifaire &amp; Configuration des Frais Scolaires" styleClass="view-title"/>
+            <Label text="Paramétrage hiérarchique par Section, Promotion, Option et Classe. Séparation étanche USD / CDF." styleClass="text-muted"/>
+            <Label fx:id="lblMessage" visible="false" managed="false"/>
+        </VBox>
+    </top>
+
+    <!-- ─── CENTER : Formulaire et Tableau côte à côte ─── -->
+    <center>
+        <ScrollPane fitToWidth="true" fitToHeight="true" styleClass="app-scroll">
+            <HBox spacing="18" styleClass="form-page-container">
+
+                <!-- 1. FORMULAIRE DE PARAMÉTRAGE (Gauche) -->
+                <VBox fx:id="formSection" prefWidth="420" minWidth="360" styleClass="form-section-card" spacing="12">
+                    <Label fx:id="lblFormTitle" text="Nouveau Frais Scolaire" styleClass="section-card-title"/>
+
+                    <!-- Libellé -->
+                    <VBox spacing="4">
+                        <Label text="Libellé du frais *" styleClass="field-label"/>
+                        <TextField fx:id="txtFeeName" promptText="ex: Minerval 1er Trimestre, Frais d'atelier..." styleClass="input-field"/>
+                    </VBox>
+
+                    <!-- Catégorie -->
+                    <VBox spacing="4">
+                        <Label text="Catégorie *" styleClass="field-label"/>
+                        <ComboBox fx:id="cmbCategory" maxWidth="Infinity" styleClass="filter-combo"/>
+                    </VBox>
+
+                    <!-- Montant et Devise -->
+                    <HBox spacing="12">
+                        <VBox spacing="4" HBox.hgrow="ALWAYS">
+                            <Label text="Montant *" styleClass="field-label"/>
+                            <TextField fx:id="txtAmount" promptText="0.00" styleClass="input-field"/>
+                        </VBox>
+                        <VBox spacing="4" prefWidth="120">
+                            <Label text="Devise *" styleClass="field-label"/>
+                            <ComboBox fx:id="cmbCurrency" maxWidth="Infinity" styleClass="filter-combo"/>
+                        </VBox>
+                    </HBox>
+
+                    <!-- Niveau de Portée (Scope) -->
+                    <VBox spacing="4">
+                        <Label text="Niveau d'application (Portée) *" styleClass="field-label"/>
+                        <ComboBox fx:id="cmbScopeLevel" maxWidth="Infinity" styleClass="filter-combo"/>
+                    </VBox>
+
+                    <!-- Cascade Conditionnelle selon le Scope -->
+                    <VBox fx:id="boxCascadeContainer" spacing="8" styleClass="form-section-card">
+                        <Label text="Ciblage Hiérarchique" styleClass="field-label"/>
+
+                        <VBox fx:id="boxSection" spacing="4">
+                            <Label text="Section :" styleClass="field-label"/>
+                            <ComboBox fx:id="cmbSection" promptText="Sélectionner une section..." maxWidth="Infinity" styleClass="filter-combo"/>
+                        </VBox>
+
+                        <VBox fx:id="boxPromotion" spacing="4">
+                            <Label text="Promotion :" styleClass="field-label"/>
+                            <ComboBox fx:id="cmbPromotion" promptText="Sélectionner une promotion..." maxWidth="Infinity" styleClass="filter-combo"/>
+                        </VBox>
+
+                        <VBox fx:id="boxOption" spacing="4">
+                            <Label text="Option d'étude :" styleClass="field-label"/>
+                            <ComboBox fx:id="cmbOption" promptText="Sélectionner une option..." maxWidth="Infinity" styleClass="filter-combo"/>
+                        </VBox>
+
+                        <VBox fx:id="boxClasse" spacing="4">
+                            <Label text="Classe spécifique :" styleClass="field-label"/>
+                            <ComboBox fx:id="cmbClasse" promptText="Sélectionner une classe..." maxWidth="Infinity" styleClass="filter-combo"/>
+                        </VBox>
+                    </VBox>
+
+                    <!-- Échéance & Année scolaire -->
+                    <HBox spacing="12">
+                        <VBox spacing="4" HBox.hgrow="ALWAYS">
+                            <Label text="Date d'échéance" styleClass="field-label"/>
+                            <DatePicker fx:id="dpEcheance" maxWidth="Infinity" styleClass="date-picker"/>
+                        </VBox>
+                        <VBox spacing="4" prefWidth="140">
+                            <Label text="Année scolaire" styleClass="field-label"/>
+                            <ComboBox fx:id="cmbAnneeScolaire" maxWidth="Infinity" styleClass="filter-combo"/>
+                        </VBox>
+                    </HBox>
+
+                    <!-- Options booléennes -->
+                    <HBox spacing="16">
+                        <CheckBox fx:id="chkMandatory" text="Frais obligatoire" selected="true" styleClass="field-label"/>
+                        <CheckBox fx:id="chkActive" text="Frais actif" selected="true" styleClass="field-label"/>
+                    </HBox>
+
+                    <!-- Boutons formulaire -->
+                    <HBox spacing="10" alignment="CENTER_RIGHT" styleClass="form-action-bar">
+                        <Button fx:id="btnResetForm" onAction="#handleReset" text="Effacer" styleClass="btn-secondary"/>
+                        <Button fx:id="btnSaveFee" onAction="#handleSave" text="Enregistrer le Frais" styleClass="btn-primary"/>
+                    </HBox>
+                </VBox>
+
+                <!-- 2. TABLEAU DE LA GRILLE TARIFAIRE (Droite) -->
+                <VBox HBox.hgrow="ALWAYS" styleClass="form-section-card" spacing="12">
+                    <HBox alignment="CENTER_LEFT" spacing="12">
+                        <Label text="Frais Scolaires Configurés" styleClass="section-card-title"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label text="Filtre catégorie :" styleClass="field-label"/>
+                        <ComboBox fx:id="cmbFilterCategory" prefWidth="180" styleClass="filter-combo"/>
+                    </HBox>
+
+                    <!-- Table des frais -->
+                    <TableView fx:id="tableFees" VBox.vgrow="ALWAYS" styleClass="table-view">
+                        <columns>
+                            <TableColumn fx:id="tcName" text="Libellé du Frais" prefWidth="200"/>
+                            <TableColumn fx:id="tcCategory" text="Catégorie" prefWidth="140"/>
+                            <TableColumn fx:id="tcAmount" text="Montant" prefWidth="100"/>
+                            <TableColumn fx:id="tcCurrency" text="Devise" prefWidth="75"/>
+                            <TableColumn fx:id="tcTarget" text="Portée / Cible" prefWidth="190"/>
+                            <TableColumn fx:id="tcEcheance" text="Échéance" prefWidth="95"/>
+                            <TableColumn fx:id="tcMandatory" text="Obligatoire" prefWidth="85"/>
+                            <TableColumn fx:id="tcStatus" text="Statut" prefWidth="85"/>
+                            <TableColumn fx:id="tcActions" text="Actions" prefWidth="150" sortable="false"/>
+                        </columns>
+                    </TableView>
+
+                    <!-- Cartouche Récapitulatif Totaux USD & CDF Étanches -->
+                    <HBox spacing="20" alignment="CENTER_LEFT" styleClass="form-section-card">
+                        <VBox spacing="2">
+                            <Label text="Total Barème USD Configuré" styleClass="field-label"/>
+                            <Label fx:id="lblTotalConfiguredUSD" text="0.00 USD" styleClass="h2"/>
+                        </VBox>
+                        <Separator orientation="VERTICAL"/>
+                        <VBox spacing="2">
+                            <Label text="Total Barème CDF Configuré" styleClass="field-label"/>
+                            <Label fx:id="lblTotalConfiguredCDF" text="0 CDF" styleClass="h2"/>
+                        </VBox>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label text="Les montants USD et CDF sont strictement séparés." styleClass="text-muted"/>
+                    </HBox>
+                </VBox>
+
+            </HBox>
+        </ScrollPane>
+    </center>
+
+</BorderPane>

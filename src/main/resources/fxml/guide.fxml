@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            styleClass="view-container"
+            fx:controller="com.jenos.gestionecole.controller.GuideController">
+
+    <!-- ─── TOP : En-tête & Barre de Recherche ─── -->
+    <top>
+        <VBox styleClass="view-top-bar" spacing="12">
+            <VBox spacing="4">
+                <Label text="Centre d'Aide &amp; Documentation Intégrée" styleClass="view-title"/>
+                <Label text="Guides d'utilisation, Foire Aux Questions (FAQ), glossaire métier et support technique 100% hors-ligne." styleClass="text-muted"/>
+            </VBox>
+
+            <!-- Barre de recherche plein texte -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <TextField fx:id="txtSearchHelp"
+                           promptText="Rechercher un guide, un problème, une question FAQ, un terme comptable..."
+                           HBox.hgrow="ALWAYS"
+                           styleClass="form-field"/>
+                <Button fx:id="btnSearch" text="Rechercher" onAction="#onSearch" styleClass="btn-primary"/>
+                <Button fx:id="btnClearSearch" text="Réinitialiser" onAction="#onClearSearch" styleClass="btn-secondary"/>
+            </HBox>
+
+            <Label fx:id="lblSearchResultStatus" text="" styleClass="text-muted" visible="false" managed="false"/>
+        </VBox>
+    </top>
+
+    <!-- ─── CENTER : Navigation par Onglets & Résultats ─── -->
+    <center>
+        <StackPane styleClass="app-content-pane">
+
+            <!-- Contenu normal : TabPane à 4 volets -->
+            <TabPane fx:id="tabPaneHelp" tabClosingPolicy="UNAVAILABLE">
+
+                <!-- 1. Guides par Module -->
+                <Tab fx:id="tabGuides" text="Guides par Module">
+                    <BorderPane>
+                        <left>
+                            <VBox prefWidth="280" minWidth="240" styleClass="form-section-card" spacing="10">
+                                <Label text="Sommaire des Modules" styleClass="section-card-title"/>
+                                <ListView fx:id="lstGuideModules" VBox.vgrow="ALWAYS" styleClass="table-view"/>
+                            </VBox>
+                        </left>
+                        <center>
+                            <ScrollPane fitToWidth="true" styleClass="app-scroll">
+                                <VBox spacing="20" styleClass="form-page-container">
+                                    <VBox styleClass="form-section-card" spacing="14">
+                                        <Label fx:id="lblTopicCategory" text="Catégorie" styleClass="field-label"/>
+                                        <Label fx:id="lblTopicTitle" text="Titre de la rubrique" styleClass="h1"/>
+                                        <Separator/>
+                                        <Label fx:id="lblTopicBody" text="Corps explicatif..." wrapText="true" styleClass="h2" lineSpacing="4"/>
+                                    </VBox>
+
+                                    <!-- Recommandations & Bonnes pratiques -->
+                                    <VBox fx:id="boxBestPractices" styleClass="form-section-card, alert-warning" spacing="8">
+                                        <Label text="Règle d'or &amp; Recommandation de gestion :" styleClass="alert-title"/>
+                                        <Label fx:id="lblBestPracticesText" text="Recommandation..." wrapText="true" styleClass="alert-message"/>
+                                    </VBox>
+                                </VBox>
+                            </ScrollPane>
+                        </center>
+                    </BorderPane>
+                </Tab>
+
+                <!-- 2. Foire Aux Questions (FAQ) -->
+                <Tab fx:id="tabFaq" text="Foire Aux Questions (FAQ)">
+                    <ScrollPane fitToWidth="true" styleClass="app-scroll">
+                        <VBox spacing="16" styleClass="form-page-container">
+                            <VBox spacing="6">
+                                <Label text="Questions Courantes &amp; Résolution de Pannes" styleClass="h1"/>
+                                <Label text="Consultez les causes probables et les démarches correctives pour les blocages fréquents." styleClass="text-muted"/>
+                            </VBox>
+                            <VBox fx:id="boxFaqList" spacing="12"/>
+                        </VBox>
+                    </ScrollPane>
+                </Tab>
+
+                <!-- 3. Glossaire Métier -->
+                <Tab fx:id="tabGlossary" text="Glossaire Métier">
+                    <ScrollPane fitToWidth="true" styleClass="app-scroll">
+                        <VBox spacing="16" styleClass="form-page-container">
+                            <VBox spacing="6">
+                                <Label text="Glossaire des Termes Techniques &amp; Comptables" styleClass="h1"/>
+                                <Label text="Définitions claires des concepts clés utilisés dans la gestion financière et scolaire." styleClass="text-muted"/>
+                            </VBox>
+                            <VBox fx:id="boxGlossaryList" spacing="12"/>
+                        </VBox>
+                    </ScrollPane>
+                </Tab>
+
+                <!-- 4. Assistance & Support -->
+                <Tab fx:id="tabSupport" text="Assistance &amp; Version">
+                    <ScrollPane fitToWidth="true" styleClass="app-scroll">
+                        <VBox spacing="20" styleClass="form-page-container">
+                            <VBox styleClass="form-section-card" spacing="16">
+                                <Label text="Informations sur l'Application &amp; Support Technique" styleClass="h1"/>
+                                <Separator/>
+
+                                <GridPane hgap="16" vgap="12">
+                                    <columnConstraints>
+                                        <ColumnConstraints prefWidth="200" minWidth="160"/>
+                                        <ColumnConstraints hgrow="ALWAYS"/>
+                                    </columnConstraints>
+
+                                    <Label text="Version du logiciel :" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="field-label"/>
+                                    <Label fx:id="lblAppVersion" text="1.0.0 LTS" GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="h2"/>
+
+                                    <Label text="Email Support Technique :" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="field-label"/>
+                                    <Label fx:id="lblSupportEmail" text="support@ecolejenos.cd" GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="h2"/>
+
+                                    <Label text="Ligne d'Assistance :" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="field-label"/>
+                                    <Label fx:id="lblSupportPhone" text="+243 81 000 0000" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="h2"/>
+
+                                    <Label text="Horaires d'Assistance :" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="field-label"/>
+                                    <Label fx:id="lblSupportHours" text="07h30 – 16h30" GridPane.rowIndex="3" GridPane.columnIndex="1" styleClass="h2"/>
+
+                                    <Label text="Équipe de Développement :" GridPane.rowIndex="4" GridPane.columnIndex="0" styleClass="field-label"/>
+                                    <Label fx:id="lblDeveloperTeam" text="Jenos Software Engineering" GridPane.rowIndex="4" GridPane.columnIndex="1" styleClass="h2"/>
+
+                                    <Label text="Mode Opérationnel :" GridPane.rowIndex="5" GridPane.columnIndex="0" styleClass="field-label"/>
+                                    <Label text="100% Hors-ligne — Base de données locale sécurisée" GridPane.rowIndex="5" GridPane.columnIndex="1" styleClass="h2"/>
+                                </GridPane>
+                            </VBox>
+                        </VBox>
+                    </ScrollPane>
+                </Tab>
+
+            </TabPane>
+
+            <!-- Panneau des Résultats de Recherche (Affiché uniquement lors d'une recherche active) -->
+            <ScrollPane fx:id="scrollSearchResults" fitToWidth="true" styleClass="app-scroll" visible="false" managed="false">
+                <VBox spacing="16" styleClass="form-page-container">
+                    <HBox alignment="CENTER_LEFT" spacing="12">
+                        <Label text="Résultats de la Recherche" styleClass="h1"/>
+                        <Label fx:id="lblSearchCount" text="" styleClass="badge-info"/>
+                    </HBox>
+                    <VBox fx:id="boxSearchResultsContainer" spacing="12"/>
+                </VBox>
+            </ScrollPane>
+
+        </StackPane>
+    </center>
+</BorderPane>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            styleClass="view-container"
+            fx:controller="com.jenos.gestionecole.controller.CashController">
+
+    <!-- ─── TOP : En-tête de Caisse & Sélecteur ─── -->
+    <top>
+        <VBox styleClass="view-top-bar" spacing="10">
+            <HBox alignment="CENTER_LEFT" spacing="14">
+                <VBox spacing="4">
+                    <Label text="Gestion &amp; État de Caisse" styleClass="view-title"/>
+                    <Label text="Supervision en temps réel des encaissements, soldes et opérations." styleClass="text-muted"/>
+                </VBox>
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <HBox fx:id="boxRegisterSelector" spacing="8" alignment="CENTER_RIGHT" visible="false" managed="false">
+                    <Label text="Caisse active :" styleClass="field-label"/>
+                    <ComboBox fx:id="cmbRegisters" styleClass="filter-combo"/>
+                </HBox>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- ─── CENTER : Cartes d'État & Actions ─── -->
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="app-scroll">
+            <VBox spacing="20" styleClass="form-page-container">
+
+                <!-- 1. Cartes de statut & soldes -->
+                <GridPane hgap="16" vgap="16">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="33.33"/>
+                        <ColumnConstraints percentWidth="33.33"/>
+                        <ColumnConstraints percentWidth="33.34"/>
+                    </columnConstraints>
+
+                    <!-- Carte Statut Caisse -->
+                    <VBox styleClass="form-section-card" spacing="8" GridPane.columnIndex="0">
+                        <Label text="État de la Caisse" styleClass="section-card-title"/>
+                        <Label fx:id="lblCashStatus" text="OUVERTE" styleClass="h1"/>
+                        <Label fx:id="lblCashierName" text="Caissière : —" styleClass="text-muted"/>
+                        <Label fx:id="lblOpenTime" text="Ouverture : —" styleClass="text-muted"/>
+                    </VBox>
+
+                    <!-- Carte Solde USD -->
+                    <VBox styleClass="form-section-card" spacing="8" GridPane.columnIndex="1">
+                        <Label text="Solde Actuel (USD)" styleClass="section-card-title"/>
+                        <Label fx:id="lblBalanceUSD" text="••••••" styleClass="h1"/>
+                        <Label text="Encaissements et décaissements en dollars" styleClass="text-muted"/>
+                    </VBox>
+
+                    <!-- Carte Solde CDF -->
+                    <VBox styleClass="form-section-card" spacing="8" GridPane.columnIndex="2">
+                        <Label text="Solde Actuel (CDF)" styleClass="section-card-title"/>
+                        <Label fx:id="lblBalanceCDF" text="••••••" styleClass="h1"/>
+                        <Label text="Encaissements et décaissements en francs" styleClass="text-muted"/>
+                    </VBox>
+                </GridPane>
+
+                <!-- 2. Barre d'état du rapport journalier -->
+                <VBox styleClass="form-section-card" spacing="12">
+                    <Label text="Contrôle avant Fermeture" styleClass="section-card-title"/>
+                    <HBox spacing="16" alignment="CENTER_LEFT">
+                        <Label text="Statut Rapport :" styleClass="field-label"/>
+                        <Label fx:id="lblReportStatus" text="Rapport Non Généré" styleClass="h2"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+
+                        <Button fx:id="btnDailyReport" onAction="#handleGenerateDailyReport"
+                                text="Générer Rapport Journalier" styleClass="btn-secondary"/>
+                        <Button fx:id="btnPrintReport" onAction="#handlePrintReport"
+                                text="Imprimer Rapport Journalier" styleClass="btn-secondary"/>
+                    </HBox>
+                </VBox>
+
+                <!-- 3. Actions majeures -->
+                <HBox spacing="14" alignment="CENTER_RIGHT" styleClass="form-action-bar">
+                    <Button fx:id="btnCloseCash" onAction="#handleGoToClosure"
+                            text="Procéder à la Clôture de la Caisse" styleClass="btn-primary, btn-danger"/>
+                </HBox>
+
+            </VBox>
+        </ScrollPane>
+    </center>
+</BorderPane>

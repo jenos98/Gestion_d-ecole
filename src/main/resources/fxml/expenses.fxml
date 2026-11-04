@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            styleClass="view-container"
+            fx:controller="com.jenos.gestionecole.controller.ExpensesController">
+
+    <!-- ─── TOP : Header ─── -->
+    <top>
+        <VBox styleClass="view-top-bar" spacing="6">
+            <padding><Insets top="10" right="16" bottom="6" left="16"/></padding>
+            <HBox alignment="CENTER_LEFT" spacing="12">
+                <VBox spacing="2">
+                    <Label text="Gestion des Dépenses &amp; Décaissements" styleClass="view-title"/>
+                    <Label text="Engagement des sorties d'argent avec vérification immédiate du solde disponible en caisse." styleClass="text-muted"/>
+                </VBox>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="btnBackToCash" onAction="#handleBackToCash" text="← Retour à la Caisse" styleClass="btn-secondary"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- ─── CENTER : Formulaire + Historique des dépenses ─── -->
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="app-scroll">
+            <VBox spacing="18" styleClass="form-page-container">
+                <padding><Insets top="14" right="16" bottom="14" left="16"/></padding>
+
+                <!-- 1. Formulaire d'engagement de dépense -->
+                <VBox styleClass="form-section-card" spacing="14">
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <Label text="1. Nouvelle Dépense" styleClass="section-card-title"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="lblAvailableCashInfo" text="Solde en caisse : —"
+                               style="-fx-font-weight: bold; -fx-text-fill: #0d6efd;"/>
+                    </HBox>
+
+                    <!-- Alertes d'état -->
+                    <Label fx:id="lblExpenseError" styleClass="label-error, alert-error-box" visible="false" managed="false"/>
+                    <Label fx:id="lblExpenseSuccess" styleClass="notification-success" visible="false" managed="false"/>
+
+                    <GridPane hgap="16" vgap="14">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="33.33"/>
+                            <ColumnConstraints percentWidth="33.33"/>
+                            <ColumnConstraints percentWidth="33.34"/>
+                        </columnConstraints>
+
+                        <!-- Ligne 0 : Date, Catégorie, Bénéficiaire -->
+                        <VBox spacing="6" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                            <Label text="Date de paiement *" styleClass="field-label"/>
+                            <DatePicker fx:id="dpDate" maxWidth="Infinity" styleClass="date-picker"/>
+                        </VBox>
+
+                        <VBox spacing="6" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                            <Label text="Catégorie de dépense *" styleClass="field-label"/>
+                            <ComboBox fx:id="cmbCategory" promptText="Choisir la catégorie" maxWidth="Infinity" styleClass="filter-combo"/>
+                        </VBox>
+
+                        <VBox spacing="6" GridPane.columnIndex="2" GridPane.rowIndex="0">
+                            <Label text="Bénéficiaire (Fournisseur/Prestataire) *" styleClass="field-label"/>
+                            <TextField fx:id="txtBeneficiary" promptText="Nom de l'entreprise ou personne" styleClass="input-field"/>
+                        </VBox>
+
+                        <!-- Ligne 1 : Description / Libellé, Montant, Devise -->
+                        <VBox spacing="6" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                            <Label text="Description / Libellé *" styleClass="field-label"/>
+                            <TextField fx:id="txtLabel" promptText="Ex: Achat fournitures de bureau" styleClass="input-field"/>
+                        </VBox>
+
+                        <VBox spacing="6" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                            <Label text="Montant *" styleClass="field-label"/>
+                            <TextField fx:id="txtAmount" promptText="0.00" styleClass="input-field"/>
+                        </VBox>
+
+                        <VBox spacing="6" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                            <Label text="Devise *" styleClass="field-label"/>
+                            <ComboBox fx:id="cmbCurrency" maxWidth="Infinity" styleClass="filter-combo"/>
+                        </VBox>
+
+                        <!-- Ligne 2 : Mode de paiement, Référence, Justificatif -->
+                        <VBox spacing="6" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                            <Label text="Mode de paiement *" styleClass="field-label"/>
+                            <ComboBox fx:id="cmbPaymentMethod" maxWidth="Infinity" styleClass="filter-combo"/>
+                        </VBox>
+
+                        <VBox spacing="6" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                            <Label text="Référence (N° Facture / Reçu)" styleClass="field-label"/>
+                            <TextField fx:id="txtReference" promptText="Ex: FAC-2026-089" styleClass="input-field"/>
+                        </VBox>
+
+                        <VBox spacing="6" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                            <Label text="Pièce Justificative (PDF, JPG, PNG)" styleClass="field-label"/>
+                            <HBox spacing="8" alignment="CENTER_LEFT">
+                                <Button fx:id="btnAddAttachment" onAction="#handleAddAttachment"
+                                        text="📎 Joindre justificatif" styleClass="btn-secondary"/>
+                                <Label fx:id="lblAttachmentName" text="Aucun fichier" styleClass="text-muted"/>
+                                <Button fx:id="btnRemoveAttachment" onAction="#handleRemoveAttachment"
+                                        text="✕" style="-fx-text-fill: #dc3545;" visible="false" managed="false"/>
+                            </HBox>
+                        </VBox>
+                    </GridPane>
+
+                    <!-- Ligne 3 : Justification détaillée -->
+                    <VBox spacing="6">
+                        <Label text="Motif détaillé / Justification de la dépense" styleClass="field-label"/>
+                        <TextArea fx:id="txtReason" promptText="Préciser l'utilité pédagogique ou administrative..." prefRowCount="2" styleClass="input-field"/>
+                    </VBox>
+
+                    <!-- Action de validation -->
+                    <HBox alignment="CENTER_RIGHT" spacing="12">
+                        <Button fx:id="btnResetExpense" onAction="#handleResetForm" text="Réinitialiser" styleClass="btn-secondary"/>
+                        <Button fx:id="btnSubmitExpense" onAction="#handleSubmitExpense"
+                                text="Valider la Dépense &amp; Enregistrer" styleClass="btn-primary"/>
+                    </HBox>
+                </VBox>
+
+                <!-- 2. Historique des dépenses engagées -->
+                <VBox styleClass="form-section-card" spacing="12">
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <VBox spacing="2">
+                            <Label text="2. Historique des Dépenses Récentes" styleClass="section-card-title"/>
+                            <Label text="Toutes les sorties de fonds restent archivées (non destructif)." styleClass="text-muted"/>
+                        </VBox>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="lblExpensesCount" text="0 dépense(s)" styleClass="text-muted"/>
+                        <Button fx:id="btnToggleAmounts" onAction="#handleToggleAmounts" text="👁" styleClass="btn-secondary"/>
+                        <Button fx:id="btnRefreshExpenses" onAction="#handleRefreshExpenses" text="Actualiser" styleClass="btn-secondary"/>
+                    </HBox>
+
+                    <TableView fx:id="tableExpenses" prefHeight="260" styleClass="table-view">
+                        <columns>
+                            <TableColumn fx:id="colDate" text="Date" prefWidth="100"/>
+                            <TableColumn fx:id="colVoucher" text="N° Bon" prefWidth="120"/>
+                            <TableColumn fx:id="colCategory" text="Catégorie" prefWidth="130"/>
+                            <TableColumn fx:id="colLabel" text="Description" prefWidth="200"/>
+                            <TableColumn fx:id="colCur" text="Devise" prefWidth="70"/>
+                            <TableColumn fx:id="colAmount" text="Montant" prefWidth="110"/>
+                            <TableColumn fx:id="colBeneficiary" text="Bénéficiaire" prefWidth="150"/>
+                            <TableColumn fx:id="colMethod" text="Mode" prefWidth="100"/>
+                            <TableColumn fx:id="colStatus" text="Statut" prefWidth="130"/>
+                            <TableColumn fx:id="colActions" text="Actions" prefWidth="100" sortable="false"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+
+            </VBox>
+        </ScrollPane>
+    </center>
+
+</BorderPane>

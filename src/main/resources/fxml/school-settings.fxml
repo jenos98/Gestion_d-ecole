@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            styleClass="view-container"
+            fx:controller="com.jenos.gestionecole.controller.SchoolSettingsController">
+
+    <!-- ─── TOP : En-tête ─── -->
+    <top>
+        <VBox styleClass="view-top-bar" spacing="6">
+            <padding><Insets top="14" right="20" bottom="14" left="20"/></padding>
+            <Label text="Configuration de l'Établissement &amp; Paramètres Globaux" styleClass="view-title"/>
+            <Label text="Identité institutionnelle, devises étanches et politique de masquage financier automatique." styleClass="text-muted"/>
+        </VBox>
+    </top>
+
+    <!-- ─── CENTER : Formulaire Déroulant ─── -->
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="app-scroll">
+            <VBox spacing="18" styleClass="form-page-container" alignment="TOP_CENTER">
+                <padding><Insets top="20" right="30" bottom="30" left="30"/></padding>
+
+                <VBox maxWidth="750" spacing="20" styleClass="form-section-card">
+
+                    <Label fx:id="lblStatus" text="" wrapText="true" visible="false" managed="false"/>
+
+                    <!-- Section 1 : Identité de l'Établissement -->
+                    <Label text="1. Identité Officielle &amp; En-tête de Document" styleClass="section-card-title"/>
+                    <GridPane hgap="16" vgap="12">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="50"/>
+                            <ColumnConstraints percentWidth="50"/>
+                        </columnConstraints>
+
+                        <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                            <Label text="Nom officiel de l'école *" styleClass="field-label"/>
+                            <TextField fx:id="txtSchoolName" promptText="ex: Complexe Scolaire Jenos" styleClass="input-field"/>
+                        </VBox>
+
+                        <VBox spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                            <Label text="Fichier du Logo Officiel" styleClass="field-label"/>
+                            <HBox spacing="8">
+                                <TextField fx:id="txtLogoPath" promptText="Chemin du logo..." HBox.hgrow="ALWAYS" styleClass="input-field"/>
+                                <Button fx:id="btnBrowseLogo" onAction="#handleBrowseLogo" text="Parcourir..." styleClass="btn-secondary"/>
+                            </HBox>
+                        </VBox>
+
+                        <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                            <Label text="Adresse physique de l'école *" styleClass="field-label"/>
+                            <TextField fx:id="txtAddress" promptText="Avenue, Numéro, Commune" styleClass="input-field"/>
+                        </VBox>
+
+                        <VBox spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                            <Label text="Ville *" styleClass="field-label"/>
+                            <TextField fx:id="txtCity" promptText="Kinshasa, Lubumbashi..." styleClass="input-field"/>
+                        </VBox>
+
+                        <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                            <Label text="Pays *" styleClass="field-label"/>
+                            <TextField fx:id="txtCountry" promptText="République Démocratique du Congo" styleClass="input-field"/>
+                        </VBox>
+
+                        <VBox spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                            <Label text="Numéro de téléphone officiel" styleClass="field-label"/>
+                            <TextField fx:id="txtPhone" promptText="+243 8..." styleClass="input-field"/>
+                        </VBox>
+
+                        <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="3" GridPane.columnSpan="2">
+                            <Label text="Email officiel de contact" styleClass="field-label"/>
+                            <TextField fx:id="txtEmail" promptText="contact@ecole.cd" styleClass="input-field"/>
+                        </VBox>
+                    </GridPane>
+
+                    <Separator/>
+
+                    <!-- Section 2 : Devises & Monnaies de Gestion -->
+                    <Label text="2. Devises Officielles de l'Établissement" styleClass="section-card-title"/>
+                    <GridPane hgap="16" vgap="12">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="50"/>
+                            <ColumnConstraints percentWidth="50"/>
+                        </columnConstraints>
+
+                        <VBox spacing="4" GridPane.columnIndex="0">
+                            <Label text="Devise Principale *" styleClass="field-label"/>
+                            <ComboBox fx:id="cmbPrimaryCurrency" maxWidth="Infinity" styleClass="filter-combo"/>
+                        </VBox>
+
+                        <VBox spacing="4" GridPane.columnIndex="1">
+                            <Label text="Devise Secondaire *" styleClass="field-label"/>
+                            <ComboBox fx:id="cmbSecondaryCurrency" maxWidth="Infinity" styleClass="filter-combo"/>
+                        </VBox>
+                    </GridPane>
+                    <Label text="🔒 Règle stricte : Les soldes et flux USD et CDF sont gérés de manière totalement étanche (pas de conversion arbitraire)." styleClass="text-muted"/>
+
+                    <Separator/>
+
+                    <!-- Section 3 : Confidentialité & Masquage Automatique -->
+                    <Label text="3. Politique de Confidentialité Financière (MoneyVisibilityManager)" styleClass="section-card-title"/>
+                    <VBox spacing="8">
+                        <HBox spacing="16" alignment="CENTER_LEFT">
+                            <Label text="Temporisation du masquage automatique :" styleClass="field-label" style="-fx-font-weight: bold;"/>
+                            <ComboBox fx:id="cmbAutoHide" prefWidth="180" styleClass="filter-combo"/>
+                        </HBox>
+                        <Label text="Délai d'inactivité après lequel les montants financiers (soldes, recettes, dépenses) se masquent automatiquement." styleClass="text-muted"/>
+                    </VBox>
+
+                    <!-- Bouton Enregistrer -->
+                    <HBox alignment="CENTER_RIGHT" spacing="12" style="-fx-padding: 10 0 0 0;">
+                        <Button fx:id="btnSaveSettings" onAction="#handleSave" text="💾 Enregistrer les Paramètres" styleClass="btn-primary" prefHeight="38"/>
+                    </HBox>
+
+                </VBox>
+
+            </VBox>
+        </ScrollPane>
+    </center>
+
+</BorderPane>

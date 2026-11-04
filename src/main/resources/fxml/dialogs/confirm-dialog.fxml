@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      styleClass="dialog-container"
+      spacing="20" alignment="CENTER"
+      fx:controller="com.jenos.gestionecole.controller.dialog.ConfirmDialogController">
+
+    <Label fx:id="lblTitle" styleClass="dialog-title" text="Confirmation" wrapText="true"/>
+    <Label fx:id="lblMessage" styleClass="dialog-message" text="" wrapText="true"/>
+
+    <HBox alignment="CENTER_RIGHT" spacing="10">
+        <Button fx:id="btnCancel" onAction="#handleCancel" styleClass="btn-secondary" text="Annuler"/>
+        <Button fx:id="btnConfirm" onAction="#handleConfirm" styleClass="btn-primary" text="Confirmer"/>
+    </HBox>
+</VBox>

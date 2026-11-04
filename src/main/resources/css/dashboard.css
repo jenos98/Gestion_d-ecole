@@ -1,0 +1,287 @@
+/* ============================================================
+   dashboard.css — Styles du tableau de bord
+   ============================================================ */
+
+/* ── Conteneur principal ── */
+.dashboard-scroll {
+    -fx-background-color: -color-bg;
+    -fx-border-width: 0;
+}
+
+.dashboard-scroll .viewport {
+    -fx-background-color: -color-bg;
+}
+
+.dashboard-root {
+    -fx-background-color: -color-bg;
+    -fx-padding: 24;
+    -fx-spacing: 24;
+}
+
+/* ── En-tête de page ── */
+.dashboard-page-header {
+    -fx-spacing: 0;
+}
+
+.dashboard-page-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-text;
+}
+
+.dashboard-welcome {
+    -fx-font-size: 13px;
+    -fx-text-fill: -color-muted;
+}
+
+.dashboard-date {
+    -fx-font-size: 12px;
+    -fx-text-fill: -color-muted;
+}
+
+/* ── Grille de cartes ── */
+.cards-grid {
+    -fx-hgap: 16;
+    -fx-vgap: 16;
+}
+
+/* ── Cartes financières ── */
+.money-card {
+    -fx-background-color: -color-surface;
+    -fx-padding: 20;
+    -fx-background-radius: 10;
+    -fx-effect: -shadow-sm;
+    -fx-spacing: 6;
+}
+
+.money-card .card-title {
+    -fx-font-size: 12px;
+    -fx-text-fill: -color-muted;
+}
+
+.money-card .card-amount {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-text;
+}
+
+.money-card .card-amount-secondary {
+    -fx-font-size: 14px;
+    -fx-text-fill: -color-muted;
+}
+
+/* Bordure gauche par couleur */
+.card-primary { -fx-border-color: -color-primary; -fx-border-width: 0 0 0 4; }
+.card-success { -fx-border-color: -color-success; -fx-border-width: 0 0 0 4; }
+.card-danger  { -fx-border-color: -color-danger;  -fx-border-width: 0 0 0 4; }
+.card-warning { -fx-border-color: -color-warning; -fx-border-width: 0 0 0 4; }
+
+/* ── Cartes statistiques (administratives) ── */
+.stat-card {
+    -fx-background-color: -color-surface;
+    -fx-padding: 20;
+    -fx-background-radius: 10;
+    -fx-effect: -shadow-sm;
+    -fx-spacing: 6;
+}
+
+.stat-card .card-title {
+    -fx-font-size: 12px;
+    -fx-text-fill: -color-muted;
+}
+
+.stat-card .card-value {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-text;
+}
+
+/* ── État de caisse ── */
+.cash-status-card {
+    -fx-background-color: -color-surface;
+    -fx-padding: 20;
+    -fx-background-radius: 10;
+    -fx-effect: -shadow-sm;
+    -fx-spacing: 10;
+}
+
+.cash-status-label {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-success;
+}
+
+.cash-status-label-closed {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-muted;
+}
+
+.cash-status-label-alert {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-danger;
+}
+
+.cash-status-detail {
+    -fx-font-size: 12px;
+    -fx-text-fill: -color-muted;
+}
+
+/* ── Actions rapides ── */
+.quick-actions-card {
+    -fx-background-color: -color-surface;
+    -fx-padding: 20;
+    -fx-background-radius: 10;
+    -fx-effect: -shadow-sm;
+    -fx-spacing: 12;
+}
+
+.btn-action {
+    -fx-background-color: -color-bg;
+    -fx-border-color: -color-border;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 10 18 10 18;
+    -fx-cursor: hand;
+    -fx-text-fill: -color-text-secondary;
+    -fx-font-size: 13px;
+}
+
+.btn-action:hover {
+    -fx-background-color: -color-primary-light;
+    -fx-border-color: -color-primary;
+    -fx-text-fill: -color-primary;
+}
+
+.btn-action:disabled {
+    -fx-opacity: 0.4;
+    -fx-cursor: default;
+}
+
+.btn-action-danger {
+    -fx-border-color: -color-danger;
+    -fx-text-fill: -color-danger;
+}
+
+.btn-action-danger:hover {
+    -fx-background-color: -color-danger-light;
+    -fx-border-color: -color-danger-hover;
+}
+
+/* ── Filtres du tableau de bord ── */
+.dashboard-filters-bar {
+    -fx-alignment: CENTER_RIGHT;
+    -fx-spacing: 10;
+}
+
+.filter-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: -color-muted;
+    -fx-font-weight: bold;
+}
+
+.card-neutral {
+    -fx-border-color: -color-border;
+    -fx-border-width: 0 0 0 4;
+}
+
+.text-success {
+    -fx-text-fill: #10b981 !important;
+}
+
+.text-danger {
+    -fx-text-fill: #ef4444 !important;
+}
+
+.text-warning {
+    -fx-text-fill: #f59e0b !important;
+}
+
+/* ── Badge monnaie graphique ── */
+.chart-currency-badge {
+    -fx-background-color: -color-primary-light;
+    -fx-text-fill: -color-primary;
+    -fx-padding: 4 10 4 10;
+    -fx-background-radius: 12;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+/* ── Zone et Conteneurs de graphiques ── */
+.charts-container {
+    -fx-background-color: -color-surface;
+    -fx-background-radius: 12;
+    -fx-padding: 16;
+    -fx-effect: -shadow-sm;
+    -fx-min-height: 360;
+}
+
+.chart-card {
+    -fx-background-color: -color-bg;
+    -fx-background-radius: 10;
+    -fx-padding: 14;
+    -fx-border-color: -color-border;
+    -fx-border-radius: 10;
+    -fx-border-width: 1;
+}
+
+.chart-card-title {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-text;
+}
+
+/* ── Règles strictes de couleur des graphiques ── */
+/* Recettes (Série 0) = VERT */
+.default-color0.chart-bar {
+    -fx-bar-fill: #10b981;
+    -fx-background-color: #10b981;
+}
+
+/* Dépenses (Série 1) = ROUGE */
+.default-color1.chart-bar {
+    -fx-bar-fill: #ef4444;
+    -fx-background-color: #ef4444;
+}
+
+/* Effectifs scolaires (Série unique) = BLEU */
+.academic-bar.chart-bar {
+    -fx-bar-fill: #3b82f6;
+    -fx-background-color: #3b82f6;
+}
+
+/* ── Overlays d'état (Chargement, Vide, Erreur) ── */
+.charts-overlay {
+    -fx-background-color: -color-surface;
+    -fx-alignment: CENTER;
+    -fx-spacing: 12;
+    -fx-padding: 30;
+}
+
+.loading-text {
+    -fx-font-size: 14px;
+    -fx-text-fill: -color-muted;
+}
+
+.empty-icon, .error-icon {
+    -fx-font-size: 36px;
+}
+
+.empty-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-text;
+}
+
+.empty-subtitle, .error-subtitle {
+    -fx-font-size: 13px;
+    -fx-text-fill: -color-muted;
+    -fx-text-alignment: CENTER;
+}
+
+.error-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-danger;
+}

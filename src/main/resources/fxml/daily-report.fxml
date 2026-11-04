@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            styleClass="view-container"
+            fx:controller="com.jenos.gestionecole.controller.DailyReportController">
+
+    <!-- ─── TOP : En-tête du Rapport ─── -->
+    <top>
+        <VBox styleClass="view-top-bar" spacing="6">
+            <padding><Insets top="10" right="16" bottom="6" left="16"/></padding>
+            <HBox alignment="CENTER_LEFT" spacing="14">
+                <VBox spacing="2">
+                    <Label text="RAPPORT JOURNALIER DE CAISSE" styleClass="view-title"/>
+                    <Label text="Élément obligatoire du processus de clôture journalière." styleClass="text-muted"/>
+                </VBox>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="lblReportBadge" text="NON GÉNÉRÉ"
+                       style="-fx-background-color: #ffe69c; -fx-text-fill: #664d03; -fx-padding: 4 10 4 10; -fx-background-radius: 4; -fx-font-weight: bold; -fx-font-size: 13;"/>
+                <Button fx:id="btnBackToCash" onAction="#handleBackToCash" text="← Retour à la Caisse" styleClass="btn-secondary"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- ─── CENTER : Contenu du rapport ─── -->
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="app-scroll">
+            <VBox spacing="18" styleClass="form-page-container">
+                <padding><Insets top="14" right="16" bottom="14" left="16"/></padding>
+
+                <!-- 1. Informations de session -->
+                <VBox styleClass="form-section-card" spacing="10">
+                    <Label text="1. Paramètres de la Session" styleClass="section-card-title"/>
+                    <GridPane hgap="20" vgap="8">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="25"/>
+                            <ColumnConstraints percentWidth="25"/>
+                            <ColumnConstraints percentWidth="25"/>
+                            <ColumnConstraints percentWidth="25"/>
+                        </columnConstraints>
+
+                        <VBox spacing="2" GridPane.columnIndex="0">
+                            <Label text="Caisse :" styleClass="field-label"/>
+                            <Label fx:id="lblRegisterName" text="Caisse 01" styleClass="h2"/>
+                        </VBox>
+
+                        <VBox spacing="2" GridPane.columnIndex="1">
+                            <Label text="Caissière responsable :" styleClass="field-label"/>
+                            <Label fx:id="lblCashierName" text="Marie" styleClass="h2"/>
+                        </VBox>
+
+                        <VBox spacing="2" GridPane.columnIndex="2">
+                            <Label text="Date d'exercice :" styleClass="field-label"/>
+                            <Label fx:id="lblSessionDate" text="26/09/2026" styleClass="h2"/>
+                        </VBox>
+
+                        <VBox spacing="2" GridPane.columnIndex="3">
+                            <Label text="Heure d'ouverture :" styleClass="field-label"/>
+                            <Label fx:id="lblOpenTime" text="07:42" styleClass="h2"/>
+                        </VBox>
+                    </GridPane>
+                </VBox>
+
+                <!-- 2. Résumés Financiers (CDF & USD strictement séparés) -->
+                <HBox spacing="16">
+                    <!-- Résumé Franc Congolais (CDF) -->
+                    <VBox styleClass="form-section-card" spacing="12" HBox.hgrow="ALWAYS">
+                        <Label text="2. Réconciliation Théorique CDF" styleClass="section-card-title"
+                               style="-fx-text-fill: #0d6efd;"/>
+                        <GridPane hgap="12" vgap="8">
+                            <columnConstraints>
+                                <ColumnConstraints percentWidth="60"/>
+                                <ColumnConstraints percentWidth="40"/>
+                            </columnConstraints>
+
+                            <Label text="Solde initial CDF :" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                            <Label fx:id="lblInitCDF" text="0 CDF" styleClass="h2" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                            <Label text="+ Entrées du jour (Paiements) :" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                            <Label fx:id="lblInCDF" text="+ 0 CDF" style="-fx-text-fill: #198754; -fx-font-weight: bold;" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                            <Label text="- Sorties du jour (Dépenses) :" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                            <Label fx:id="lblOutCDF" text="- 0 CDF" style="-fx-text-fill: #dc3545; -fx-font-weight: bold;" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                            <Separator GridPane.columnSpan="2" GridPane.rowIndex="3"/>
+
+                            <Label text="= Solde Théorique CDF :" style="-fx-font-weight: bold; -fx-font-size: 14;" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                            <Label fx:id="lblTheoreticalCDF" text="0 CDF" style="-fx-font-weight: bold; -fx-font-size: 16; -fx-text-fill: #0d6efd;" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                        </GridPane>
+                    </VBox>
+
+                    <!-- Résumé Dollar Américain (USD) -->
+                    <VBox styleClass="form-section-card" spacing="12" HBox.hgrow="ALWAYS">
+                        <Label text="3. Réconciliation Théorique USD" styleClass="section-card-title"
+                               style="-fx-text-fill: #198754;"/>
+                        <GridPane hgap="12" vgap="8">
+                            <columnConstraints>
+                                <ColumnConstraints percentWidth="60"/>
+                                <ColumnConstraints percentWidth="40"/>
+                            </columnConstraints>
+
+                            <Label text="Solde initial USD :" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                            <Label fx:id="lblInitUSD" text="0.00 USD" styleClass="h2" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                            <Label text="+ Entrées du jour (Paiements) :" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                            <Label fx:id="lblInUSD" text="+ 0.00 USD" style="-fx-text-fill: #198754; -fx-font-weight: bold;" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                            <Label text="- Sorties du jour (Dépenses) :" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                            <Label fx:id="lblOutUSD" text="- 0.00 USD" style="-fx-text-fill: #dc3545; -fx-font-weight: bold;" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                            <Separator GridPane.columnSpan="2" GridPane.rowIndex="3"/>
+
+                            <Label text="= Solde Théorique USD :" style="-fx-font-weight: bold; -fx-font-size: 14;" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                            <Label fx:id="lblTheoreticalUSD" text="0.00 USD" style="-fx-font-weight: bold; -fx-font-size: 16; -fx-text-fill: #198754;" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                        </GridPane>
+                    </VBox>
+                </HBox>
+
+                <!-- 3. Détails des opérations : Encaissements & Décaissements -->
+                <GridPane hgap="16" vgap="14">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="50"/>
+                        <ColumnConstraints percentWidth="50"/>
+                    </columnConstraints>
+
+                    <!-- Synthèse des Paiements -->
+                    <VBox styleClass="form-section-card" spacing="8" GridPane.columnIndex="0">
+                        <Label text="4. Synthèse des Encaissements Scolaires" styleClass="section-card-title"/>
+                        <Label fx:id="lblPaymentStats" text="0 paiements enregistrés" styleClass="text-muted"/>
+                        <GridPane hgap="10" vgap="6">
+                            <columnConstraints>
+                                <ColumnConstraints percentWidth="50"/>
+                                <ColumnConstraints percentWidth="50"/>
+                            </columnConstraints>
+                            <Label text="Espèces (Cash) :" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                            <Label fx:id="lblPayCash" text="—" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                            <Label text="Mobile Money :" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                            <Label fx:id="lblPayMobile" text="—" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                            <Label text="Virements bancaires :" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                            <Label fx:id="lblPayBank" text="—" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                        </GridPane>
+                    </VBox>
+
+                    <!-- Synthèse des Dépenses -->
+                    <VBox styleClass="form-section-card" spacing="8" GridPane.columnIndex="1">
+                        <Label text="5. Synthèse des Décaissements / Dépenses" styleClass="section-card-title"/>
+                        <Label fx:id="lblExpenseStats" text="0 dépenses enregistrées" styleClass="text-muted"/>
+                        <VBox fx:id="boxExpenseCategories" spacing="4">
+                            <Label text="Répartition par catégorie :" styleClass="field-label"/>
+                        </VBox>
+                    </VBox>
+                </GridPane>
+
+                <!-- 4. Barre d'action et verrouillage de clôture -->
+                <VBox styleClass="form-section-card" spacing="12">
+                    <Label text="6. Processus de Validation &amp; Impression" styleClass="section-card-title"/>
+                    <Label fx:id="lblReportWorkflowMsg"
+                           text="Rappel : Pour clôturer la caisse, le rapport doit être d'abord GÉNÉRÉ puis IMPRIMÉ."
+                           style="-fx-text-fill: #6c757d;"/>
+
+                    <HBox spacing="14" alignment="CENTER_RIGHT">
+                        <Button fx:id="btnGenerateReport" onAction="#handleGenerateReport"
+                                text="1. Générer le Rapport Journalier" styleClass="btn-primary" prefHeight="40"/>
+                        <Button fx:id="btnPreviewReport" onAction="#handlePreviewReport"
+                                text="2. Prévisualiser le Rapport" styleClass="btn-secondary" prefHeight="40" disable="true"/>
+                        <Button fx:id="btnPrintReport" onAction="#handlePrintReport"
+                                text="3. Imprimer &amp; Confirmer l'Impression" styleClass="btn-secondary" prefHeight="40" disable="true"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Button fx:id="btnProceedToClose" onAction="#handleProceedToClose"
+                                text="Procéder à la Clôture →"
+                                prefHeight="40" styleClass="btn-primary, btn-danger" disable="true"/>
+                    </HBox>
+                </VBox>
+
+            </VBox>
+        </ScrollPane>
+    </center>
+
+</BorderPane>

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            styleClass="view-container"
+            fx:controller="com.jenos.gestionecole.controller.PayslipPreviewController">
+
+    <!-- ─── TOP : Barre d'actions d'aperçu ─── -->
+    <top>
+        <HBox spacing="14" alignment="CENTER_LEFT" styleClass="view-top-bar">
+            <Label text="Aperçu du Bulletin de Paie" styleClass="view-title"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button fx:id="btnClose" onAction="#handleClose" text="Fermer" styleClass="btn-secondary"/>
+            <Button fx:id="btnPrint" onAction="#handlePrint" text="Imprimer le Bulletin" styleClass="btn-primary"/>
+        </HBox>
+    </top>
+
+    <!-- ─── CENTER : Feuille de Bulletin de Paie ─── -->
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="app-scroll">
+            <StackPane styleClass="form-page-container" alignment="TOP_CENTER">
+
+                <VBox fx:id="payslipSheet" prefWidth="680" maxWidth="720" styleClass="form-section-card" spacing="16">
+
+                    <!-- En-tête institutionnel -->
+                    <VBox spacing="4" alignment="CENTER">
+                        <Label text="COMPLEXE SCOLAIRE JENOS" styleClass="h1"/>
+                        <Label text="République Démocratique du Congo - Ministère de l'Éducation Nationale" styleClass="text-muted"/>
+                        <Label text="DIRECTION DES RESSOURCES HUMAINES &amp; FINANCES" styleClass="field-label"/>
+                        <Separator/>
+                    </VBox>
+
+                    <!-- Titre & Référence -->
+                    <HBox alignment="CENTER_LEFT" spacing="12">
+                        <VBox spacing="2">
+                            <Label text="BULLETIN DE PAIE INDIVIDUEL" styleClass="h2"/>
+                            <HBox spacing="8" alignment="CENTER_LEFT">
+                                <Label text="Réf :" styleClass="field-label"/>
+                                <Label fx:id="lblPayslipNumber" text="PAY-2025-00-000" styleClass="h2"/>
+                            </HBox>
+                        </VBox>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <VBox alignment="CENTER_RIGHT" spacing="4">
+                            <Label fx:id="lblPeriod" text="Période : Septembre 2026" styleClass="badge, badge-neutral"/>
+                            <Label fx:id="lblDate" text="Date : 25/09/2026" styleClass="text-muted"/>
+                        </VBox>
+                    </HBox>
+
+                    <!-- Fiche Employé -->
+                    <VBox styleClass="form-section-card" spacing="8">
+                        <Label text="Identification du Bénéficiaire" styleClass="section-card-title"/>
+                        <GridPane hgap="16" vgap="8">
+                            <columnConstraints>
+                                <ColumnConstraints percentWidth="30"/>
+                                <ColumnConstraints percentWidth="70"/>
+                            </columnConstraints>
+
+                            <Label text="Nom &amp; Postnom :" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                            <Label fx:id="lblStaffName" text="MUKENDI Alain" styleClass="h2" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                            <Label text="Matricule :" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                            <Label fx:id="lblStaffMatricule" text="STF-2025-0001" styleClass="field-label" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                            <Label text="Catégorie &amp; Fonction :" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                            <Label fx:id="lblStaffRole" text="Enseignant - Professeur de Mathématiques" styleClass="field-label" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                        </GridPane>
+                    </VBox>
+
+                    <!-- Rubriques de rémunération -->
+                    <VBox styleClass="form-section-card" spacing="10">
+                        <Label text="Décompte Salarial" styleClass="section-card-title"/>
+                        <GridPane hgap="16" vgap="10">
+                            <columnConstraints>
+                                <ColumnConstraints percentWidth="60"/>
+                                <ColumnConstraints percentWidth="40"/>
+                            </columnConstraints>
+
+                            <Label text="Salaire de base contractuel :" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                            <Label fx:id="lblBaseSalary" text="0.00 USD" styleClass="h2" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                            <Label text="Primes, indemnités &amp; heures supplémentaires :" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                            <Label fx:id="lblAllowances" text="0.00 USD" styleClass="field-label" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                            <Separator GridPane.columnSpan="2" GridPane.rowIndex="2"/>
+
+                            <Label text="Avances sur salaire déduites :" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                            <Label fx:id="lblAdvances" text="- 0.00 USD" styleClass="field-label" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+                            <Label text="Autres retenues :" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                            <Label fx:id="lblDeductions" text="- 0.00 USD" styleClass="field-label" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                        </GridPane>
+
+                        <Separator/>
+
+                        <!-- Salaire Net Payé Mis en Évidence -->
+                        <HBox alignment="CENTER_LEFT" spacing="12">
+                            <Label text="NET À PERCEVOIR :" styleClass="h2"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label fx:id="lblNetPayable" text="0.00 USD" styleClass="h1"/>
+                        </HBox>
+                    </VBox>
+
+                    <!-- Signatures & Émargement -->
+                    <VBox spacing="14">
+                        <HBox spacing="40">
+                            <VBox spacing="35" HBox.hgrow="ALWAYS">
+                                <Label text="Visa &amp; Cachet de la Direction / Caisse :" styleClass="field-label"/>
+                                <Label text="__________________________________" styleClass="text-muted"/>
+                            </VBox>
+                            <VBox spacing="35" alignment="TOP_RIGHT">
+                                <Label text="Émargement de l'Employé (Pour Acquit) :" styleClass="field-label"/>
+                                <Label text="__________________________________" styleClass="text-muted"/>
+                            </VBox>
+                        </HBox>
+
+                        <Separator/>
+                        <Label text="Ce bulletin certifie le règlement libératoire des prestations pour la période indiquée."
+                               styleClass="text-muted"/>
+                    </VBox>
+
+                </VBox>
+
+            </StackPane>
+        </ScrollPane>
+    </center>
+
+</BorderPane>

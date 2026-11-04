@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            styleClass="view-container"
+            fx:controller="com.jenos.gestionecole.controller.StaffDetailsController">
+
+    <!-- ─── TOP : Barre d'en-tête ─── -->
+    <top>
+        <VBox styleClass="view-top-bar" spacing="8">
+            <HBox alignment="CENTER_LEFT" spacing="14">
+                <Button fx:id="btnBack" onAction="#handleBack" text="← Retour au Personnel" styleClass="btn-secondary"/>
+                <VBox spacing="2">
+                    <Label fx:id="lblFullName" text="Nom Complet" styleClass="view-title"/>
+                    <Label fx:id="lblFonctionHeader" text="Fonction officielle" styleClass="text-muted"/>
+                </VBox>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="lblMatricule" text="STF-2025-0000" styleClass="badge, badge-neutral"/>
+                <Label fx:id="lblStatus" text="ACTIF" styleClass="badge, badge-success"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- ─── CENTER : Fiche détaillée en lecture seule ─── -->
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="app-scroll">
+            <VBox spacing="18" styleClass="form-page-container">
+
+                <!-- 1. Informations Générales & Qualification -->
+                <VBox styleClass="form-section-card" spacing="12">
+                    <Label text="Informations Personnelles &amp; Qualification" styleClass="section-card-title"/>
+                    <GridPane hgap="20" vgap="10">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="25"/>
+                            <ColumnConstraints percentWidth="25"/>
+                            <ColumnConstraints percentWidth="25"/>
+                            <ColumnConstraints percentWidth="25"/>
+                        </columnConstraints>
+
+                        <VBox spacing="3" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                            <Label text="Nom &amp; Postnom :" styleClass="field-label"/>
+                            <Label fx:id="lblName" text="—" styleClass="h2"/>
+                        </VBox>
+
+                        <VBox spacing="3" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                            <Label text="Prénom :" styleClass="field-label"/>
+                            <Label fx:id="lblPrenom" text="—" styleClass="field-label"/>
+                        </VBox>
+
+                        <VBox spacing="3" GridPane.columnIndex="2" GridPane.rowIndex="0">
+                            <Label text="Genre :" styleClass="field-label"/>
+                            <Label fx:id="lblGenre" text="—" styleClass="field-label"/>
+                        </VBox>
+
+                        <VBox spacing="3" GridPane.columnIndex="3" GridPane.rowIndex="0">
+                            <Label text="Date d'embauche :" styleClass="field-label"/>
+                            <Label fx:id="lblDateEmbauche" text="—" styleClass="field-label"/>
+                        </VBox>
+
+                        <VBox spacing="3" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                            <Label text="Titre / Diplôme :" styleClass="field-label"/>
+                            <Label fx:id="lblQualification" text="—" styleClass="field-label"/>
+                        </VBox>
+
+                        <VBox spacing="3" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                            <Label text="Téléphone :" styleClass="field-label"/>
+                            <Label fx:id="lblTelephone" text="—" styleClass="field-label"/>
+                        </VBox>
+
+                        <VBox spacing="3" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                            <Label text="Email :" styleClass="field-label"/>
+                            <Label fx:id="lblEmail" text="—" styleClass="field-label"/>
+                        </VBox>
+
+                        <VBox spacing="3" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                            <Label text="Adresse résidentielle :" styleClass="field-label"/>
+                            <Label fx:id="lblAdresse" text="—" styleClass="text-muted"/>
+                        </VBox>
+                    </GridPane>
+                </VBox>
+
+                <!-- 2. Affectation Scolaire -->
+                <VBox styleClass="form-section-card" spacing="12">
+                    <Label text="Affectation &amp; Rôle au sein de l'Établissement" styleClass="section-card-title"/>
+                    <GridPane hgap="20" vgap="10">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="33.33"/>
+                            <ColumnConstraints percentWidth="33.33"/>
+                            <ColumnConstraints percentWidth="33.34"/>
+                        </columnConstraints>
+
+                        <VBox spacing="3" GridPane.columnIndex="0">
+                            <Label text="Catégorie professionnelle :" styleClass="field-label"/>
+                            <Label fx:id="lblCategorie" text="—" styleClass="h2"/>
+                        </VBox>
+
+                        <VBox spacing="3" GridPane.columnIndex="1">
+                            <Label text="Fonction officielle :" styleClass="field-label"/>
+                            <Label fx:id="lblFonction" text="—" styleClass="field-label"/>
+                        </VBox>
+
+                        <VBox spacing="3" GridPane.columnIndex="2">
+                            <Label text="Poste / Charge attribuée :" styleClass="field-label"/>
+                            <Label fx:id="lblPoste" text="—" styleClass="field-label"/>
+                        </VBox>
+                    </GridPane>
+                </VBox>
+
+                <!-- 3. Rémunération & Situation Salariale du Mois (Protégé par RoleGuard) -->
+                <VBox fx:id="cardPayroll" styleClass="form-section-card" spacing="14">
+                    <HBox alignment="CENTER_LEFT" spacing="12">
+                        <Label text="Rémunération &amp; Situation Salariale Mensuelle" styleClass="section-card-title"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="lblCurrentPeriod" text="Mois en cours" styleClass="field-label"/>
+                    </HBox>
+
+                    <GridPane hgap="20" vgap="12">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="25"/>
+                            <ColumnConstraints percentWidth="25"/>
+                            <ColumnConstraints percentWidth="25"/>
+                            <ColumnConstraints percentWidth="25"/>
+                        </columnConstraints>
+
+                        <VBox spacing="3" GridPane.columnIndex="0">
+                            <Label text="Salaire de Base Contractuel :" styleClass="field-label"/>
+                            <Label fx:id="lblBaseSalary" text="0.00 USD" styleClass="h2"/>
+                        </VBox>
+
+                        <VBox spacing="3" GridPane.columnIndex="1">
+                            <Label text="Primes &amp; Indemnités du mois :" styleClass="field-label"/>
+                            <Label fx:id="lblAllowances" text="0.00 USD" styleClass="field-label"/>
+                        </VBox>
+
+                        <VBox spacing="3" GridPane.columnIndex="2">
+                            <Label text="Avances sur Salaire Déduites :" styleClass="field-label"/>
+                            <Label fx:id="lblAdvances" text="0.00 USD" styleClass="field-label"/>
+                        </VBox>
+
+                        <VBox spacing="3" GridPane.columnIndex="3">
+                            <Label text="Net Restant à Payer :" styleClass="field-label"/>
+                            <Label fx:id="lblNetPayable" text="0.00 USD" styleClass="h1"/>
+                        </VBox>
+                    </GridPane>
+                </VBox>
+
+                <!-- 4. Barre d'actions -->
+                <HBox spacing="14" alignment="CENTER_RIGHT" styleClass="form-action-bar">
+                    <Button fx:id="btnEdit" onAction="#handleEdit" text="Modifier la Fiche" styleClass="btn-secondary"/>
+                    <Button fx:id="btnPayslip" onAction="#handleGeneratePayslip" text="Générer Bulletin de Paie" styleClass="btn-secondary"/>
+                    <Button fx:id="btnPay" onAction="#handleMakePayment" text="Effectuer un Règlement / Avance" styleClass="btn-primary"/>
+                </HBox>
+
+            </VBox>
+        </ScrollPane>
+    </center>
+
+</BorderPane>
