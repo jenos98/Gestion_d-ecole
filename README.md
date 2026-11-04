@@ -90,3 +90,4 @@ java -jar target/gestion-scolaire-1.0.0.jar
 - `cd.ecole.gestionscolaire.config` : Configuration base de données et applicative.
 - `cd.ecole.gestionscolaire.service` : Logique métier et validation transactionnelle (Paiement, Caisse, Dépense, Audit).
 - `cd.ecole.gestionscolaire.repository` : Accès aux données JDBC paramétrées (sans ORM lourd).
+# Gestion_d-ecole
