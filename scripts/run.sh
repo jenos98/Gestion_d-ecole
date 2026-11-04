@@ -6,12 +6,12 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
 # Détection de Java 21
-if [ -n "$JAVA_HOME" ] && [ -x "$JAVA_HOME/bin/java" ]; then
+if [ -x "/home/jenos/.local/share/jdk-21/bin/java" ]; then
+    JAVA_CMD="/home/jenos/.local/share/jdk-21/bin/java"
+elif [ -n "$JAVA_HOME" ] && [ -x "$JAVA_HOME/bin/java" ]; then
     JAVA_CMD="$JAVA_HOME/bin/java"
 elif command -v java >/dev/null 2>&1; then
     JAVA_CMD="java"
-elif [ -d "/home/jenos/.local/share/jdk-21" ]; then
-    JAVA_CMD="/home/jenos/.local/share/jdk-21/bin/java"
 else
     echo "Erreur : Java n'est pas installé sur ce système." >&2
     exit 1
