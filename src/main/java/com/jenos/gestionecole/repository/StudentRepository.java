@@ -1,9 +1,13 @@
 package com.jenos.gestionecole.repository;
 
+import cd.ecole.gestionscolaire.config.DatabaseConfig;
 import com.jenos.gestionecole.model.Student;
 import com.jenos.gestionecole.model.StudentFilter;
 import com.jenos.gestionecole.model.StudentSearchResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -11,11 +15,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * StudentRepository — Accès aux données persistées des étudiants.
+ * StudentRepository — Accès aux données persistées des étudiants avec synchronisation PostgreSQL.
  * Aucune suppression physique n'est opérée (statut non destructif INACTIF / ARCHIVE).
  */
 public class StudentRepository {
 
+    private static final Logger logger = LoggerFactory.getLogger(StudentRepository.class);
     private final List<Student> storage = new ArrayList<>();
 
     public StudentRepository(ClasseRepository classeRepo) {
@@ -23,6 +28,13 @@ public class StudentRepository {
     }
 
     private void initDefaultStudents(ClasseRepository classeRepo) {
+        if (DatabaseConfig.isDatabaseReachable()) {
+            loadFromDatabase(classeRepo);
+            if (!storage.isEmpty()) {
+                logger.info("{} étudiants chargés depuis PostgreSQL.", storage.size());
+                return;
+            }
+        }
         var c5mpa = classeRepo.findById(1);   // 6e Math-Physique A (Scientifique)
         var c5mpb = classeRepo.findById(2);   // 6e Math-Physique B (Scientifique)
         var c5bioa = classeRepo.findById(3);  // 6e Bio-Chimie A (Scientifique)
@@ -208,12 +220,18 @@ public class StudentRepository {
             int maxId = storage.stream().mapToInt(Student::getId).max().orElse(0);
             student.setId(maxId + 1);
             storage.add(student);
+            if (DatabaseConfig.isDatabaseReachable()) {
+                saveToDatabase(student, true);
+            }
         } else {
             for (int i = 0; i < storage.size(); i++) {
                 if (storage.get(i).getId() == student.getId()) {
                     storage.set(i, student);
-                    return;
+                    break;
                 }
+            }
+            if (DatabaseConfig.isDatabaseReachable()) {
+                saveToDatabase(student, false);
             }
         }
     }
@@ -222,6 +240,7 @@ public class StudentRepository {
         for (Student s : storage) {
             if (s.getId() == studentId) {
                 s.setStatut(Student.StudentStatus.INACTIF);
+                updateStatusInDatabase(studentId, "INACTIF");
                 return;
             }
         }
@@ -231,8 +250,110 @@ public class StudentRepository {
         for (Student s : storage) {
             if (s.getId() == studentId) {
                 s.setStatut(Student.StudentStatus.ARCHIVE);
+                updateStatusInDatabase(studentId, "ARCHIVE");
                 return;
             }
+        }
+    }
+
+    private void saveToDatabase(Student student, boolean isInsert) {
+        try (Connection conn = DatabaseConfig.getConnection()) {
+            if (isInsert) {
+                String sql = "INSERT INTO students (matricule, first_name, last_name, post_name, gender, birth_date, phone, classe_id, academic_year, status, guardian_name, guardian_phone, guardian_relation) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                try (PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+                    ps.setString(1, student.getMatricule());
+                    ps.setString(2, student.getPrenom() != null ? student.getPrenom() : "");
+                    ps.setString(3, student.getNom() != null ? student.getNom() : "");
+                    ps.setString(4, student.getPostnom() != null ? student.getPostnom() : "");
+                    ps.setString(5, student.getSexe() != null ? student.getSexe() : "M");
+                    ps.setDate(6, student.getDateNaissance() != null ? Date.valueOf(student.getDateNaissance()) : null);
+                    ps.setString(7, student.getTelephone());
+                    if (student.getClasse() != null) {
+                        ps.setInt(8, student.getClasse().getId());
+                    } else {
+                        ps.setNull(8, Types.INTEGER);
+                    }
+                    ps.setString(9, student.getAnneeScolaire() != null ? student.getAnneeScolaire() : "2024-2025");
+                    ps.setString(10, student.getStatut() != null ? student.getStatut().name() : "ACTIF");
+                    ps.setString(11, student.getGuardianName());
+                    ps.setString(12, student.getGuardianPhone());
+                    ps.setString(13, student.getGuardianRelation());
+                    ps.executeUpdate();
+                }
+            } else {
+                String sql = "UPDATE students SET matricule = ?, first_name = ?, last_name = ?, post_name = ?, gender = ?, birth_date = ?, phone = ?, classe_id = ?, academic_year = ?, status = ?, guardian_name = ?, guardian_phone = ?, guardian_relation = ? WHERE id = ?";
+                try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                    ps.setString(1, student.getMatricule());
+                    ps.setString(2, student.getPrenom() != null ? student.getPrenom() : "");
+                    ps.setString(3, student.getNom() != null ? student.getNom() : "");
+                    ps.setString(4, student.getPostnom() != null ? student.getPostnom() : "");
+                    ps.setString(5, student.getSexe() != null ? student.getSexe() : "M");
+                    ps.setDate(6, student.getDateNaissance() != null ? Date.valueOf(student.getDateNaissance()) : null);
+                    ps.setString(7, student.getTelephone());
+                    if (student.getClasse() != null) {
+                        ps.setInt(8, student.getClasse().getId());
+                    } else {
+                        ps.setNull(8, Types.INTEGER);
+                    }
+                    ps.setString(9, student.getAnneeScolaire() != null ? student.getAnneeScolaire() : "2024-2025");
+                    ps.setString(10, student.getStatut() != null ? student.getStatut().name() : "ACTIF");
+                    ps.setString(11, student.getGuardianName());
+                    ps.setString(12, student.getGuardianPhone());
+                    ps.setString(13, student.getGuardianRelation());
+                    ps.setInt(14, student.getId());
+                    ps.executeUpdate();
+                }
+            }
+        } catch (Exception e) {
+            logger.warn("Synchronisation PostgreSQL pour l'étudiant {} échouée : {}", student.getMatricule(), e.getMessage());
+        }
+    }
+
+    private void updateStatusInDatabase(int id, String status) {
+        if (!DatabaseConfig.isDatabaseReachable()) return;
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement ps = conn.prepareStatement("UPDATE students SET status = ? WHERE id = ?")) {
+            ps.setString(1, status);
+            ps.setInt(2, id);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            logger.warn("Erreur mise à jour statut PostgreSQL étudiant {} : {}", id, e.getMessage());
+        }
+    }
+
+    private void loadFromDatabase(ClasseRepository classeRepo) {
+        String sql = "SELECT id, matricule, first_name, last_name, post_name, gender, birth_date, phone, classe_id, academic_year, status, guardian_name, guardian_phone, guardian_relation FROM students ORDER BY id";
+        try (Connection conn = DatabaseConfig.getConnection();
+             Statement st = conn.createStatement();
+             ResultSet rs = st.executeQuery(sql)) {
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String mat = rs.getString("matricule");
+                String prenom = rs.getString("first_name");
+                String nom = rs.getString("last_name");
+                String postnom = rs.getString("post_name");
+                String sexe = rs.getString("gender");
+                int classeId = rs.getInt("classe_id");
+                String annee = rs.getString("academic_year");
+                var classe = classeRepo != null ? classeRepo.findById(classeId) : null;
+
+                Student s = new Student(id, mat, nom, postnom, prenom, sexe, classe, annee);
+                Date bDate = rs.getDate("birth_date");
+                if (bDate != null) s.setDateNaissance(bDate.toLocalDate());
+                s.setTelephone(rs.getString("phone"));
+                s.setGuardianName(rs.getString("guardian_name"));
+                s.setGuardianPhone(rs.getString("guardian_phone"));
+                s.setGuardianRelation(rs.getString("guardian_relation"));
+                String statusStr = rs.getString("status");
+                if (statusStr != null) {
+                    try {
+                        s.setStatut(Student.StudentStatus.valueOf(statusStr));
+                    } catch (Exception ignored) {}
+                }
+                storage.add(s);
+            }
+        } catch (Exception e) {
+            logger.warn("Impossible de lire les étudiants depuis PostgreSQL : {}", e.getMessage());
         }
     }
 

@@ -1,8 +1,12 @@
 package com.jenos.gestionecole.repository;
 
+import cd.ecole.gestionscolaire.config.DatabaseConfig;
 import com.jenos.gestionecole.model.Payment;
 import com.jenos.gestionecole.model.Receipt;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -11,11 +15,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * PaymentRepository — Persistance des paiements et des quittances de caisse.
+ * PaymentRepository — Persistance des paiements et des quittances de caisse avec synchronisation PostgreSQL.
  * Aucune suppression physique n'est opérée (non destructif).
  */
 public class PaymentRepository {
 
+    private static final Logger logger = LoggerFactory.getLogger(PaymentRepository.class);
     private final List<Payment> payments = new ArrayList<>();
     private final List<Receipt> receipts = new ArrayList<>();
 
@@ -24,6 +29,13 @@ public class PaymentRepository {
     }
 
     private void initDefaultData() {
+        if (DatabaseConfig.isDatabaseReachable()) {
+            loadFromDatabase();
+            if (!payments.isEmpty()) {
+                logger.info("{} paiements chargés depuis PostgreSQL.", payments.size());
+                return;
+            }
+        }
         // Paiement initial 1
         Payment p1 = new Payment();
         p1.setId(1);
@@ -99,13 +111,83 @@ public class PaymentRepository {
             int maxId = payments.stream().mapToInt(Payment::getId).max().orElse(0);
             payment.setId(maxId + 1);
             payments.add(payment);
+            if (DatabaseConfig.isDatabaseReachable()) {
+                saveToDatabase(payment, true);
+            }
         } else {
             for (int i = 0; i < payments.size(); i++) {
                 if (payments.get(i).getId() == payment.getId()) {
                     payments.set(i, payment);
-                    return;
+                    break;
                 }
             }
+            if (DatabaseConfig.isDatabaseReachable()) {
+                saveToDatabase(payment, false);
+            }
+        }
+    }
+
+    private void saveToDatabase(Payment p, boolean isInsert) {
+        try (Connection conn = DatabaseConfig.getConnection()) {
+            if (isInsert) {
+                String sql = "INSERT INTO payments (receipt_number, cashier_username, cash_register_name, amount, currency, payment_method, reference, status, payment_date, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                try (PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+                    ps.setString(1, p.getReceiptNumber() != null ? p.getReceiptNumber() : "REC-" + System.currentTimeMillis());
+                    ps.setString(2, p.getCashierUsername() != null ? p.getCashierUsername() : "Jenos");
+                    ps.setString(3, p.getCashRegisterName() != null ? p.getCashRegisterName() : "Caisse Principale");
+                    ps.setDouble(4, p.getAmount());
+                    ps.setString(5, p.getCurrency() != null ? p.getCurrency() : "USD");
+                    ps.setString(6, p.getPaymentMethod() != null ? p.getPaymentMethod().name() : "ESPECES");
+                    ps.setString(7, p.getReference());
+                    ps.setString(8, "VALIDEE");
+                    ps.setDate(9, p.getPaymentDate() != null ? Date.valueOf(p.getPaymentDate()) : Date.valueOf(LocalDate.now()));
+                    ps.setTimestamp(10, p.getCreatedAt() != null ? Timestamp.valueOf(p.getCreatedAt()) : Timestamp.valueOf(LocalDateTime.now()));
+                    ps.executeUpdate();
+                }
+            } else {
+                String sql = "UPDATE payments SET amount = ?, currency = ?, payment_method = ?, reference = ? WHERE receipt_number = ?";
+                try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                    ps.setDouble(1, p.getAmount());
+                    ps.setString(2, p.getCurrency() != null ? p.getCurrency() : "USD");
+                    ps.setString(3, p.getPaymentMethod() != null ? p.getPaymentMethod().name() : "ESPECES");
+                    ps.setString(4, p.getReference());
+                    ps.setString(5, p.getReceiptNumber());
+                    ps.executeUpdate();
+                }
+            }
+        } catch (Exception e) {
+            logger.warn("Synchronisation PostgreSQL du paiement {} échouée : {}", p.getReceiptNumber(), e.getMessage());
+        }
+    }
+
+    private void loadFromDatabase() {
+        String sql = "SELECT id, receipt_number, cashier_username, cash_register_name, amount, currency, payment_method, reference, status, payment_date, created_at FROM payments ORDER BY id";
+        try (Connection conn = DatabaseConfig.getConnection();
+             Statement st = conn.createStatement();
+             ResultSet rs = st.executeQuery(sql)) {
+            while (rs.next()) {
+                Payment p = new Payment();
+                p.setId(rs.getInt("id"));
+                p.setReceiptNumber(rs.getString("receipt_number"));
+                p.setCashierUsername(rs.getString("cashier_username"));
+                p.setCashRegisterName(rs.getString("cash_register_name"));
+                p.setAmount(rs.getDouble("amount"));
+                p.setCurrency(rs.getString("currency"));
+                String methodStr = rs.getString("payment_method");
+                if (methodStr != null) {
+                    try {
+                        p.setPaymentMethod(Payment.PaymentMethod.valueOf(methodStr));
+                    } catch (Exception ignored) {}
+                }
+                p.setReference(rs.getString("reference"));
+                Date d = rs.getDate("payment_date");
+                if (d != null) p.setPaymentDate(d.toLocalDate());
+                Timestamp ts = rs.getTimestamp("created_at");
+                if (ts != null) p.setCreatedAt(ts.toLocalDateTime());
+                payments.add(p);
+            }
+        } catch (Exception e) {
+            logger.warn("Impossible de lire les paiements depuis PostgreSQL : {}", e.getMessage());
         }
     }
 

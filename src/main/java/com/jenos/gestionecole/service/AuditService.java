@@ -73,11 +73,31 @@ public class AuditService {
 
         auditLogs.add(entry);
 
+        if (cd.ecole.gestionscolaire.config.DatabaseConfig.isDatabaseReachable()) {
+            saveToDatabase(entry);
+        }
+
         logger.info("[AUDIT] {} - {} par '{}' sur '{}' - Résultat: {}",
                 entry.getModule(), entry.getAction(), entry.getUsername(),
                 entry.getEntityName(), entry.getResult());
 
         return entry;
+    }
+
+    private void saveToDatabase(AuditLog entry) {
+        String sql = "INSERT INTO audit_logs (timestamp, username, action, entity_name, old_value, new_value) VALUES (?, ?, ?, ?, ?, ?)";
+        try (java.sql.Connection conn = cd.ecole.gestionscolaire.config.DatabaseConfig.getConnection();
+             java.sql.PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setTimestamp(1, java.sql.Timestamp.valueOf(entry.getTimestamp()));
+            ps.setString(2, entry.getUsername());
+            ps.setString(3, entry.getAction());
+            ps.setString(4, entry.getEntityName() != null ? entry.getEntityName() : entry.getModule().name());
+            ps.setString(5, entry.getOldValue());
+            ps.setString(6, entry.getNewValue());
+            ps.executeUpdate();
+        } catch (Exception e) {
+            logger.debug("Journalisation d'audit PostgreSQL non persistée : {}", e.getMessage());
+        }
     }
 
     /**
