@@ -8,12 +8,17 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.time.format.DateTimeFormatter;
 
 /**
  * StudentDetailsController — Consultation en lecture seule du dossier complet d'un étudiant.
  */
 public class StudentDetailsController {
+
+    private static final Logger logger = LoggerFactory.getLogger(StudentDetailsController.class);
 
     @FXML private Label lblFullName;
     @FXML private Label lblMatricule;
@@ -90,7 +95,7 @@ public class StudentDetailsController {
 
             NavigationManager.getInstance().getContentContainer().getChildren().setAll(node);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Erreur lors du chargement du formulaire de modification de l'étudiant", e);
         }
     }
 

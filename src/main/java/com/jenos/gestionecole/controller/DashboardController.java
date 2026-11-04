@@ -261,6 +261,7 @@ public class DashboardController implements MoneyVisibilityManager.VisibilityObs
      * Rendu du graphique financier avec coloration stricte :
      * Vert pour les recettes, Rouge pour les dépenses.
      */
+    @SuppressWarnings("unchecked")
     private boolean renderFinancialChart() {
         if (financialChart == null || currentMetrics == null) return false;
 

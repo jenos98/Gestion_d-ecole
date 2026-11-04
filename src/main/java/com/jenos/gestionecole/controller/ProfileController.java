@@ -12,10 +12,15 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * ProfileController — Contrôleur du profil utilisateur et de la sécurité.
  */
 public class ProfileController {
+
+    private static final Logger logger = LoggerFactory.getLogger(ProfileController.class);
 
     @FXML private Label lblFeedback;
 
@@ -153,7 +158,7 @@ public class ProfileController {
                                 NavigationManager.getInstance().getPrimaryStage().getScene().setRoot(root);
                             }
                         } catch (Exception e) {
-                            e.printStackTrace();
+                            logger.error("Erreur lors de la redirection vers l'écran de connexion après changement de mot de passe", e);
                         }
                     }
                 }

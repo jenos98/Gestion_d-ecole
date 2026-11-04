@@ -14,6 +14,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.List;
 
 /**
@@ -25,6 +28,8 @@ import java.util.List;
  * - RoleGuard contrôle l'accès aux actions
  */
 public class StaffController {
+
+    private static final Logger logger = LoggerFactory.getLogger(StaffController.class);
 
     // Header
     @FXML private Label lblPageTitle;
@@ -260,7 +265,7 @@ public class StaffController {
             ctrl.setStaff(staff);
             NavigationManager.getInstance().getContentContainer().getChildren().setAll(node);
         } catch (java.io.IOException ex) {
-            ex.printStackTrace();
+            logger.error("Impossible d'ouvrir les détails du membre du personnel : {}", ex.getMessage(), ex);
         }
     }
 
@@ -272,7 +277,7 @@ public class StaffController {
             ctrl.setStaff(staff);
             NavigationManager.getInstance().getContentContainer().getChildren().setAll(node);
         } catch (java.io.IOException ex) {
-            ex.printStackTrace();
+            logger.error("Impossible d'ouvrir le formulaire du personnel : {}", ex.getMessage(), ex);
         }
     }
 

@@ -15,6 +15,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
@@ -26,6 +29,8 @@ import java.util.List;
  * JAMAIS additionnés ni convertis implicitement.
  */
 public class StaffDetailsController {
+
+    private static final Logger logger = LoggerFactory.getLogger(StaffDetailsController.class);
 
     // En-tête
     @FXML private Label lblFullName;
@@ -154,7 +159,7 @@ public class StaffDetailsController {
             ctrl.setStaff(currentStaff);
             NavigationManager.getInstance().getContentContainer().getChildren().setAll(node);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Erreur lors de l'ouverture du formulaire d'édition du personnel", e);
         }
     }
 
@@ -185,7 +190,7 @@ public class StaffDetailsController {
             staffService.setLastGeneratedPayslip(p);
             NavigationManager.getInstance().navigate(Route.PAYSLIP_PREVIEW);
         } catch (Exception e) {
-            System.err.println("[StaffDetailsController] Erreur génération bulletin : " + e.getMessage());
+            logger.error("Erreur lors de la génération du bulletin de paie", e);
         } finally {
             if (btnPayslip != null) btnPayslip.setDisable(false);
         }

@@ -27,7 +27,12 @@ import javafx.scene.image.ImageView;
  * - Gérer la visibilité des montants (MoneyVisibilityManager)
  * - Confirmer avant déconnexion avec DialogManager
  */
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class HeaderController implements NotificationService.NotificationObserver {
+
+    private static final Logger logger = LoggerFactory.getLogger(HeaderController.class);
 
     // Identité
     @FXML private ImageView imgLogo;
@@ -215,7 +220,7 @@ public class HeaderController implements NotificationService.NotificationObserve
                 NavigationManager.getInstance().getPrimaryStage().getScene().setRoot(root);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Erreur lors de la redirection vers l'écran de connexion : {}", e.getMessage(), e);
         }
     }
 }

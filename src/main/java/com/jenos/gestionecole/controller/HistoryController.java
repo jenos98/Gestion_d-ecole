@@ -36,7 +36,12 @@ import java.util.List;
  * Filtrage scolaire en cascade descendante (Section → Promotion → Option → Classe),
  * avec l'Option d'étude comme citoyen indépendant de 1er rang.
  */
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class HistoryController implements MoneyVisibilityManager.VisibilityObserver {
+
+    private static final Logger logger = LoggerFactory.getLogger(HistoryController.class);
 
     // ── En-tête & Export ──
     @FXML private Label lblResultCount;
@@ -314,7 +319,7 @@ public class HistoryController implements MoneyVisibilityManager.VisibilityObser
 
             search(); // Rafraîchir en cas d'annulation ou correction
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Erreur ouverture dialogue détails opération : {}", e.getMessage(), e);
         }
     }
 
@@ -387,7 +392,7 @@ public class HistoryController implements MoneyVisibilityManager.VisibilityObser
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Erreur lors de l'exportation de l'historique", e);
         }
     }
 

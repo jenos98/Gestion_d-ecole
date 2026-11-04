@@ -12,6 +12,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * LoginController — Contrôleur de l'écran d'authentification.
@@ -22,6 +24,8 @@ import javafx.stage.Stage;
  * - Connexion via SessionManager.
  */
 public class LoginController {
+
+    private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
     @FXML private TextField txtUsername;
     @FXML private PasswordField txtPassword;
@@ -162,7 +166,7 @@ public class LoginController {
             }
         } catch (Exception e) {
             showError("Impossible de charger l'interface principale.");
-            e.printStackTrace();
+            logger.error("Impossible de charger l'interface principale : {}", e.getMessage(), e);
         }
     }
 

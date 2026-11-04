@@ -11,6 +11,9 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.function.Consumer;
 
 /**
@@ -21,6 +24,7 @@ import java.util.function.Consumer;
  */
 public class DialogManager {
 
+    private static final Logger logger = LoggerFactory.getLogger(DialogManager.class);
     private static DialogManager instance;
 
     private DialogManager() {}
@@ -88,7 +92,7 @@ public class DialogManager {
                 controller.setup(new AppErrorDTO("ERR-SYS-UI", userMessage, probableCause, suggestedAction, technicalDetails, true));
                 stage.showAndWait();
             } catch (Exception e) {
-                System.err.println("[DialogManager] Erreur affichage dialogue : " + userMessage + " (" + technicalDetails + ")");
+                logger.error("Erreur affichage dialogue : {} ({})", userMessage, technicalDetails, e);
             }
         });
     }
@@ -157,7 +161,7 @@ public class DialogManager {
                 alert.setContentText(message);
                 alert.showAndWait();
             } catch (Exception e) {
-                System.out.println("[INFO] " + title + " : " + message);
+                logger.info("[DIALOG] {} : {}", title, message);
             }
         });
     }

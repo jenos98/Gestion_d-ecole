@@ -33,7 +33,12 @@ import java.util.List;
  * - 4 états visuels (Normal, boxLoading, boxEmpty, boxError)
  * - Gestion du statut non destructif (ACTIF, INACTIF, ARCHIVE)
  */
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class StudentsController {
+
+    private static final Logger logger = LoggerFactory.getLogger(StudentsController.class);
 
     // ── En-tête & Compteurs ──
     @FXML private Label lblPageTitle;
@@ -386,7 +391,7 @@ public class StudentsController {
                 setViewState(false, false, false);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Erreur chargement page initiale élèves : {}", e.getMessage(), e);
             setViewState(false, false, true);
         }
     }
@@ -403,7 +408,7 @@ public class StudentsController {
 
             setViewState(false, result.getTotalCount() == 0, false);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Erreur chargement page élèves : {}", e.getMessage(), e);
             setViewState(false, false, true);
         }
     }
@@ -455,7 +460,7 @@ public class StudentsController {
 
             NavigationManager.getInstance().getContentContainer().getChildren().setAll(node);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Erreur ouverture formulaire élève : {}", e.getMessage(), e);
         }
     }
 
@@ -469,7 +474,7 @@ public class StudentsController {
 
             NavigationManager.getInstance().getContentContainer().getChildren().setAll(node);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Erreur ouverture détails élève : {}", e.getMessage(), e);
         }
     }
 
@@ -483,7 +488,7 @@ public class StudentsController {
 
             NavigationManager.getInstance().getContentContainer().getChildren().setAll(node);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Erreur ouverture historique élève : {}", e.getMessage(), e);
         }
     }
 
