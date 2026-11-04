@@ -141,7 +141,23 @@ public class DialogManager {
                 stage.setScene(scene);
                 stage.show();
             } catch (Exception e) {
-                System.err.println("[DialogManager] Erreur affichage aide contextuelle : " + e.getMessage());
+            }
+        });
+    }
+
+    /**
+     * Affiche un message d'information modal standard.
+     */
+    public void showInfo(String title, String message) {
+        runOnFx(() -> {
+            try {
+                javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
+                alert.setTitle(title != null ? title : "Information");
+                alert.setHeaderText(null);
+                alert.setContentText(message);
+                alert.showAndWait();
+            } catch (Exception e) {
+                System.out.println("[INFO] " + title + " : " + message);
             }
         });
     }

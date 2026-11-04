@@ -182,12 +182,40 @@ public class PrintPreviewController {
 
     @FXML
     private void handleExportExcel() {
-        HistoryController.openExportDialog(document != null ? document.getTitle() : "Rapport", List.of());
+        if (document == null) return;
+        javafx.stage.FileChooser chooser = new javafx.stage.FileChooser();
+        chooser.setTitle("Exporter en CSV / Excel");
+        String safeTitle = document.getTitle().toLowerCase().replaceAll("[^a-z0-9_]+", "_");
+        chooser.setInitialFileName(safeTitle + ".csv");
+        chooser.getExtensionFilters().add(new javafx.stage.FileChooser.ExtensionFilter("Fichier CSV compatible Excel (*.csv)", "*.csv"));
+        java.io.File file = chooser.showSaveDialog(documentSheet.getScene().getWindow());
+        if (file != null) {
+            boolean ok = com.jenos.gestionecole.service.ExportService.getInstance().exportReportDocument(document, file, ".csv");
+            if (ok) {
+                com.jenos.gestionecole.util.DialogManager.getInstance().showInfo("Export CSV Réussi", "Rapport exporté avec succès :\n" + file.getAbsolutePath());
+            } else {
+                com.jenos.gestionecole.util.DialogManager.getInstance().showError("Erreur d'exportation", "Impossible d'écrire le fichier CSV", "Vérifiez les permissions.");
+            }
+        }
     }
 
     @FXML
     private void handleExportPdf() {
-        HistoryController.openExportDialog(document != null ? document.getTitle() : "Rapport", List.of());
+        if (document == null) return;
+        javafx.stage.FileChooser chooser = new javafx.stage.FileChooser();
+        chooser.setTitle("Exporter en PDF");
+        String safeTitle = document.getTitle().toLowerCase().replaceAll("[^a-z0-9_]+", "_");
+        chooser.setInitialFileName(safeTitle + ".pdf");
+        chooser.getExtensionFilters().add(new javafx.stage.FileChooser.ExtensionFilter("Document PDF (*.pdf)", "*.pdf"));
+        java.io.File file = chooser.showSaveDialog(documentSheet.getScene().getWindow());
+        if (file != null) {
+            boolean ok = com.jenos.gestionecole.service.ExportService.getInstance().exportReportDocument(document, file, ".pdf");
+            if (ok) {
+                com.jenos.gestionecole.util.DialogManager.getInstance().showInfo("Export PDF Réussi", "Rapport enregistré avec succès :\n" + file.getAbsolutePath());
+            } else {
+                com.jenos.gestionecole.util.DialogManager.getInstance().showError("Erreur d'exportation", "Impossible d'écrire le fichier PDF", "Vérifiez les permissions.");
+            }
+        }
     }
 
     @FXML

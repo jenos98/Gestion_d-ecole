@@ -22,6 +22,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -367,7 +368,24 @@ public class HistoryController implements MoneyVisibilityManager.VisibilityObser
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setTitle("Exportation de Données");
             dialog.setDialogPane(pane);
-            dialog.showAndWait();
+            var optResult = dialog.showAndWait();
+
+            if (optResult.isPresent() && optResult.get().getButtonData() == ButtonBar.ButtonData.OK_DONE) {
+                if (ctrl.isAuthorized()) {
+                    String targetPath = ctrl.getExportFilePath();
+                    File targetFile = new File(targetPath);
+                    String ext = targetPath.contains(".") ? targetPath.substring(targetPath.lastIndexOf('.')) : ".csv";
+                    boolean ok = com.jenos.gestionecole.service.ExportService.getInstance().exportList(reportTitle, filteredData, targetFile, ext);
+                    if (ok) {
+                        com.jenos.gestionecole.util.DialogManager.getInstance().showInfo("Export Réussi",
+                                "Les données ont été exportées avec succès dans :\n" + targetFile.getAbsolutePath());
+                    } else {
+                        com.jenos.gestionecole.util.DialogManager.getInstance().showError("Erreur d'exportation",
+                                "Impossible d'exporter le fichier vers " + targetFile.getAbsolutePath(),
+                                "Vérifiez les permissions d'accès au dossier de destination.");
+                    }
+                }
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

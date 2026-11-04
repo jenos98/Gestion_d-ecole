@@ -75,4 +75,17 @@ public final class DatabaseConfig {
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(getJdbcUrl(), getUsername(), getPassword());
     }
+
+    /**
+     * Teste rapidement si le serveur PostgreSQL est accessible et répond.
+     * @return true si la connexion réussit, false sinon (sans lever d'exception).
+     */
+    public static boolean isDatabaseReachable() {
+        try (Connection conn = getConnection()) {
+            return conn != null && conn.isValid(2);
+        } catch (Exception e) {
+            logger.debug("Base de données injoignable : {}", e.getMessage());
+            return false;
+        }
+    }
 }
